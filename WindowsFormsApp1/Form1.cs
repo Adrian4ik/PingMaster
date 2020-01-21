@@ -17,16 +17,30 @@ namespace WindowsFormsApp1
     public partial class Form1 : Form
     {
         private int t0, t1a, t1b, t2a, t2b, t3a, t3b, t4a, t4b;
-        private string abonent;
-
-        private const int sec = 1000, min = 60000;
+        //private string abonent;
 
         private string[] abonentslist;
 
-        /*private const string[] StandartList = new string[27] {"127.0.0.1", "10.1.1.254", "10.1.2.254", "192.168.60.254", "192.168.68.73", "10.1.2.250", "",
-            "192.168.67.25", "192.168.60.253", "192.168.60.51", "192.168.60.53", "192.168.60.82", "",
-            "10.1.1.3", "10.1.1.4", "10.1.1.5", "10.1.2.1", "10.1.1.1", "192.168.60.81", "10.1.1.80", "10.1.1.7", "",
-            "10.1.1.100", "10.1.3.4", "10.1.3.1", "192.168.249.1", "10.1.11.5"};*/
+        private struct abonent
+        {
+            public int Group;
+
+            public string Name;
+            public string DNS;
+            public string IP;
+        }
+
+        private abonent[] ab = new abonent[100];
+
+        #region Константы
+        private const int С_sec = 1000, С_min = 60000;
+
+        private string[] StandartList = new string[]
+            {"Loopback//DNS name//127.0.0.1", "БРИ-1//DNS name//10.1.1.254", "БРИ-2//DNS name//10.1.2.254", "БРИ-3//DNS name//192.168.60.254", "Что-то//DNS name//192.168.68.73", "АСП//DNS name//10.1.2.250", "",
+            "Ещё что-то// //192.168.67.25", "USL ER-SWA1,2// //192.168.60.253", "ISS Server 1// //192.168.60.51", "LS1// //192.168.60.53", "Lab printer// //192.168.60.82", "",
+            "RSE1// //10.1.1.3", "RSK1// //10.1.1.4", "RSK2// //10.1.1.5", "RSS1// //10.1.2.1", "RSS2// //10.1.1.1", "SM Printer// //192.168.60.81", "Mediaserver AGAT// //10.1.1.80", "RSE-Med// //10.1.1.7", "",
+            "FS1// //10.1.1.100", "БСПН (PLS)// //10.1.3.4", "ТВМ1-Н// //10.1.3.1", "БПИ-НЧ (TRPU)// //192.168.249.1", "БЗУ// //10.1.11.5"};
+        #endregion Константы
 
         #region Методы
         public Form1()
@@ -47,40 +61,69 @@ namespace WindowsFormsApp1
             //Count();
         }
 
-        /*public static void Count(Object obj)
-        {
-            //int x = (int)obj;
-            //for(int i = 1; i < 9; i++, x++)
-            //{ }
-            SomeMethod();
-        }*/
-
         private void PreProcessing()
         {
             if (File.Exists("Abonents.txt"))
-            {
-                //int oldw = int.Parse(File.ReadAllText("OldW.txt"));
                 abonentslist = File.ReadAllLines("Abonents.txt");
+            else
+            {
+                File.Create("Abonents.txt");
+                File.WriteAllLines("Abonents.txt", StandartList);
+                abonentslist = StandartList;
             }
-            //else
-                //File.WriteAllLines("Abonents.txt", StandartList); // .ToString()
+            /*
+            int s = 0; // Счётчик строк
+            while (abonentslist[s] != "")
+            {
+                string str = abonentslist[s];
+                int flag = 0, start_id = 0;
 
-            /*this.dataGridView1.Rows.Add("Laptop 1", "192.168.0.1", "Online");
-            this.dataGridView1.Rows.Add("Laptop 2", "192.168.51.86", "Online");
-            this.dataGridView1.Rows.Add("Laptop 3", "127.0.0.1", "Offline");
-            this.dataGridView1.Rows.Add("Laptop 4", "Some ip", "Offline");
-            this.dataGridView1.Rows.Add("Laptop 5", "Some ip", "Online");
-            this.dataGridView1.Rows.Add("Laptop 6", abonent, "Online");*/
+                int c = 0; // Счётчик символов
+                while (str[c].ToString() != "//")
+                {
+                    c++;
+                }
 
-            t0 = 3 * sec;
-            t1a = 3 * sec;
-            t1b = 1 * min;
-            t2a = 3 * sec;
-            t2b = 1 * min;
-            t3a = 3 * sec;
-            t3b = 1 * min;
-            t4a = 3 * sec;
-            t4b = 1 * min;
+                switch(flag)
+                {
+                    case 0:
+                        ab[c].Name = str.Substring(start_id, c);
+                        break;
+                    case 1:
+                        ab[c].DNS = str;
+                        break;
+                    case 2:
+                        ab[c].IP = str;
+                        break;
+                }
+                flag++;
+
+                s++;
+            }
+            */
+            //ab.Name = "Kek";
+
+            dataGridView1.Rows.Add("Laptop 1", "192.168.0.1", "Online");
+            dataGridView1.Rows.Add("Laptop 2", "192.168.51.86", "Online");
+            dataGridView1.Rows.Add("Laptop 3", "127.0.0.1", "Offline");
+            dataGridView1.Rows.Add("Laptop 4", "Some ip", "Offline");
+            dataGridView1.Rows.Add("Laptop 5", "Some ip", "Online");
+            //dataGridView1.Rows.Add("Laptop 6", ab.IP, "Online");
+            dataGridView1.Rows.Add("", "", "");
+
+            dataGridView1[3, 2].Style.BackColor = Color.Red;
+
+            //dataGridView1[0, 0].Value = ab.Name;
+
+            t0 = 3 * С_sec;
+            t1a = 3 * С_sec;
+            t1b = 1 * С_min;
+            t2a = 3 * С_sec;
+            t2b = 1 * С_min;
+            t3a = 3 * С_sec;
+            t3b = 1 * С_min;
+            t4a = 3 * С_sec;
+            t4b = 1 * С_min;
         }
 
         private void FormResized()
@@ -137,47 +180,47 @@ namespace WindowsFormsApp1
         #region Таймеры
         private void timer0_Tick(object sender, EventArgs e)
         {
-            
+
         }
 
         private void timer1a_Tick(object sender, EventArgs e)
         {
-            
+
         }
 
         private void timer1b_Tick(object sender, EventArgs e)
         {
-            
+
         }
 
         private void timer2a_Tick(object sender, EventArgs e)
         {
-            
+
         }
 
         private void timer2b_Tick(object sender, EventArgs e)
         {
-            
+
         }
 
         private void timer3a_Tick(object sender, EventArgs e)
         {
-            
+
         }
 
         private void timer3b_Tick(object sender, EventArgs e)
         {
-            
+
         }
 
         private void timer4a_Tick(object sender, EventArgs e)
         {
-            
+
         }
 
         private void timer4b_Tick(object sender, EventArgs e)
         {
-            
+
         }
         #endregion Таймеры
 

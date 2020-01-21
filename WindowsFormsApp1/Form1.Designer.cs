@@ -223,7 +223,7 @@
             // 
             // Column3
             // 
-            this.Column3.HeaderText = "";
+            this.Column3.HeaderText = " ";
             this.Column3.MinimumWidth = 6;
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;

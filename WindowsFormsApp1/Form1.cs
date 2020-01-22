@@ -31,6 +31,11 @@ namespace WindowsFormsApp1
 
         private abonent[] ab = new abonent[100];
 
+        private struct reply
+        {
+
+        }
+
         #region Константы
         private const int С_sec = 1000, С_min = 60000;
 
@@ -45,19 +50,6 @@ namespace WindowsFormsApp1
         public Form1()
         {
             InitializeComponent();
-        }
-
-        private void SomeMethod()
-        {
-            /*if (textBox1.Text != "")
-            {
-                System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
-                System.Net.NetworkInformation.PingReply pingReply = ping.Send(textBox1.Text);
-
-                label2.Text = pingReply.RoundtripTime.ToString() + " ms";
-                label3.Text = pingReply.Status.ToString();
-            }*/
-            //Count();
         }
 
         private string[] PreProcessing()
@@ -137,7 +129,21 @@ namespace WindowsFormsApp1
             dataGridView1[5, 4].Style.BackColor = Color.Red;
             dataGridView1[5, 5].Style.BackColor = Color.Cyan;
 
-            dataGridView1[1, 0].Value = ab[0].Name;
+            //dataGridView1[1, 0].Value = ab[0].Name;
+        }
+        private reply Ping_cl(abonent a)
+        {
+            reply r;
+            /*if (textBox1.Text != "")
+            {
+                System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
+                System.Net.NetworkInformation.PingReply pingReply = ping.Send(textBox1.Text);
+
+                label2.Text = pingReply.RoundtripTime.ToString() + " ms";
+                label3.Text = pingReply.Status.ToString();
+            }*/
+            //Count();
+            return r;
         }
 
         private void FormResized() // standart form size w916; h639;
@@ -229,6 +235,11 @@ namespace WindowsFormsApp1
         }
 
         private void timer3a_Tick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown9_ValueChanged(object sender, EventArgs e)
         {
 
         }

@@ -115,7 +115,7 @@ namespace WindowsFormsApp1
             //dataGridView1.Rows.Add("Laptop 6", ab.IP, "Online");
             dataGridView1.Rows.Add("", "", "");
 
-            dataGridView1[3, 2].Style.BackColor = Color.Red;
+            dataGridView1[5, 2].Style.BackColor = Color.Red;
 
             //dataGridView1[0, 0].Value = ab.Name;
 
@@ -130,7 +130,7 @@ namespace WindowsFormsApp1
             t4b = 1 * С_min;
         }
 
-        private void FormResized()
+        private void FormResized() // standart form size w916; h639;
         {
             groupBox1.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 50) / 2);
 
@@ -148,7 +148,8 @@ namespace WindowsFormsApp1
             dataGridView3.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 95);
             dataGridView4.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 95);
 
-            //label1.Text = dataGridView1.Width.ToString();
+            label1.Text = "Form size: " + ClientSize.Width + "x" + ClientSize.Height + " gb size: " + groupBox1.Width + "x" + groupBox1.Height + " dgv size: " + dataGridView1.Width + "x" + dataGridView1.Height;
+            //dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
         }
         #endregion Методы
 

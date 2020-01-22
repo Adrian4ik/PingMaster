@@ -75,7 +75,6 @@
             this.Column4e = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4f = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label22 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
@@ -86,9 +85,8 @@
             this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label24 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -98,6 +96,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.numericUpDown9 = new System.Windows.Forms.NumericUpDown();
             this.button3 = new System.Windows.Forms.Button();
@@ -277,6 +277,7 @@
             this.Column1a.Name = "Column1a";
             this.Column1a.ReadOnly = true;
             this.Column1a.Width = 40;
+            this.Column1a.Visible = false;
             // 
             // Column1b
             // 
@@ -292,6 +293,7 @@
             this.Column1c.MinimumWidth = 25;
             this.Column1c.Name = "Column1c";
             this.Column1c.ReadOnly = true;
+            this.Column1c.Visible = false;
             // 
             // Column1d
             // 
@@ -355,6 +357,7 @@
             this.Column2a.Name = "Column2a";
             this.Column2a.ReadOnly = true;
             this.Column2a.Width = 40;
+            this.Column2a.Visible = false;
             // 
             // Column2b
             // 
@@ -370,6 +373,7 @@
             this.Column2c.MinimumWidth = 25;
             this.Column2c.Name = "Column2c";
             this.Column2c.ReadOnly = true;
+            this.Column2c.Visible = false;
             // 
             // Column2d
             // 
@@ -433,6 +437,7 @@
             this.Column3a.Name = "Column3a";
             this.Column3a.ReadOnly = true;
             this.Column3a.Width = 40;
+            this.Column3a.Visible = false;
             // 
             // Column3b
             // 
@@ -448,6 +453,7 @@
             this.Column3c.MinimumWidth = 25;
             this.Column3c.Name = "Column3c";
             this.Column3c.ReadOnly = true;
+            this.Column3c.Visible = false;
             // 
             // Column3d
             // 
@@ -511,6 +517,7 @@
             this.Column4a.Name = "Column4a";
             this.Column4a.ReadOnly = true;
             this.Column4a.Width = 40;
+            this.Column4a.Visible = false;
             // 
             // Column4b
             // 
@@ -526,6 +533,7 @@
             this.Column4c.MinimumWidth = 25;
             this.Column4c.Name = "Column4c";
             this.Column4c.ReadOnly = true;
+            this.Column4c.Visible = false;
             // 
             // Column4d
             // 
@@ -573,15 +581,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Группа 1";
             // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(5, 70);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(88, 13);
-            this.label22.TabIndex = 29;
-            this.label22.Text = "Кол-во пакетов:";
-            // 
             // label21
             // 
             this.label21.AutoSize = true;
@@ -599,6 +598,7 @@
             this.button1.TabIndex = 27;
             this.button1.Text = "Пинг 1 группы";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label12
             // 
@@ -624,6 +624,7 @@
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(35, 20);
             this.numericUpDown2.TabIndex = 21;
+            this.numericUpDown2.ValueChanged += new System.EventHandler(this.numericUpDown2_ValueChanged);
             // 
             // checkBox1
             // 
@@ -634,6 +635,7 @@
             this.checkBox1.TabIndex = 19;
             this.checkBox1.Text = "Автопинг 1 группы";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // label2
             // 
@@ -650,6 +652,7 @@
             this.numericUpDown3.Name = "numericUpDown3";
             this.numericUpDown3.Size = new System.Drawing.Size(35, 20);
             this.numericUpDown3.TabIndex = 23;
+            this.numericUpDown3.ValueChanged += new System.EventHandler(this.numericUpDown3_ValueChanged);
             // 
             // numericUpDown1
             // 
@@ -657,6 +660,7 @@
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(35, 20);
             this.numericUpDown1.TabIndex = 17;
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // label1
             // 
@@ -666,6 +670,15 @@
             this.label1.Size = new System.Drawing.Size(96, 13);
             this.label1.TabIndex = 16;
             this.label1.Text = "Время ожидания:";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(5, 70);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(88, 13);
+            this.label22.TabIndex = 29;
+            this.label22.Text = "Кол-во пакетов:";
             // 
             // groupBox2
             // 
@@ -689,24 +702,6 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Группа 2";
             // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(5, 70);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(88, 13);
-            this.label24.TabIndex = 31;
-            this.label24.Text = "Кол-во пакетов:";
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(5, 70);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(88, 13);
-            this.label23.TabIndex = 30;
-            this.label23.Text = "Кол-во пакетов:";
-            // 
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(200, 60);
@@ -715,6 +710,7 @@
             this.button2.TabIndex = 28;
             this.button2.Text = "Пинг 2 группы";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // checkBox2
             // 
@@ -725,6 +721,7 @@
             this.checkBox2.TabIndex = 27;
             this.checkBox2.Text = "Автопинг 2 группы";
             this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // label14
             // 
@@ -750,6 +747,7 @@
             this.numericUpDown4.Name = "numericUpDown4";
             this.numericUpDown4.Size = new System.Drawing.Size(35, 20);
             this.numericUpDown4.TabIndex = 24;
+            this.numericUpDown4.ValueChanged += new System.EventHandler(this.numericUpDown4_ValueChanged);
             // 
             // numericUpDown6
             // 
@@ -757,6 +755,7 @@
             this.numericUpDown6.Name = "numericUpDown6";
             this.numericUpDown6.Size = new System.Drawing.Size(35, 20);
             this.numericUpDown6.TabIndex = 13;
+            this.numericUpDown6.ValueChanged += new System.EventHandler(this.numericUpDown6_ValueChanged);
             // 
             // label3
             // 
@@ -773,6 +772,7 @@
             this.numericUpDown5.Name = "numericUpDown5";
             this.numericUpDown5.Size = new System.Drawing.Size(35, 20);
             this.numericUpDown5.TabIndex = 12;
+            this.numericUpDown5.ValueChanged += new System.EventHandler(this.numericUpDown5_ValueChanged);
             // 
             // label4
             // 
@@ -782,6 +782,24 @@
             this.label4.Size = new System.Drawing.Size(103, 13);
             this.label4.TabIndex = 22;
             this.label4.Text = "Период автопинга:";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(5, 70);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(88, 13);
+            this.label24.TabIndex = 31;
+            this.label24.Text = "Кол-во пакетов:";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(5, 70);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(88, 13);
+            this.label23.TabIndex = 30;
+            this.label23.Text = "Кол-во пакетов:";
             // 
             // groupBox3
             // 
@@ -821,6 +839,7 @@
             this.button3.TabIndex = 30;
             this.button3.Text = "Пинг 3 группы";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // checkBox3
             // 
@@ -831,6 +850,7 @@
             this.checkBox3.TabIndex = 28;
             this.checkBox3.Text = "Автопинг 3 группы";
             this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
             // 
             // label16
             // 
@@ -874,6 +894,7 @@
             this.numericUpDown8.Name = "numericUpDown8";
             this.numericUpDown8.Size = new System.Drawing.Size(35, 20);
             this.numericUpDown8.TabIndex = 15;
+            this.numericUpDown8.ValueChanged += new System.EventHandler(this.numericUpDown8_ValueChanged);
             // 
             // numericUpDown7
             // 
@@ -881,6 +902,7 @@
             this.numericUpDown7.Name = "numericUpDown7";
             this.numericUpDown7.Size = new System.Drawing.Size(35, 20);
             this.numericUpDown7.TabIndex = 14;
+            this.numericUpDown7.ValueChanged += new System.EventHandler(this.numericUpDown7_ValueChanged);
             // 
             // groupBox4
             // 
@@ -910,6 +932,7 @@
             this.numericUpDown12.Name = "numericUpDown12";
             this.numericUpDown12.Size = new System.Drawing.Size(35, 20);
             this.numericUpDown12.TabIndex = 25;
+            this.numericUpDown12.ValueChanged += new System.EventHandler(this.numericUpDown12_ValueChanged);
             // 
             // numericUpDown11
             // 
@@ -917,6 +940,7 @@
             this.numericUpDown11.Name = "numericUpDown11";
             this.numericUpDown11.Size = new System.Drawing.Size(35, 20);
             this.numericUpDown11.TabIndex = 24;
+            this.numericUpDown11.ValueChanged += new System.EventHandler(this.numericUpDown11_ValueChanged);
             // 
             // numericUpDown10
             // 
@@ -924,6 +948,7 @@
             this.numericUpDown10.Name = "numericUpDown10";
             this.numericUpDown10.Size = new System.Drawing.Size(35, 20);
             this.numericUpDown10.TabIndex = 23;
+            this.numericUpDown10.ValueChanged += new System.EventHandler(this.numericUpDown10_ValueChanged);
             // 
             // button4
             // 
@@ -933,6 +958,7 @@
             this.button4.TabIndex = 22;
             this.button4.Text = "Пинг 4 группы";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // checkBox4
             // 
@@ -943,6 +969,7 @@
             this.checkBox4.TabIndex = 20;
             this.checkBox4.Text = "Автопинг 4 группы";
             this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
             // 
             // label18
             // 

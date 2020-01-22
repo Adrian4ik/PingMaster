@@ -164,22 +164,60 @@ namespace WindowsFormsApp1
             dataGridView3.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 95);
             dataGridView4.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 95);
 
+            checkBox1.Location = new Point(groupBox1.Size.Width - 125, 20);
+            checkBox2.Location = new Point(groupBox2.Size.Width - 125, 20);
+            checkBox3.Location = new Point(groupBox3.Size.Width - 125, 20);
+            checkBox4.Location = new Point(groupBox4.Size.Width - 125, 20);
+
+            button1.Location = new Point(groupBox1.Size.Width - 105, 60);
+            button2.Location = new Point(groupBox2.Size.Width - 105, 60);
+            button3.Location = new Point(groupBox3.Size.Width - 105, 60);
+            button4.Location = new Point(groupBox4.Size.Width - 105, 60);
+
+            if(Column1a.Visible || Column1c.Visible)
+            {
+
+            }
+            else
+            {                
+                Column1b.Width = dataGridView1.Width - 195;
+                //label1.Text = dataGridView1.VerticalScrollingOffset.ToString();
+            }
+            if (Column2a.Visible || Column1c.Visible)
+            {
+
+            }
+            else
+            {
+                Column2b.Width = dataGridView2.Width - 195;
+            }
+            if (Column3a.Visible || Column1c.Visible)
+            {
+
+            }
+            else
+            {
+                Column3b.Width = dataGridView3.Width - 195;
+            }
+            if (Column4a.Visible || Column1c.Visible)
+            {
+
+            }
+            else
+            {
+                Column4b.Width = dataGridView4.Width - 195;
+            }
+
             //label1.Text = "Form size: " + ClientSize.Width + "x" + ClientSize.Height + " gb size: " + groupBox1.Width + "x" + groupBox1.Height + " dgv size: " + dataGridView1.Width + "x" + dataGridView1.Height;
             //dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            //label1.Text = checkBox1.Location.X.ToString();
         }
         #endregion Методы
 
         #region События
         private void Form1_Load(object sender, EventArgs e)
         {
-            Column1a.Visible = false;
-            Column1c.Visible = false;
-            Column2a.Visible = false;
-            Column2c.Visible = false;
-            Column3a.Visible = false;
-            Column3c.Visible = false;
-            Column4a.Visible = false;
-            Column4c.Visible = false;
+            //MinimumSize = new System.Drawing.Size(816, 639); // 800*600
 
             string[] abonentslist = new string[100];
 
@@ -239,11 +277,6 @@ namespace WindowsFormsApp1
 
         }
 
-        private void numericUpDown9_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void timer3b_Tick(object sender, EventArgs e)
         {
 
@@ -260,14 +293,137 @@ namespace WindowsFormsApp1
         }
         #endregion Таймеры
 
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                numericUpDown2.Enabled = true;
+            }
+            else
+            {
+                numericUpDown2.Enabled = false;
+            }
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox2.Checked)
+            {
+                numericUpDown5.Enabled = true;
+            }
+            else
+            {
+                numericUpDown5.Enabled = false;
+            }
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox3.Checked)
+            {
+                numericUpDown8.Enabled = true;
+            }
+            else
+            {
+                numericUpDown8.Enabled = false;
+            }
+        }
+
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox4.Checked)
+            {
+                numericUpDown11.Enabled = true;
+            }
+            else
+            {
+                numericUpDown11.Enabled = false;
+            }
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown3_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown4_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown5_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown6_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown7_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown8_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown9_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown10_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown11_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown12_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            //SomeMethod();
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            label1.Text = e.RowIndex.ToString();
+            //label1.Text = e.RowIndex.ToString();
         }
 
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)

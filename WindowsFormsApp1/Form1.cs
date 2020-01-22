@@ -18,6 +18,7 @@ namespace WindowsFormsApp1
     {
         private int t0, t1a, t1b, t2a, t2b, t3a, t3b, t4a, t4b;
         //private string abonent;
+        //List<string> testlist = new List<string>();
 
         private string[] abonentslist;
 
@@ -71,36 +72,39 @@ namespace WindowsFormsApp1
                 File.WriteAllLines("Abonents.txt", StandartList);
                 abonentslist = StandartList;
             }
-            /*
-            int s = 0; // Счётчик строк
-            while (abonentslist[s] != "")
+            
+            //int s = 0; // Счётчик строк
+            /*for(int s = 0; s < 50; s++)
             {
-                string str = abonentslist[s];
-                int flag = 0, start_id = 0;
-
-                int c = 0; // Счётчик символов
-                while (str[c].ToString() != "//")
+                int flag = 0;
+                while (abonentslist[s] != "")
                 {
-                    c++;
-                }
+                    string str = abonentslist[s];
+                    int start_id = 0;
 
-                switch(flag)
-                {
-                    case 0:
-                        ab[c].Name = str.Substring(start_id, c);
-                        break;
-                    case 1:
-                        ab[c].DNS = str;
-                        break;
-                    case 2:
-                        ab[c].IP = str;
-                        break;
-                }
-                flag++;
+                    int c = 0; // Счётчик символов
+                    while (str[c].ToString() != "//")
+                    {
+                        c++;
+                    }
 
+                    switch (flag)
+                    {
+                        case 0:
+                            ab[c].Name = str.Substring(start_id, c);
+                            break;
+                        case 1:
+                            ab[c].DNS = str;
+                            break;
+                        case 2:
+                            ab[c].IP = str;
+                            break;
+                    }
+                    flag++;
+                }
                 s++;
-            }
-            */
+            }*/
+            
             //ab.Name = "Kek";
 
             dataGridView1.Rows.Add("Laptop 1", "192.168.0.1", "Online");
@@ -128,7 +132,7 @@ namespace WindowsFormsApp1
 
         private void FormResized()
         {
-            /*if (ClientSize.Height - 60 < label1.Location.X - 44)
+            /*if (ClientSize.Height - 16 < label1.Location.X)
             {
                 pictureBox1.Size = new Size(ClientSize.Height / 2 - 60, ClientSize.Height / 2 - 60);
                 pictureBox2.Size = new Size(ClientSize.Height / 2 - 60, ClientSize.Height / 2 - 60);
@@ -148,6 +152,22 @@ namespace WindowsFormsApp1
             pictureBox3.Location = new Point(12, pictureBox1.Size.Height + 48);
             pictureBox4.Location = new Point(pictureBox1.Size.Width + 32, pictureBox1.Size.Height + 48);
             pictureBox5.Location = new Point(pictureBox1.Size.Width * 2 + 52, pictureBox4.Location.Y);*/
+
+            groupBox1.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 50) / 2);
+
+            groupBox2.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 50) / 2);
+            groupBox2.Location = new Point(groupBox1.Width + 20, 25);
+
+            groupBox3.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 50) / 2);
+            groupBox3.Location = new Point(10, groupBox1.Height + 35);
+
+            groupBox4.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 50) / 2);
+            groupBox4.Location = new Point(groupBox1.Width + 20, groupBox1.Height + 35);
+
+            dataGridView1.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 55);
+            dataGridView2.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 55);
+            dataGridView3.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 55);
+            dataGridView4.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 55);
         }
         #endregion Методы
 
@@ -231,7 +251,7 @@ namespace WindowsFormsApp1
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
+            label1.Text = dataGridView1.SelectedCells[1].ToString();
         }
 
         private void Form_ChangedSize(object sender, EventArgs e)

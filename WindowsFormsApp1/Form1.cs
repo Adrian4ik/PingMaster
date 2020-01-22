@@ -107,11 +107,11 @@ namespace WindowsFormsApp1
             
             //ab.Name = "Kek";
 
-            dataGridView1.Rows.Add("Laptop 1", "192.168.0.1", "Online");
-            dataGridView1.Rows.Add("Laptop 2", "192.168.51.86", "Online");
-            dataGridView1.Rows.Add("Laptop 3", "127.0.0.1", "Offline");
-            dataGridView1.Rows.Add("Laptop 4", "Some ip", "Offline");
-            dataGridView1.Rows.Add("Laptop 5", "Some ip", "Online");
+            dataGridView1.Rows.Add("", "Laptop 1", "", "192.168.0.1", "Online");
+            dataGridView1.Rows.Add("", "Laptop 2", "", "192.168.51.86", "Online");
+            dataGridView1.Rows.Add("", "Laptop 3", "", "127.0.0.1", "Offline");
+            dataGridView1.Rows.Add("", "Laptop 4", "", "Some ip", "Offline");
+            dataGridView1.Rows.Add("", "Laptop 5", "", "Some ip", "Online");
             //dataGridView1.Rows.Add("Laptop 6", ab.IP, "Online");
             dataGridView1.Rows.Add("", "", "");
 
@@ -132,27 +132,6 @@ namespace WindowsFormsApp1
 
         private void FormResized()
         {
-            /*if (ClientSize.Height - 16 < label1.Location.X)
-            {
-                pictureBox1.Size = new Size(ClientSize.Height / 2 - 60, ClientSize.Height / 2 - 60);
-                pictureBox2.Size = new Size(ClientSize.Height / 2 - 60, ClientSize.Height / 2 - 60);
-                pictureBox3.Size = new Size(ClientSize.Height / 2 - 60, ClientSize.Height / 2 - 60);
-                pictureBox4.Size = new Size(ClientSize.Height / 2 - 60, ClientSize.Height / 2 - 60);
-            }
-            else
-            {
-                pictureBox1.Size = new Size(label1.Location.X / 2 - 44, label1.Location.X / 2 - 44);
-                pictureBox2.Size = new Size(label1.Location.X / 2 - 44, label1.Location.X / 2 - 44);
-                pictureBox3.Size = new Size(label1.Location.X / 2 - 44, label1.Location.X / 2 - 44);
-                pictureBox4.Size = new Size(label1.Location.X / 2 - 44, label1.Location.X / 2 - 44);
-            }
-
-            pictureBox5.Size = new Size(1, 1);
-            pictureBox2.Location = new Point(pictureBox1.Size.Width + 32, 28);
-            pictureBox3.Location = new Point(12, pictureBox1.Size.Height + 48);
-            pictureBox4.Location = new Point(pictureBox1.Size.Width + 32, pictureBox1.Size.Height + 48);
-            pictureBox5.Location = new Point(pictureBox1.Size.Width * 2 + 52, pictureBox4.Location.Y);*/
-
             groupBox1.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 50) / 2);
 
             groupBox2.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 50) / 2);
@@ -164,19 +143,31 @@ namespace WindowsFormsApp1
             groupBox4.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 50) / 2);
             groupBox4.Location = new Point(groupBox1.Width + 20, groupBox1.Height + 35);
 
-            dataGridView1.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 55);
-            dataGridView2.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 55);
-            dataGridView3.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 55);
-            dataGridView4.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 55);
+            dataGridView1.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 95);
+            dataGridView2.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 95);
+            dataGridView3.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 95);
+            dataGridView4.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 95);
+
+            //label1.Text = dataGridView1.Width.ToString();
         }
         #endregion Методы
 
         #region События
         private void Form1_Load(object sender, EventArgs e)
         {
+            Column1a.Visible = false;
+            Column1c.Visible = false;
+            Column2a.Visible = false;
+            Column2c.Visible = false;
+            Column3a.Visible = false;
+            Column3c.Visible = false;
+            Column4a.Visible = false;
+            Column4c.Visible = false;
+
+            FormResized();
             PreProcessing();
 
-            Timer0.Start();
+            /*Timer0.Start();
             Timer1a.Start();
             Timer1b.Start();
             Timer2a.Start();
@@ -194,7 +185,7 @@ namespace WindowsFormsApp1
             Timer3a.Interval = 1;
             Timer3b.Interval = 1;
             Timer4a.Interval = 1;
-            Timer4b.Interval = 1;
+            Timer4b.Interval = 1;*/
         }
 
         #region Таймеры
@@ -251,7 +242,22 @@ namespace WindowsFormsApp1
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            label1.Text = dataGridView1.SelectedCells[1].ToString();
+            //label1.Text = dataGridView1.SelectedCells[1].ToString();
+        }
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //label1.Text = dataGridView1.SelectedCells[1].ToString();
+        }
+
+        private void dataGridView3_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //label1.Text = dataGridView1.SelectedCells[1].ToString();
+        }
+
+        private void dataGridView4_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //label1.Text = dataGridView1.SelectedCells[1].ToString();
         }
 
         private void Form_ChangedSize(object sender, EventArgs e)

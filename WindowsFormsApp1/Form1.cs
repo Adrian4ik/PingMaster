@@ -20,8 +20,6 @@ namespace WindowsFormsApp1
         //private string abonent;
         //List<string> testlist = new List<string>();
 
-        private string[] abonentslist;
-
         private struct abonent
         {
             public int Group;
@@ -62,17 +60,34 @@ namespace WindowsFormsApp1
             //Count();
         }
 
-        private void PreProcessing()
+        private string[] PreProcessing()
         {
+            string[] al = new string[100];
+
             if (File.Exists("Abonents.txt"))
-                abonentslist = File.ReadAllLines("Abonents.txt");
+                al = File.ReadAllLines("Abonents.txt");
             else
             {
                 File.Create("Abonents.txt");
                 File.WriteAllLines("Abonents.txt", StandartList);
-                abonentslist = StandartList;
+                al = StandartList;
             }
-            
+
+            t0 = 3 * С_sec;
+            t1a = 3 * С_sec;
+            t1b = 1 * С_min;
+            t2a = 3 * С_sec;
+            t2b = 1 * С_min;
+            t3a = 3 * С_sec;
+            t3b = 1 * С_min;
+            t4a = 3 * С_sec;
+            t4b = 1 * С_min;
+
+            return al;
+        }
+
+        private void FillGrids()
+        {
             //int s = 0; // Счётчик строк
             /*for(int s = 0; s < 50; s++)
             {
@@ -104,7 +119,7 @@ namespace WindowsFormsApp1
                 }
                 s++;
             }*/
-            
+
             //ab.Name = "Kek";
 
             dataGridView1.Rows.Add("", "Laptop 1", "", "192.168.0.1", "Online");
@@ -115,19 +130,14 @@ namespace WindowsFormsApp1
             //dataGridView1.Rows.Add("Laptop 6", ab.IP, "Online");
             dataGridView1.Rows.Add("", "", "");
 
+            dataGridView1[5, 0].Style.BackColor = Color.GreenYellow;
+            dataGridView1[5, 1].Style.BackColor = Color.GreenYellow;
             dataGridView1[5, 2].Style.BackColor = Color.Red;
+            dataGridView1[5, 3].Style.BackColor = Color.Red;
+            dataGridView1[5, 4].Style.BackColor = Color.Red;
+            dataGridView1[5, 5].Style.BackColor = Color.Cyan;
 
-            //dataGridView1[0, 0].Value = ab.Name;
-
-            t0 = 3 * С_sec;
-            t1a = 3 * С_sec;
-            t1b = 1 * С_min;
-            t2a = 3 * С_sec;
-            t2b = 1 * С_min;
-            t3a = 3 * С_sec;
-            t3b = 1 * С_min;
-            t4a = 3 * С_sec;
-            t4b = 1 * С_min;
+            dataGridView1[1, 0].Value = ab[0].Name;
         }
 
         private void FormResized() // standart form size w916; h639;
@@ -148,7 +158,7 @@ namespace WindowsFormsApp1
             dataGridView3.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 95);
             dataGridView4.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 95);
 
-            label1.Text = "Form size: " + ClientSize.Width + "x" + ClientSize.Height + " gb size: " + groupBox1.Width + "x" + groupBox1.Height + " dgv size: " + dataGridView1.Width + "x" + dataGridView1.Height;
+            //label1.Text = "Form size: " + ClientSize.Width + "x" + ClientSize.Height + " gb size: " + groupBox1.Width + "x" + groupBox1.Height + " dgv size: " + dataGridView1.Width + "x" + dataGridView1.Height;
             //dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
         }
         #endregion Методы
@@ -165,8 +175,11 @@ namespace WindowsFormsApp1
             Column4a.Visible = false;
             Column4c.Visible = false;
 
+            string[] abonentslist = new string[100];
+
             FormResized();
-            PreProcessing();
+            abonentslist = PreProcessing();
+            FillGrids();
 
             /*Timer0.Start();
             Timer1a.Start();
@@ -243,22 +256,22 @@ namespace WindowsFormsApp1
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            //label1.Text = dataGridView1.SelectedCells[1].ToString();
+            label1.Text = e.RowIndex.ToString();
         }
 
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            //label1.Text = dataGridView1.SelectedCells[1].ToString();
+            //label1.Text = e.RowIndex.ToString();
         }
 
         private void dataGridView3_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            //label1.Text = dataGridView1.SelectedCells[1].ToString();
+            //label1.Text = e.RowIndex.ToString();
         }
 
         private void dataGridView4_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            //label1.Text = dataGridView1.SelectedCells[1].ToString();
+            //label1.Text = e.RowIndex.ToString();
         }
 
         private void Form_ChangedSize(object sender, EventArgs e)

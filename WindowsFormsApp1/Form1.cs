@@ -52,6 +52,53 @@ namespace WindowsFormsApp1
             InitializeComponent();
         }
 
+        private void Translate()
+        {
+            Column2a.HeaderText = Column1b.HeaderText;
+            Column3a.HeaderText = Column1b.HeaderText;
+            Column4a.HeaderText = Column1b.HeaderText;
+
+            Column2b.HeaderText = Column1b.HeaderText;
+            Column3b.HeaderText = Column1b.HeaderText;
+            Column4b.HeaderText = Column1b.HeaderText;
+
+            Column2c.HeaderText = Column1b.HeaderText;
+            Column3c.HeaderText = Column1b.HeaderText;
+            Column4c.HeaderText = Column1b.HeaderText;
+
+            Column2d.HeaderText = Column1b.HeaderText;
+            Column3d.HeaderText = Column1b.HeaderText;
+            Column4d.HeaderText = Column1b.HeaderText;
+
+            Column2e.HeaderText = Column1b.HeaderText;
+            Column3e.HeaderText = Column1b.HeaderText;
+            Column4e.HeaderText = Column1b.HeaderText;
+
+            Column2f.HeaderText = Column1b.HeaderText;
+            Column3f.HeaderText = Column1b.HeaderText;
+            Column4f.HeaderText = Column1b.HeaderText;
+
+            label3.Text = label1.Text;
+            label5.Text = label1.Text;
+            label7.Text = label1.Text;
+
+            label4.Text = label2.Text;
+            label6.Text = label2.Text;
+            label8.Text = label2.Text;
+
+            label13.Text = label11.Text;
+            label15.Text = label11.Text;
+            label17.Text = label11.Text;
+
+            label14.Text = label12.Text;
+            label16.Text = label12.Text;
+            label18.Text = label12.Text;
+
+            label22.Text = label21.Text;
+            label23.Text = label21.Text;
+            label24.Text = label21.Text;
+        }
+
         private string[] PreProcessing()
         {
             string[] al = new string[100];
@@ -119,8 +166,26 @@ namespace WindowsFormsApp1
             dataGridView1.Rows.Add("", "Laptop 3", "", "127.0.0.1", "Offline");
             dataGridView1.Rows.Add("", "Laptop 4", "", "Some ip", "Offline");
             dataGridView1.Rows.Add("", "Laptop 5", "", "Some ip", "Online");
+
+            dataGridView2.Rows.Add("", "Laptop 1", "", "192.168.0.1", "Online");
+            dataGridView2.Rows.Add("", "Laptop 2", "", "192.168.51.86", "Online");
+            dataGridView2.Rows.Add("", "Laptop 3", "", "127.0.0.1", "Offline");
+            dataGridView2.Rows.Add("", "Laptop 4", "", "Some ip", "Offline");
+            dataGridView2.Rows.Add("", "Laptop 5", "", "Some ip", "Online");
+
+            dataGridView3.Rows.Add("", "Laptop 1", "", "192.168.0.1", "Online");
+            dataGridView3.Rows.Add("", "Laptop 2", "", "192.168.51.86", "Online");
+            dataGridView3.Rows.Add("", "Laptop 3", "", "127.0.0.1", "Offline");
+            dataGridView3.Rows.Add("", "Laptop 4", "", "Some ip", "Offline");
+            dataGridView3.Rows.Add("", "Laptop 5", "", "Some ip", "Online");
+
+            dataGridView4.Rows.Add("", "Laptop 1", "", "192.168.0.1", "Online");
+            dataGridView4.Rows.Add("", "Laptop 2", "", "192.168.51.86", "Online");
+            dataGridView4.Rows.Add("", "Laptop 3", "", "127.0.0.1", "Offline");
+            dataGridView4.Rows.Add("", "Laptop 4", "", "Some ip", "Offline");
+            dataGridView4.Rows.Add("", "Laptop 5", "", "Some ip", "Online");
             //dataGridView1.Rows.Add("Laptop 6", ab.IP, "Online");
-            dataGridView1.Rows.Add("", "", "");
+            dataGridView1.Rows.Add();
 
             dataGridView1[5, 0].Style.BackColor = Color.GreenYellow;
             dataGridView1[5, 1].Style.BackColor = Color.GreenYellow;
@@ -128,6 +193,8 @@ namespace WindowsFormsApp1
             dataGridView1[5, 3].Style.BackColor = Color.Red;
             dataGridView1[5, 4].Style.BackColor = Color.Red;
             dataGridView1[5, 5].Style.BackColor = Color.Cyan;
+
+            //dataGridView1[0, 0]. = false;
 
             //dataGridView1[1, 0].Value = ab[0].Name;
         }
@@ -222,6 +289,7 @@ namespace WindowsFormsApp1
             string[] abonentslist = new string[100];
 
             FormResized();
+            Translate();
             abonentslist = PreProcessing();
             FillGrids();
 

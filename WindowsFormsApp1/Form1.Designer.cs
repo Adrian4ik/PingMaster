@@ -30,10 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.Open_iniTSMitem = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,10 +43,9 @@
             this.LanguageTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.Lang_rusTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.Lang_engTSMitem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Options_2TSMitem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ViewTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.Options_3TSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.ReferenceTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.User_guideTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.Timer0 = new System.Windows.Forms.Timer(this.components);
@@ -130,6 +129,9 @@
             this.label17 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.Switch_dnsTSMitem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Switch_idTSMitem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Switch_ipTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
@@ -176,19 +178,16 @@
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(38, 22);
-            this.toolStripButton1.Text = "File";
             // 
             // Open_iniTSMitem
             // 
             this.Open_iniTSMitem.Name = "Open_iniTSMitem";
-            this.Open_iniTSMitem.Size = new System.Drawing.Size(142, 22);
-            this.Open_iniTSMitem.Text = "Open INI file";
+            this.Open_iniTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // Open_logTSMitem
             // 
             this.Open_logTSMitem.Name = "Open_logTSMitem";
-            this.Open_logTSMitem.Size = new System.Drawing.Size(142, 22);
-            this.Open_logTSMitem.Text = "Open log file";
+            this.Open_logTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // toolStripButton2
             // 
@@ -197,17 +196,15 @@
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(56, 22);
-            this.toolStripButton2.Text = "Tracking";
             // 
             // toolStripButton3
             // 
             this.toolStripButton3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LanguageTSMitem,
-            this.Options_2TSMitem,
+            this.ViewTSMitem,
             this.Options_3TSMitem});
             this.toolStripButton3.Name = "toolStripButton3";
             this.toolStripButton3.Size = new System.Drawing.Size(62, 22);
-            this.toolStripButton3.Text = "Options";
             // 
             // LanguageTSMitem
             // 
@@ -215,63 +212,54 @@
             this.Lang_rusTSMitem,
             this.Lang_engTSMitem});
             this.LanguageTSMitem.Name = "LanguageTSMitem";
-            this.LanguageTSMitem.Size = new System.Drawing.Size(126, 22);
-            this.LanguageTSMitem.Text = "Language";
+            this.LanguageTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // Lang_rusTSMitem
             // 
             this.Lang_rusTSMitem.Name = "Lang_rusTSMitem";
             this.Lang_rusTSMitem.Size = new System.Drawing.Size(114, 22);
-            this.Lang_rusTSMitem.Text = "Russian";
             this.Lang_rusTSMitem.Click += new System.EventHandler(this.Lang_rusTSMitem_Click);
             // 
             // Lang_engTSMitem
             // 
             this.Lang_engTSMitem.Name = "Lang_engTSMitem";
             this.Lang_engTSMitem.Size = new System.Drawing.Size(114, 22);
-            this.Lang_engTSMitem.Text = "English";
             this.Lang_engTSMitem.Click += new System.EventHandler(this.Lang_engTSMitem_Click);
             // 
-            // Options_2TSMitem
+            // ViewTSMitem
             // 
-            this.Options_2TSMitem.Name = "Options_2TSMitem";
-            this.Options_2TSMitem.Size = new System.Drawing.Size(126, 22);
+            this.ViewTSMitem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Switch_idTSMitem,
+            this.Switch_dnsTSMitem,
+            this.Switch_ipTSMitem});
+            this.ViewTSMitem.Name = "ViewTSMitem";
+            this.ViewTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // Options_3TSMitem
             // 
             this.Options_3TSMitem.Name = "Options_3TSMitem";
-            this.Options_3TSMitem.Size = new System.Drawing.Size(126, 22);
+            this.Options_3TSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // toolStripButton4
             // 
             this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButton4.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ReferenceTSMitem,
             this.User_guideTSMitem,
             this.AboutTSMitem});
             this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
             this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton4.Name = "toolStripButton4";
             this.toolStripButton4.Size = new System.Drawing.Size(45, 22);
-            this.toolStripButton4.Text = "Help";
-            // 
-            // ReferenceTSMitem
-            // 
-            this.ReferenceTSMitem.Name = "ReferenceTSMitem";
-            this.ReferenceTSMitem.Size = new System.Drawing.Size(130, 22);
-            this.ReferenceTSMitem.Text = "Reference";
             // 
             // User_guideTSMitem
             // 
             this.User_guideTSMitem.Name = "User_guideTSMitem";
-            this.User_guideTSMitem.Size = new System.Drawing.Size(130, 22);
-            this.User_guideTSMitem.Text = "User guide";
+            this.User_guideTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // AboutTSMitem
             // 
             this.AboutTSMitem.Name = "AboutTSMitem";
-            this.AboutTSMitem.Size = new System.Drawing.Size(130, 22);
-            this.AboutTSMitem.Text = "About";
+            this.AboutTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // Timer0
             // 
@@ -322,14 +310,14 @@
             this.Column1d,
             this.Column1e,
             this.Column1f});
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.DeepSkyBlue;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.DeepSkyBlue;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView1.Location = new System.Drawing.Point(5, 90);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(2);
@@ -360,14 +348,13 @@
             // Column1b
             // 
             this.Column1b.FillWeight = 150F;
-            this.Column1b.HeaderText = "Laptop name";
             this.Column1b.MinimumWidth = 25;
             this.Column1b.Name = "Column1b";
             this.Column1b.ReadOnly = true;
             // 
             // Column1c
             // 
-            this.Column1c.HeaderText = "DNS name";
+            this.Column1c.HeaderText = "DNS";
             this.Column1c.MinimumWidth = 25;
             this.Column1c.Name = "Column1c";
             this.Column1c.ReadOnly = true;
@@ -375,7 +362,7 @@
             // 
             // Column1d
             // 
-            this.Column1d.HeaderText = "Laptop IP";
+            this.Column1d.HeaderText = "IP";
             this.Column1d.MinimumWidth = 25;
             this.Column1d.Name = "Column1d";
             this.Column1d.ReadOnly = true;
@@ -383,7 +370,6 @@
             // 
             // Column1e
             // 
-            this.Column1e.HeaderText = "Status";
             this.Column1e.MinimumWidth = 25;
             this.Column1e.Name = "Column1e";
             this.Column1e.ReadOnly = true;
@@ -410,14 +396,14 @@
             this.Column2d,
             this.Column2e,
             this.Column2f});
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.DeepSkyBlue;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.DeepSkyBlue;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView2.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView2.Location = new System.Drawing.Point(5, 90);
             this.dataGridView2.Margin = new System.Windows.Forms.Padding(2);
@@ -492,14 +478,14 @@
             this.Column3d,
             this.Column3e,
             this.Column3f});
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.DeepSkyBlue;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView3.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.DeepSkyBlue;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView3.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView3.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView3.Location = new System.Drawing.Point(5, 90);
             this.dataGridView3.Margin = new System.Windows.Forms.Padding(2);
@@ -574,14 +560,14 @@
             this.Column4d,
             this.Column4e,
             this.Column4f});
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.DeepSkyBlue;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView4.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.DeepSkyBlue;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView4.DefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridView4.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView4.Location = new System.Drawing.Point(5, 90);
             this.dataGridView4.Margin = new System.Windows.Forms.Padding(2);
@@ -663,7 +649,6 @@
             this.groupBox1.Size = new System.Drawing.Size(305, 215);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Group 1";
             // 
             // label21
             // 
@@ -672,7 +657,6 @@
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(79, 13);
             this.label21.TabIndex = 28;
-            this.label21.Text = "Packets count:";
             // 
             // button1
             // 
@@ -680,7 +664,6 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(100, 25);
             this.button1.TabIndex = 27;
-            this.button1.Text = "Ping 1 group";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -691,7 +674,6 @@
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(23, 13);
             this.label12.TabIndex = 25;
-            this.label12.Text = "min";
             // 
             // label11
             // 
@@ -700,7 +682,6 @@
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(24, 13);
             this.label11.TabIndex = 24;
-            this.label11.Text = "sec";
             // 
             // numericUpDown2
             // 
@@ -733,7 +714,6 @@
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(115, 17);
             this.checkBox1.TabIndex = 19;
-            this.checkBox1.Text = "Autoping 1st group";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
@@ -744,7 +724,6 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(84, 13);
             this.label2.TabIndex = 18;
-            this.label2.Text = "Autoping period:";
             // 
             // numericUpDown3
             // 
@@ -794,7 +773,6 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(48, 13);
             this.label1.TabIndex = 16;
-            this.label1.Text = "Timeout:";
             // 
             // label6
             // 
@@ -832,7 +810,6 @@
             this.groupBox2.Size = new System.Drawing.Size(305, 215);
             this.groupBox2.TabIndex = 13;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Group 2";
             // 
             // button2
             // 
@@ -840,7 +817,6 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(100, 25);
             this.button2.TabIndex = 28;
-            this.button2.Text = "Ping 2 group";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -851,7 +827,6 @@
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(119, 17);
             this.checkBox2.TabIndex = 27;
-            this.checkBox2.Text = "Autoping 2nd group";
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
@@ -988,7 +963,6 @@
             this.groupBox3.Size = new System.Drawing.Size(305, 215);
             this.groupBox3.TabIndex = 14;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Group 3";
             // 
             // numericUpDown9
             // 
@@ -1014,7 +988,6 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(100, 25);
             this.button3.TabIndex = 30;
-            this.button3.Text = "Ping 3 group";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -1025,7 +998,6 @@
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(116, 17);
             this.checkBox3.TabIndex = 28;
-            this.checkBox3.Text = "Autoping 3rd group";
             this.checkBox3.UseVisualStyleBackColor = true;
             this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
             // 
@@ -1120,7 +1092,6 @@
             this.groupBox4.Size = new System.Drawing.Size(305, 215);
             this.groupBox4.TabIndex = 15;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Group 4";
             // 
             // numericUpDown12
             // 
@@ -1193,7 +1164,6 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(100, 25);
             this.button4.TabIndex = 22;
-            this.button4.Text = "Ping 4 group";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
@@ -1204,7 +1174,6 @@
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(116, 17);
             this.checkBox4.TabIndex = 20;
-            this.checkBox4.Text = "Autoping 4th group";
             this.checkBox4.UseVisualStyleBackColor = true;
             this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
             // 
@@ -1239,6 +1208,21 @@
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(0, 13);
             this.label7.TabIndex = 16;
+            // 
+            // Switch_dnsTSMitem
+            // 
+            this.Switch_dnsTSMitem.Name = "Switch_dnsTSMitem";
+            this.Switch_dnsTSMitem.Size = new System.Drawing.Size(180, 22);
+            // 
+            // Switch_idTSMitem
+            // 
+            this.Switch_idTSMitem.Name = "Switch_idTSMitem";
+            this.Switch_idTSMitem.Size = new System.Drawing.Size(180, 22);
+            // 
+            // Switch_ipTSMitem
+            // 
+            this.Switch_ipTSMitem.Name = "Switch_ipTSMitem";
+            this.Switch_ipTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // Form1
             // 
@@ -1291,7 +1275,7 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripDropDownButton toolStripButton3;
         private System.Windows.Forms.ToolStripMenuItem LanguageTSMitem;
-        private System.Windows.Forms.ToolStripMenuItem Options_2TSMitem;
+        private System.Windows.Forms.ToolStripMenuItem ViewTSMitem;
         private System.Windows.Forms.ToolStripMenuItem Options_3TSMitem;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.DataGridView dataGridView3;
@@ -1355,7 +1339,6 @@
         private System.Windows.Forms.ToolStripMenuItem Open_iniTSMitem;
         private System.Windows.Forms.ToolStripMenuItem Open_logTSMitem;
         private System.Windows.Forms.ToolStripDropDownButton toolStripButton4;
-        private System.Windows.Forms.ToolStripMenuItem ReferenceTSMitem;
         private System.Windows.Forms.ToolStripMenuItem Lang_rusTSMitem;
         private System.Windows.Forms.ToolStripMenuItem Lang_engTSMitem;
         private System.Windows.Forms.ToolStripMenuItem User_guideTSMitem;
@@ -1384,6 +1367,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1d;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1e;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1f;
+        private System.Windows.Forms.ToolStripMenuItem Switch_dnsTSMitem;
+        private System.Windows.Forms.ToolStripMenuItem Switch_idTSMitem;
+        private System.Windows.Forms.ToolStripMenuItem Switch_ipTSMitem;
     }
 }
 

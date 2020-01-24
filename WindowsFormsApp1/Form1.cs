@@ -29,7 +29,7 @@ namespace WindowsFormsApp1
             public string IP;
         }
 
-        private abonent[] ab = new abonent[100];
+        public abonent[] ab = new abonent[103];
 
         public struct reply
         {
@@ -43,10 +43,10 @@ namespace WindowsFormsApp1
         public const int C_sec = 1000, C_min = 60000;
 
         private string[] StandartList = new string[]
-            {"Loopback//DNS name//127.0.0.1", "БРИ-1//DNS name//10.1.1.254", "БРИ-2//DNS name//10.1.2.254", "БРИ-3//DNS name//192.168.60.254", "Что-то//DNS name//192.168.68.73", "АСП//DNS name//10.1.2.250", "",
-            "Ещё что-то// //192.168.67.25", "USL ER-SWA1,2// //192.168.60.253", "ISS Server 1// //192.168.60.51", "LS1// //192.168.60.53", "Lab printer// //192.168.60.82", "",
-            "RSE1// //10.1.1.3", "RSK1// //10.1.1.4", "RSK2// //10.1.1.5", "RSS1// //10.1.2.1", "RSS2// //10.1.1.1", "SM Printer// //192.168.60.81", "Mediaserver AGAT// //10.1.1.80", "RSE-Med// //10.1.1.7", "",
-            "FS1// //10.1.1.100", "БСПН (PLS)// //10.1.3.4", "ТВМ1-Н// //10.1.3.1", "БПИ-НЧ (TRPU)// //192.168.249.1", "БЗУ// //10.1.11.5"};
+            {"Loopback/DNS name/127.0.0.1", "БРИ-1/DNS name/10.1.1.254", "БРИ-2/DNS name/10.1.2.254", "БРИ-3/DNS name/192.168.60.254", "Что-то/DNS name/192.168.68.73", "АСП/DNS name/10.1.2.250", "",
+            "Ещё что-то/ /192.168.67.25", "USL ER-SWA1,2/ /192.168.60.253", "ISS Server 1/ /192.168.60.51", "LS1/ /192.168.60.53", "Lab printer/ /192.168.60.82", "",
+            "RSE1/ /10.1.1.3", "RSK1/ /10.1.1.4", "RSK2/ /10.1.1.5", "RSS1/ /10.1.2.1", "RSS2/ /10.1.1.1", "SM Printer/ /192.168.60.81", "Mediaserver AGAT/ /10.1.1.80", "RSE-Med/ /10.1.1.7", "",
+            "FS1/ /10.1.1.100", "БСПН (PLS)/ /10.1.3.4", "ТВМ1-Н/ /10.1.3.1", "БПИ-НЧ (TRPU)/ /192.168.249.1", "БЗУ/ /10.1.11.5"};
         #endregion Константы
 
         #region Методы
@@ -60,16 +60,19 @@ namespace WindowsFormsApp1
             if(is_english)
             {
                 toolStripButton1.Text = "File";
-                    Open_iniTSMitem.Text = "Open INI file";
+                    Open_iniTSMitem.Text = "Open .INI file";
                     Open_logTSMitem.Text = "Open log file";
                 toolStripButton2.Text = "Tracking";
-                toolStripButton3.Text = "Options";
+                toolStripButton3.Text = "Settings";
                     LanguageTSMitem.Text = "Language";
                         Lang_rusTSMitem.Text = "Russian";
                         Lang_engTSMitem.Text = "English";
+                    ViewTSMitem.Text = "View";
+                        Switch_idTSMitem.Text = "On/Off ID";
+                        Switch_dnsTSMitem.Text = "On/Off DNS";
+                        Switch_ipTSMitem.Text = "On/Off IP";
                 toolStripButton4.Text = "Help";
-                    ReferenceTSMitem.Text = "Reference";
-                    User_guideTSMitem.Text = "User guide";
+                    User_guideTSMitem.Text = "User's guide";
                     AboutTSMitem.Text = "About";
 
                 groupBox1.Text = "Group 1";
@@ -77,13 +80,11 @@ namespace WindowsFormsApp1
                 groupBox3.Text = "Group 3";
                 groupBox4.Text = "Group 4";
 
-                Column1b.HeaderText = "Laptop name";
-                Column1c.HeaderText = "DNS name";
-                Column1d.HeaderText = "Laptop IP";
+                Column1b.HeaderText = "Name";
                 Column1e.HeaderText = "Status";
 
                 label1.Text = "Timeout:";
-                label2.Text = "Autoping period:";
+                label2.Text = "Ping ever:";
                 label21.Text = "Packets count:";
                 label11.Text = "sec";
                 label12.Text = "min";
@@ -93,34 +94,35 @@ namespace WindowsFormsApp1
                 checkBox3.Text = "Autoping 3rd group";
                 checkBox4.Text = "Autoping 4th group";
 
-                button1.Text = "Ping 1 group";
-                button2.Text = "Ping 2 group";
-                button3.Text = "Ping 3 group";
-                button4.Text = "Ping 4 group";
+                button1.Text = "Ping 1st group";
+                button2.Text = "Ping 2nd group";
+                button3.Text = "Ping 3rd group";
+                button4.Text = "Ping 4th group";
             }
             else
             {
                 toolStripButton1.Text = "Файл";
-                Open_iniTSMitem.Text = "Открыть INI файл";
-                Open_logTSMitem.Text = "Открыть лог файл";
+                    Open_iniTSMitem.Text = "Открыть .INI файл";
+                    Open_logTSMitem.Text = "Открыть лог файл";
                 toolStripButton2.Text = "Слежение";
                 toolStripButton3.Text = "Настройки";
-                LanguageTSMitem.Text = "Язык";
-                Lang_rusTSMitem.Text = "Русский";
-                Lang_engTSMitem.Text = "Английский";
+                    LanguageTSMitem.Text = "Язык";
+                        Lang_rusTSMitem.Text = "Русский";
+                        Lang_engTSMitem.Text = "Английский";
+                    ViewTSMitem.Text = "Вид";
+                        Switch_idTSMitem.Text = "Вкл/Выкл ID";
+                        Switch_dnsTSMitem.Text = "Вкл/Выкл DNS";
+                        Switch_ipTSMitem.Text = "Вкл/Выкл IP";
                 toolStripButton4.Text = "Помощь";
-                ReferenceTSMitem.Text = "Справка";
-                User_guideTSMitem.Text = "Руководство пользователя";
-                AboutTSMitem.Text = "О программе";
+                    User_guideTSMitem.Text = "Руководство пользователя";
+                    AboutTSMitem.Text = "О программе";
 
                 groupBox1.Text = "Группа 1";
                 groupBox2.Text = "Группа 2";
                 groupBox3.Text = "Группа 3";
                 groupBox4.Text = "Группа 4";
 
-                Column1b.HeaderText = "Имя лэптопа";
-                Column1c.HeaderText = "DNS имя";
-                Column1d.HeaderText = "IP лэптопа";
+                Column1b.HeaderText = "Имя";
                 Column1e.HeaderText = "Статус";
 
                 label1.Text = "Время ожидания:";
@@ -228,40 +230,53 @@ namespace WindowsFormsApp1
             return al;
         }
 
+        private void FillAL(string[] al)
+        {
+            for (int s = 0, grid = 1; s < al.Count(); s++)
+            {
+                if (al[s] == "")
+                {
+                    ab[s].Name = "";
+                    grid++;
+                }
+                else
+                {
+                    string str = al[s];
+
+                    for(int c = 0, flag = 1; c < al[s].Length; c++) // Правило разбиения строки на компоненты абонента (Имя абонента/DNS/IP)
+                    {
+                        char a = str[c];
+                        if (str[c] == '/' && str[c + 1] == '/')
+                        {
+                            flag++;
+                            c++;
+                            //a[s].Name = "";
+                            //a[s].DNS = "";
+                            //a[s].IP = "";
+                        }
+                        else
+                        {
+                            switch (flag)
+                            {
+                                case 1:
+                                    ab[s].Name = ab[s].Name + str[c];
+                                    break;
+                                case 2:
+                                    ab[s].DNS = ab[s].DNS + str[c];
+                                    break;
+                                case 3:
+                                    ab[s].IP = ab[s].IP + str[c];
+                                    break;
+                            }
+                        }
+                    }
+                }
+                ab[s].Group = grid; // хрень с первыми строками
+            }
+        }
+
         private void FillGrids()
         {
-            //int s = 0; // Счётчик строк
-            /*for(int s = 0; s < 50; s++)
-            {
-                int flag = 0;
-                while (abonentslist[s] != "")
-                {
-                    string str = abonentslist[s];
-                    int start_id = 0;
-
-                    int c = 0; // Счётчик символов
-                    while (str[c].ToString() != "//")
-                    {
-                        c++;
-                    }
-
-                    switch (flag)
-                    {
-                        case 0:
-                            ab[c].Name = str.Substring(start_id, c);
-                            break;
-                        case 1:
-                            ab[c].DNS = str;
-                            break;
-                        case 2:
-                            ab[c].IP = str;
-                            break;
-                    }
-                    flag++;
-                }
-                s++;
-            }*/
-
             //ab.Name = "Kek";
 
             /*dataGridView1.Rows.Add("", "Laptop 1", "", "192.168.0.1", "Online");
@@ -299,6 +314,37 @@ namespace WindowsFormsApp1
             //dataGridView1[0, 0]. = false;
 
             //dataGridView1[1, 0].Value = ab[0].Name;
+            for(int i = 0, j = 0; i < ab.Count(); i++, j++)
+            {
+                if(ab[i].Name == "")
+                    j = -1;
+                else
+                {
+                    switch (ab[i].Group)
+                    {
+                        case 1:
+                            dataGridView1[1, j].Value = ab[i].Name;
+                            dataGridView1[2, j].Value = ab[i].DNS; //ab[i].Name; ab[i].DNS; ab[i].IP;
+                            dataGridView1[3, j].Value = ab[i].IP;
+                            break;
+                        case 2:
+                            dataGridView2[1, j].Value = ab[i].Name;
+                            dataGridView2[2, j].Value = ab[i].DNS;
+                            dataGridView2[3, j].Value = ab[i].IP;
+                            break;
+                        case 3:
+                            dataGridView3[1, j].Value = ab[i].Name;
+                            dataGridView3[2, j].Value = ab[i].DNS;
+                            dataGridView3[3, j].Value = ab[i].IP;
+                            break;
+                        case 4:
+                            dataGridView4[1, j].Value = ab[i].Name;
+                            dataGridView4[2, j].Value = ab[i].DNS;
+                            dataGridView4[3, j].Value = ab[i].IP;
+                            break;
+                    }
+                }
+            }
         }
         // дописать
         private reply Ping_cl(abonent a)
@@ -399,6 +445,7 @@ namespace WindowsFormsApp1
             CopyElements();
 
             abonentslist = PreProcessing();
+            FillAL(abonentslist);
             FillGrids();
 
             /*Timer0.Start();*/
@@ -597,6 +644,8 @@ namespace WindowsFormsApp1
             if (Timer1a.Enabled)
                 Timer1a.Stop();
             Timer1a.Start();
+
+            label1.Text = ab[1].Name;
         }
         // дописать
         private void button2_Click(object sender, EventArgs e)

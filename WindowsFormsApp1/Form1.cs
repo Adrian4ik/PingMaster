@@ -16,7 +16,7 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        private int t0, t1a, t1b, t2a, t2b, t3a, t3b, t4a, t4b;
+        string[] al;
         //private string abonent;
         //List<string> testlist = new List<string>();
 
@@ -29,7 +29,7 @@ namespace WindowsFormsApp1
             public string IP;
         }
 
-        public abonent[] ab = new abonent[103];
+        public abonent[] ab;
 
         public struct reply
         {
@@ -68,7 +68,6 @@ namespace WindowsFormsApp1
                         Lang_rusTSMitem.Text = "Russian";
                         Lang_engTSMitem.Text = "English";
                     ViewTSMitem.Text = "View";
-                        Switch_idTSMitem.Text = "On/Off ID";
                         Switch_dnsTSMitem.Text = "On/Off DNS";
                         Switch_ipTSMitem.Text = "On/Off IP";
                 toolStripButton4.Text = "Help";
@@ -80,8 +79,8 @@ namespace WindowsFormsApp1
                 groupBox3.Text = "Group 3";
                 groupBox4.Text = "Group 4";
 
-                Column1b.HeaderText = "Name";
-                Column1e.HeaderText = "Status";
+                Column1a.HeaderText = "Name";
+                Column1d.HeaderText = "Status";
 
                 label1.Text = "Timeout:";
                 label2.Text = "Ping ever:";
@@ -110,7 +109,6 @@ namespace WindowsFormsApp1
                         Lang_rusTSMitem.Text = "Русский";
                         Lang_engTSMitem.Text = "Английский";
                     ViewTSMitem.Text = "Вид";
-                        Switch_idTSMitem.Text = "Вкл/Выкл ID";
                         Switch_dnsTSMitem.Text = "Вкл/Выкл DNS";
                         Switch_ipTSMitem.Text = "Вкл/Выкл IP";
                 toolStripButton4.Text = "Помощь";
@@ -122,8 +120,8 @@ namespace WindowsFormsApp1
                 groupBox3.Text = "Группа 3";
                 groupBox4.Text = "Группа 4";
 
-                Column1b.HeaderText = "Имя";
-                Column1e.HeaderText = "Статус";
+                Column1a.HeaderText = "Имя";
+                Column1d.HeaderText = "Статус";
 
                 label1.Text = "Время ожидания:";
                 label2.Text = "Период автопинга:";
@@ -165,10 +163,6 @@ namespace WindowsFormsApp1
             Column3e.HeaderText = Column1e.HeaderText;
             Column4e.HeaderText = Column1e.HeaderText;
 
-            Column2f.HeaderText = Column1f.HeaderText;
-            Column3f.HeaderText = Column1f.HeaderText;
-            Column4f.HeaderText = Column1f.HeaderText;
-
             label3.Text = label1.Text;
             label5.Text = label1.Text;
             label7.Text = label1.Text;
@@ -190,47 +184,42 @@ namespace WindowsFormsApp1
             label24.Text = label21.Text;
         }
 
-        private string[] PreProcessing()
+        private void PreProcessing()
         {
-            int k;
-            string[] al = new string[100];
-
-            if (File.Exists("Abonents.txt"))
-                al = File.ReadAllLines("Abonents.txt");
-            else
+            if (!File.Exists("Abonents.txt"))
             {
-                File.Create("Abonents.txt");
+                FileStream f = File.Create("Abonents.txt");
+                f.Close();
                 File.WriteAllLines("Abonents.txt", StandartList);
                 al = StandartList;
             }
+            al = File.ReadAllLines("Abonents.txt");
+            ab = new abonent[al.Count()];
 
-            t0 = 3 * C_sec;
-            t1a = 3 * C_sec;
-            t1b = 1 * C_min;
-            t2a = 3 * C_sec;
-            t2b = 1 * C_min;
-            t3a = 3 * C_sec;
-            t3b = 1 * C_min;
-            t4a = 3 * C_sec;
-            t4b = 1 * C_min;
+            /*Timer0.Start();*/
+            Timer0.Interval = 1;
+            Timer1a.Interval = (int)numericUpDown1.Value * C_sec;
+            Timer1b.Interval = (int)numericUpDown2.Value * C_min;
+            Timer2a.Interval = (int)numericUpDown4.Value * C_sec;
+            Timer2b.Interval = (int)numericUpDown5.Value * C_min;
+            Timer3a.Interval = (int)numericUpDown7.Value * C_sec;
+            Timer3b.Interval = (int)numericUpDown8.Value * C_min;
+            Timer4a.Interval = (int)numericUpDown10.Value * C_sec;
+            Timer4b.Interval = (int)numericUpDown11.Value * C_min;
 
+            int c;
             if (al.Count() <= 60)
-                k = 15;
+                c = 15;
             else
-                k = 25;
+                c = 25;
 
-            for (int i = 0; i < k; i++)
-            {
-                dataGridView1.Rows.Add();
-                dataGridView2.Rows.Add();
-                dataGridView3.Rows.Add();
-                dataGridView4.Rows.Add();
-            }
-
-            return al;
+            dataGridView1.Rows.Add(c);
+            dataGridView2.Rows.Add(c);
+            dataGridView3.Rows.Add(c);
+            dataGridView4.Rows.Add(c);
         }
 
-        private void FillAL(string[] al)
+        private void FillAL()
         {
             for (int s = 0, grid = 1; s < al.Count(); s++)
             {
@@ -243,17 +232,10 @@ namespace WindowsFormsApp1
                 {
                     string str = al[s];
 
-                    for(int c = 0, flag = 1; c < al[s].Length; c++) // Правило разбиения строки на компоненты абонента (Имя абонента/DNS/IP)
+                    for(int c = 0, flag = 1; c < al[s].Length; c++)
                     {
-                        char a = str[c];
-                        if (str[c] == '/' && str[c + 1] == '/')
-                        {
+                        if (str[c] == '/') // Правило разбиения строки на компоненты абонента (Имя абонента/DNS/IP)
                             flag++;
-                            c++;
-                            //a[s].Name = "";
-                            //a[s].DNS = "";
-                            //a[s].IP = "";
-                        }
                         else
                         {
                             switch (flag)
@@ -271,49 +253,12 @@ namespace WindowsFormsApp1
                         }
                     }
                 }
-                ab[s].Group = grid; // хрень с первыми строками
+                ab[s].Group = grid;
             }
         }
 
         private void FillGrids()
         {
-            //ab.Name = "Kek";
-
-            /*dataGridView1.Rows.Add("", "Laptop 1", "", "192.168.0.1", "Online");
-            dataGridView1.Rows.Add("", "Laptop 2", "", "192.168.51.86", "Online");
-            dataGridView1.Rows.Add("", "Laptop 3", "", "127.0.0.1", "Offline");
-            dataGridView1.Rows.Add("", "Laptop 4", "", "Some ip", "Offline");
-            dataGridView1.Rows.Add("", "Laptop 5", "", "Some ip", "Online");
-
-            dataGridView2.Rows.Add("", "Laptop 1", "", "192.168.0.1", "Online");
-            dataGridView2.Rows.Add("", "Laptop 2", "", "192.168.51.86", "Online");
-            dataGridView2.Rows.Add("", "Laptop 3", "", "127.0.0.1", "Offline");
-            dataGridView2.Rows.Add("", "Laptop 4", "", "Some ip", "Offline");
-            dataGridView2.Rows.Add("", "Laptop 5", "", "Some ip", "Online");
-
-            dataGridView3.Rows.Add("", "Laptop 1", "", "192.168.0.1", "Online");
-            dataGridView3.Rows.Add("", "Laptop 2", "", "192.168.51.86", "Online");
-            dataGridView3.Rows.Add("", "Laptop 3", "", "127.0.0.1", "Offline");
-            dataGridView3.Rows.Add("", "Laptop 4", "", "Some ip", "Offline");
-            dataGridView3.Rows.Add("", "Laptop 5", "", "Some ip", "Online");
-
-            dataGridView4.Rows.Add("", "Laptop 1", "", "192.168.0.1", "Online");
-            dataGridView4.Rows.Add("", "Laptop 2", "", "192.168.51.86", "Online");
-            dataGridView4.Rows.Add("", "Laptop 3", "", "127.0.0.1", "Offline");
-            dataGridView4.Rows.Add("", "Laptop 4", "", "Some ip", "Offline");
-            dataGridView4.Rows.Add("", "Laptop 5", "", "Some ip", "Online");*/
-            //dataGridView1.Rows.Add("Laptop 6", ab.IP, "Online");
-
-            /*dataGridView1[5, 0].Style.BackColor = Color.GreenYellow;
-            dataGridView1[5, 1].Style.BackColor = Color.GreenYellow;
-            dataGridView1[5, 2].Style.BackColor = Color.Red;
-            dataGridView1[5, 3].Style.BackColor = Color.Red;
-            dataGridView1[5, 4].Style.BackColor = Color.Red;
-            dataGridView1[5, 5].Style.BackColor = Color.Cyan;*/
-
-            //dataGridView1[0, 0]. = false;
-
-            //dataGridView1[1, 0].Value = ab[0].Name;
             for(int i = 0, j = 0; i < ab.Count(); i++, j++)
             {
                 if(ab[i].Name == "")
@@ -323,24 +268,24 @@ namespace WindowsFormsApp1
                     switch (ab[i].Group)
                     {
                         case 1:
-                            dataGridView1[1, j].Value = ab[i].Name;
-                            dataGridView1[2, j].Value = ab[i].DNS; //ab[i].Name; ab[i].DNS; ab[i].IP;
-                            dataGridView1[3, j].Value = ab[i].IP;
+                            dataGridView1[0, j].Value = ab[i].Name;
+                            dataGridView1[1, j].Value = ab[i].DNS;
+                            dataGridView1[2, j].Value = ab[i].IP;
                             break;
                         case 2:
-                            dataGridView2[1, j].Value = ab[i].Name;
-                            dataGridView2[2, j].Value = ab[i].DNS;
-                            dataGridView2[3, j].Value = ab[i].IP;
+                            dataGridView2[0, j].Value = ab[i].Name;
+                            dataGridView2[1, j].Value = ab[i].DNS;
+                            dataGridView2[2, j].Value = ab[i].IP;
                             break;
                         case 3:
-                            dataGridView3[1, j].Value = ab[i].Name;
-                            dataGridView3[2, j].Value = ab[i].DNS;
-                            dataGridView3[3, j].Value = ab[i].IP;
+                            dataGridView3[0, j].Value = ab[i].Name;
+                            dataGridView3[1, j].Value = ab[i].DNS;
+                            dataGridView3[2, j].Value = ab[i].IP;
                             break;
                         case 4:
-                            dataGridView4[1, j].Value = ab[i].Name;
-                            dataGridView4[2, j].Value = ab[i].DNS;
-                            dataGridView4[3, j].Value = ab[i].IP;
+                            dataGridView4[0, j].Value = ab[i].Name;
+                            dataGridView4[1, j].Value = ab[i].DNS;
+                            dataGridView4[2, j].Value = ab[i].IP;
                             break;
                     }
                 }
@@ -368,7 +313,7 @@ namespace WindowsFormsApp1
             return r;
         }
 
-        private void FormResized() // standart form size w916; h639;
+        private void FormResized() // form adds height and width to client size: x16, y39
         {
             groupBox1.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 50) / 2);
             groupBox2.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 50) / 2);
@@ -393,71 +338,49 @@ namespace WindowsFormsApp1
             button3.Location = new Point(groupBox3.Size.Width - 105, 60);
             button4.Location = new Point(groupBox4.Size.Width - 105, 60);
 
-            if(Column1a.Visible || Column1c.Visible)
+            if(Column1b.Visible)
             {
+                Column1a.Width = (dataGridView1.Width - 195) / 2;
+                Column2a.Width = (dataGridView1.Width - 195) / 2;
+                Column3a.Width = (dataGridView1.Width - 195) / 2;
+                Column4a.Width = (dataGridView1.Width - 195) / 2;
 
-            }
-            else
-            {                
-                Column1b.Width = dataGridView1.Width - 195;
-                //label1.Text = dataGridView1.VerticalScrollingOffset.ToString();
-            }
-            if (Column2a.Visible || Column1c.Visible)
-            {
-
-            }
-            else
-            {
-                Column2b.Width = dataGridView2.Width - 195;
-            }
-            if (Column3a.Visible || Column1c.Visible)
-            {
-
+                Column1b.Width = Column1a.Width;
+                Column2b.Width = Column2a.Width;
+                Column3b.Width = Column3a.Width;
+                Column4b.Width = Column4a.Width;
             }
             else
             {
-                Column3b.Width = dataGridView3.Width - 195;
+                Column1a.Width = dataGridView1.Width - 195;
+                Column2a.Width = dataGridView1.Width - 195;
+                Column3a.Width = dataGridView1.Width - 195;
+                Column4a.Width = dataGridView1.Width - 195;
             }
-            if (Column4a.Visible || Column1c.Visible)
-            {
-
-            }
-            else
-            {
-                Column4b.Width = dataGridView4.Width - 195;
-            }
-
-            //label1.Text = "Form size: " + ClientSize.Width + "x" + ClientSize.Height + " gb size: " + groupBox1.Width + "x" + groupBox1.Height + " dgv size: " + dataGridView1.Width + "x" + dataGridView1.Height;
-            //dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            //label1.Text = checkBox1.Location.X.ToString();
         }
         #endregion Методы
 
         #region События
         private void Form1_Load(object sender, EventArgs e)
         {
-            //MinimumSize = new System.Drawing.Size(816, 639); // 800*600
-
-            string[] abonentslist = new string[100];
-
-            //FormResized();
             Translate(false);
             CopyElements();
 
-            abonentslist = PreProcessing();
-            FillAL(abonentslist);
+            Column1b.Visible = false;
+            Column2b.Visible = false;
+            Column3b.Visible = false;
+            Column4b.Visible = false;
+
+            PreProcessing();
+            FillAL();
             FillGrids();
 
-            /*Timer0.Start();*/
-            Timer0.Interval = 1;
-            Timer1a.Interval = (int)numericUpDown1.Value * C_sec;
-            Timer1b.Interval = (int)numericUpDown2.Value * C_min;
-            Timer2a.Interval = (int)numericUpDown4.Value * C_sec;
-            Timer2b.Interval = (int)numericUpDown5.Value * C_min;
-            Timer3a.Interval = (int)numericUpDown7.Value * C_sec;
-            Timer3b.Interval = (int)numericUpDown8.Value * C_min;
-            Timer4a.Interval = (int)numericUpDown10.Value * C_sec;
-            Timer4b.Interval = (int)numericUpDown11.Value * C_min;
+            dataGridView1[4, 0].Style.BackColor = Color.GreenYellow;
+            dataGridView1[4, 1].Style.BackColor = Color.GreenYellow;
+            dataGridView1[4, 2].Style.BackColor = Color.Red;
+            dataGridView1[4, 3].Style.BackColor = Color.Red;
+            dataGridView1[4, 4].Style.BackColor = Color.Red;
+            dataGridView1[4, 5].Style.BackColor = Color.Cyan;
         }
 
         #region Таймеры
@@ -522,60 +445,76 @@ namespace WindowsFormsApp1
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
-            {
                 numericUpDown2.Enabled = true;
-            }
             else
-            {
                 numericUpDown2.Enabled = false;
-            }
+
+            if (Timer1a.Enabled)
+                Timer1a.Stop();
+
             if (Timer1b.Enabled)
                 Timer1b.Stop();
+
+            Timer1a.Interval = (int)numericUpDown1.Value * C_sec;
+            Timer1a.Start();
+            Timer1b.Interval = (int)numericUpDown2.Value * C_min;
             Timer1b.Start();
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox2.Checked)
-            {
                 numericUpDown5.Enabled = true;
-            }
             else
-            {
                 numericUpDown5.Enabled = false;
-            }
+
+            if (Timer2a.Enabled)
+                Timer2a.Stop();
+
             if (Timer2b.Enabled)
                 Timer2b.Stop();
+
+            Timer2a.Interval = (int)numericUpDown4.Value * C_sec;
+            Timer2a.Start();
+            Timer2b.Interval = (int)numericUpDown5.Value * C_min;
             Timer2b.Start();
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox3.Checked)
-            {
                 numericUpDown8.Enabled = true;
-            }
             else
-            {
                 numericUpDown8.Enabled = false;
-            }
+
+            if (Timer3a.Enabled)
+                Timer3a.Stop();
+
             if (Timer3b.Enabled)
                 Timer3b.Stop();
+
+            Timer3a.Interval = (int)numericUpDown7.Value * C_sec;
+            Timer3a.Start();
+            Timer3b.Interval = (int)numericUpDown8.Value * C_min;
             Timer3b.Start();
         }
 
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox4.Checked)
-            {
                 numericUpDown11.Enabled = true;
-            }
             else
-            {
                 numericUpDown11.Enabled = false;
-            }
+
+            if (Timer4a.Enabled)
+                Timer4a.Stop();
+
             if (Timer4b.Enabled)
                 Timer4b.Stop();
+
+            Timer4a.Interval = (int)numericUpDown10.Value * C_sec;
+            Timer4a.Start();
+            Timer4b.Interval = (int)numericUpDown11.Value * C_min;
             Timer4b.Start();
         }
 
@@ -643,15 +582,17 @@ namespace WindowsFormsApp1
         {
             if (Timer1a.Enabled)
                 Timer1a.Stop();
-            Timer1a.Start();
 
-            label1.Text = ab[1].Name;
+            Timer1a.Interval = (int)numericUpDown1.Value * C_sec;
+            Timer1a.Start();
         }
         // дописать
         private void button2_Click(object sender, EventArgs e)
         {
             if (Timer2a.Enabled)
                 Timer2a.Stop();
+
+            Timer2a.Interval = (int)numericUpDown4.Value * C_sec;
             Timer2a.Start();
         }
         // дописать
@@ -659,6 +600,8 @@ namespace WindowsFormsApp1
         {
             if (Timer3a.Enabled)
                 Timer3a.Stop();
+
+            Timer3a.Interval = (int)numericUpDown7.Value * C_sec;
             Timer3a.Start();
         }
         // дописать
@@ -666,27 +609,61 @@ namespace WindowsFormsApp1
         {
             if (Timer4a.Enabled)
                 Timer4a.Stop();
+
+            Timer4a.Interval = (int)numericUpDown10.Value * C_sec;
             Timer4a.Start();
         }
-        // дописать
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+
+        private void dataGridView1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            //label1.Text = e.RowIndex.ToString();
+            int selected_row = dataGridView1.SelectedCells[0].RowIndex;
+            string s_name = dataGridView1[0, selected_row].Value.ToString();
+            string s_dns = dataGridView1[1, selected_row].Value.ToString();
+            string s_ip = dataGridView1[2, selected_row].Value.ToString();
+
+            Tracking tr = new Tracking(s_name, s_dns, s_ip);
+            tr.Activate();
         }
-        // дописать
-        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+
+        private void dataGridView2_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            //label1.Text = e.RowIndex.ToString();
+            int selected_row = dataGridView2.SelectedCells[0].RowIndex;
+            label3.Text = dataGridView2[2, selected_row].Value.ToString();
         }
-        // дописать
-        private void dataGridView3_CellContentClick(object sender, DataGridViewCellEventArgs e)
+
+        private void dataGridView3_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            //label1.Text = e.RowIndex.ToString();
+            int selected_row = dataGridView3.SelectedCells[0].RowIndex;
+            label5.Text = dataGridView3[2, selected_row].Value.ToString();
         }
-        // дописать
-        private void dataGridView4_CellContentClick(object sender, DataGridViewCellEventArgs e)
+
+        private void dataGridView4_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            //label1.Text = e.RowIndex.ToString();
+            int selected_row = dataGridView4.SelectedCells[0].RowIndex;
+            label7.Text = dataGridView4[2, selected_row].Value.ToString();
+        }
+
+        private void Switch_dnsTSMitem_Click(object sender, EventArgs e)
+        {
+            if (Column1b.Visible)
+            {
+                Column1b.Visible = false;
+                Column2b.Visible = false;
+                Column3b.Visible = false;
+                Column4b.Visible = false;
+
+                MinimumSize = new Size(656, 519);
+            }
+            else
+            {
+                Column1b.Visible = true;
+                Column2b.Visible = true;
+                Column3b.Visible = true;
+                Column4b.Visible = true;
+
+                MinimumSize = new Size(896, 519);
+            }
+            FormResized();
         }
 
         private void Form_ChangedSize(object sender, EventArgs e)

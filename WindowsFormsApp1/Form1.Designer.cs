@@ -44,6 +44,8 @@
             this.Lang_rusTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.Lang_engTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.ViewTSMitem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Switch_dnsTSMitem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Switch_ipTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.Options_3TSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripDropDownButton();
             this.User_guideTSMitem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,28 +65,24 @@
             this.Column1c = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1d = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1e = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1f = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.Column2a = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2b = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2c = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2d = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2e = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2f = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.Column3a = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3b = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3c = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3d = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3e = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3f = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridView4 = new System.Windows.Forms.DataGridView();
             this.Column4a = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4b = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4c = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4d = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4e = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4f = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label21 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
@@ -129,9 +127,6 @@
             this.label17 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.Switch_dnsTSMitem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Switch_idTSMitem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Switch_ipTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
@@ -170,6 +165,7 @@
             // 
             // toolStripButton1
             // 
+            this.toolStripButton1.AutoToolTip = false;
             this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Open_iniTSMitem,
@@ -177,34 +173,36 @@
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(38, 22);
+            this.toolStripButton1.Size = new System.Drawing.Size(13, 22);
             // 
             // Open_iniTSMitem
             // 
             this.Open_iniTSMitem.Name = "Open_iniTSMitem";
-            this.Open_iniTSMitem.Size = new System.Drawing.Size(180, 22);
+            this.Open_iniTSMitem.Size = new System.Drawing.Size(67, 22);
             // 
             // Open_logTSMitem
             // 
             this.Open_logTSMitem.Name = "Open_logTSMitem";
-            this.Open_logTSMitem.Size = new System.Drawing.Size(180, 22);
+            this.Open_logTSMitem.Size = new System.Drawing.Size(67, 22);
             // 
             // toolStripButton2
             // 
+            this.toolStripButton2.AutoToolTip = false;
             this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(56, 22);
+            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
             // 
             // toolStripButton3
             // 
+            this.toolStripButton3.AutoToolTip = false;
             this.toolStripButton3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LanguageTSMitem,
             this.ViewTSMitem,
             this.Options_3TSMitem});
             this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(62, 22);
+            this.toolStripButton3.Size = new System.Drawing.Size(13, 22);
             // 
             // LanguageTSMitem
             // 
@@ -212,36 +210,47 @@
             this.Lang_rusTSMitem,
             this.Lang_engTSMitem});
             this.LanguageTSMitem.Name = "LanguageTSMitem";
-            this.LanguageTSMitem.Size = new System.Drawing.Size(180, 22);
+            this.LanguageTSMitem.Size = new System.Drawing.Size(67, 22);
             // 
             // Lang_rusTSMitem
             // 
             this.Lang_rusTSMitem.Name = "Lang_rusTSMitem";
-            this.Lang_rusTSMitem.Size = new System.Drawing.Size(114, 22);
+            this.Lang_rusTSMitem.Size = new System.Drawing.Size(67, 22);
             this.Lang_rusTSMitem.Click += new System.EventHandler(this.Lang_rusTSMitem_Click);
             // 
             // Lang_engTSMitem
             // 
             this.Lang_engTSMitem.Name = "Lang_engTSMitem";
-            this.Lang_engTSMitem.Size = new System.Drawing.Size(114, 22);
+            this.Lang_engTSMitem.Size = new System.Drawing.Size(67, 22);
             this.Lang_engTSMitem.Click += new System.EventHandler(this.Lang_engTSMitem_Click);
             // 
             // ViewTSMitem
             // 
             this.ViewTSMitem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Switch_idTSMitem,
             this.Switch_dnsTSMitem,
             this.Switch_ipTSMitem});
             this.ViewTSMitem.Name = "ViewTSMitem";
-            this.ViewTSMitem.Size = new System.Drawing.Size(180, 22);
+            this.ViewTSMitem.Size = new System.Drawing.Size(67, 22);
+            // 
+            // Switch_dnsTSMitem
+            // 
+            this.Switch_dnsTSMitem.Name = "Switch_dnsTSMitem";
+            this.Switch_dnsTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.Switch_dnsTSMitem.Click += new System.EventHandler(this.Switch_dnsTSMitem_Click);
+            // 
+            // Switch_ipTSMitem
+            // 
+            this.Switch_ipTSMitem.Name = "Switch_ipTSMitem";
+            this.Switch_ipTSMitem.Size = new System.Drawing.Size(67, 22);
             // 
             // Options_3TSMitem
             // 
             this.Options_3TSMitem.Name = "Options_3TSMitem";
-            this.Options_3TSMitem.Size = new System.Drawing.Size(180, 22);
+            this.Options_3TSMitem.Size = new System.Drawing.Size(67, 22);
             // 
             // toolStripButton4
             // 
+            this.toolStripButton4.AutoToolTip = false;
             this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButton4.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.User_guideTSMitem,
@@ -249,17 +258,17 @@
             this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
             this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(45, 22);
+            this.toolStripButton4.Size = new System.Drawing.Size(13, 22);
             // 
             // User_guideTSMitem
             // 
             this.User_guideTSMitem.Name = "User_guideTSMitem";
-            this.User_guideTSMitem.Size = new System.Drawing.Size(180, 22);
+            this.User_guideTSMitem.Size = new System.Drawing.Size(67, 22);
             // 
             // AboutTSMitem
             // 
             this.AboutTSMitem.Name = "AboutTSMitem";
-            this.AboutTSMitem.Size = new System.Drawing.Size(180, 22);
+            this.AboutTSMitem.Size = new System.Drawing.Size(67, 22);
             // 
             // Timer0
             // 
@@ -308,8 +317,7 @@
             this.Column1b,
             this.Column1c,
             this.Column1d,
-            this.Column1e,
-            this.Column1f});
+            this.Column1e});
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -334,54 +342,44 @@
             this.dataGridView1.Size = new System.Drawing.Size(295, 120);
             this.dataGridView1.StandardTab = true;
             this.dataGridView1.TabIndex = 9;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.dataGridView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.dataGridView1_MouseDoubleClick);
             // 
             // Column1a
             // 
-            this.Column1a.HeaderText = "ID";
+            this.Column1a.FillWeight = 150F;
             this.Column1a.MinimumWidth = 25;
             this.Column1a.Name = "Column1a";
             this.Column1a.ReadOnly = true;
-            this.Column1a.Visible = false;
-            this.Column1a.Width = 40;
             // 
             // Column1b
             // 
-            this.Column1b.FillWeight = 150F;
+            this.Column1b.HeaderText = "DNS";
             this.Column1b.MinimumWidth = 25;
             this.Column1b.Name = "Column1b";
             this.Column1b.ReadOnly = true;
             // 
             // Column1c
             // 
-            this.Column1c.HeaderText = "DNS";
+            this.Column1c.HeaderText = "IP";
             this.Column1c.MinimumWidth = 25;
             this.Column1c.Name = "Column1c";
             this.Column1c.ReadOnly = true;
-            this.Column1c.Visible = false;
+            this.Column1c.Width = 85;
             // 
             // Column1d
             // 
-            this.Column1d.HeaderText = "IP";
             this.Column1d.MinimumWidth = 25;
             this.Column1d.Name = "Column1d";
             this.Column1d.ReadOnly = true;
-            this.Column1d.Width = 85;
+            this.Column1d.Width = 65;
             // 
             // Column1e
             // 
+            this.Column1e.HeaderText = " ";
             this.Column1e.MinimumWidth = 25;
             this.Column1e.Name = "Column1e";
             this.Column1e.ReadOnly = true;
-            this.Column1e.Width = 65;
-            // 
-            // Column1f
-            // 
-            this.Column1f.HeaderText = " ";
-            this.Column1f.MinimumWidth = 25;
-            this.Column1f.Name = "Column1f";
-            this.Column1f.ReadOnly = true;
-            this.Column1f.Width = 25;
+            this.Column1e.Width = 25;
             // 
             // dataGridView2
             // 
@@ -394,8 +392,7 @@
             this.Column2b,
             this.Column2c,
             this.Column2d,
-            this.Column2e,
-            this.Column2f});
+            this.Column2e});
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -420,19 +417,17 @@
             this.dataGridView2.Size = new System.Drawing.Size(295, 120);
             this.dataGridView2.StandardTab = true;
             this.dataGridView2.TabIndex = 10;
-            this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
+            this.dataGridView2.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.dataGridView2_MouseDoubleClick);
             // 
             // Column2a
             // 
+            this.Column2a.FillWeight = 150F;
             this.Column2a.MinimumWidth = 25;
             this.Column2a.Name = "Column2a";
             this.Column2a.ReadOnly = true;
-            this.Column2a.Visible = false;
-            this.Column2a.Width = 40;
             // 
             // Column2b
             // 
-            this.Column2b.FillWeight = 150F;
             this.Column2b.MinimumWidth = 25;
             this.Column2b.Name = "Column2b";
             this.Column2b.ReadOnly = true;
@@ -442,28 +437,21 @@
             this.Column2c.MinimumWidth = 25;
             this.Column2c.Name = "Column2c";
             this.Column2c.ReadOnly = true;
-            this.Column2c.Visible = false;
+            this.Column2c.Width = 85;
             // 
             // Column2d
             // 
             this.Column2d.MinimumWidth = 25;
             this.Column2d.Name = "Column2d";
             this.Column2d.ReadOnly = true;
-            this.Column2d.Width = 85;
+            this.Column2d.Width = 65;
             // 
             // Column2e
             // 
             this.Column2e.MinimumWidth = 25;
             this.Column2e.Name = "Column2e";
             this.Column2e.ReadOnly = true;
-            this.Column2e.Width = 65;
-            // 
-            // Column2f
-            // 
-            this.Column2f.MinimumWidth = 25;
-            this.Column2f.Name = "Column2f";
-            this.Column2f.ReadOnly = true;
-            this.Column2f.Width = 25;
+            this.Column2e.Width = 25;
             // 
             // dataGridView3
             // 
@@ -476,8 +464,7 @@
             this.Column3b,
             this.Column3c,
             this.Column3d,
-            this.Column3e,
-            this.Column3f});
+            this.Column3e});
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -502,19 +489,17 @@
             this.dataGridView3.Size = new System.Drawing.Size(295, 120);
             this.dataGridView3.StandardTab = true;
             this.dataGridView3.TabIndex = 11;
-            this.dataGridView3.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView3_CellContentClick);
+            this.dataGridView3.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.dataGridView3_MouseDoubleClick);
             // 
             // Column3a
             // 
+            this.Column3a.FillWeight = 150F;
             this.Column3a.MinimumWidth = 25;
             this.Column3a.Name = "Column3a";
             this.Column3a.ReadOnly = true;
-            this.Column3a.Visible = false;
-            this.Column3a.Width = 40;
             // 
             // Column3b
             // 
-            this.Column3b.FillWeight = 150F;
             this.Column3b.MinimumWidth = 25;
             this.Column3b.Name = "Column3b";
             this.Column3b.ReadOnly = true;
@@ -524,28 +509,21 @@
             this.Column3c.MinimumWidth = 25;
             this.Column3c.Name = "Column3c";
             this.Column3c.ReadOnly = true;
-            this.Column3c.Visible = false;
+            this.Column3c.Width = 85;
             // 
             // Column3d
             // 
             this.Column3d.MinimumWidth = 25;
             this.Column3d.Name = "Column3d";
             this.Column3d.ReadOnly = true;
-            this.Column3d.Width = 85;
+            this.Column3d.Width = 65;
             // 
             // Column3e
             // 
             this.Column3e.MinimumWidth = 25;
             this.Column3e.Name = "Column3e";
             this.Column3e.ReadOnly = true;
-            this.Column3e.Width = 65;
-            // 
-            // Column3f
-            // 
-            this.Column3f.MinimumWidth = 25;
-            this.Column3f.Name = "Column3f";
-            this.Column3f.ReadOnly = true;
-            this.Column3f.Width = 25;
+            this.Column3e.Width = 25;
             // 
             // dataGridView4
             // 
@@ -558,8 +536,7 @@
             this.Column4b,
             this.Column4c,
             this.Column4d,
-            this.Column4e,
-            this.Column4f});
+            this.Column4e});
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -584,19 +561,17 @@
             this.dataGridView4.Size = new System.Drawing.Size(295, 120);
             this.dataGridView4.StandardTab = true;
             this.dataGridView4.TabIndex = 12;
-            this.dataGridView4.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView4_CellContentClick);
+            this.dataGridView4.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.dataGridView4_MouseDoubleClick);
             // 
             // Column4a
             // 
+            this.Column4a.FillWeight = 150F;
             this.Column4a.MinimumWidth = 25;
             this.Column4a.Name = "Column4a";
             this.Column4a.ReadOnly = true;
-            this.Column4a.Visible = false;
-            this.Column4a.Width = 40;
             // 
             // Column4b
             // 
-            this.Column4b.FillWeight = 150F;
             this.Column4b.MinimumWidth = 25;
             this.Column4b.Name = "Column4b";
             this.Column4b.ReadOnly = true;
@@ -606,28 +581,21 @@
             this.Column4c.MinimumWidth = 25;
             this.Column4c.Name = "Column4c";
             this.Column4c.ReadOnly = true;
-            this.Column4c.Visible = false;
+            this.Column4c.Width = 85;
             // 
             // Column4d
             // 
             this.Column4d.MinimumWidth = 25;
             this.Column4d.Name = "Column4d";
             this.Column4d.ReadOnly = true;
-            this.Column4d.Width = 85;
+            this.Column4d.Width = 65;
             // 
             // Column4e
             // 
             this.Column4e.MinimumWidth = 25;
             this.Column4e.Name = "Column4e";
             this.Column4e.ReadOnly = true;
-            this.Column4e.Width = 65;
-            // 
-            // Column4f
-            // 
-            this.Column4f.MinimumWidth = 25;
-            this.Column4f.Name = "Column4f";
-            this.Column4f.ReadOnly = true;
-            this.Column4f.Width = 25;
+            this.Column4e.Width = 25;
             // 
             // groupBox1
             // 
@@ -655,7 +623,7 @@
             this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(5, 70);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(79, 13);
+            this.label21.Size = new System.Drawing.Size(0, 13);
             this.label21.TabIndex = 28;
             // 
             // button1
@@ -672,7 +640,7 @@
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(150, 45);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(23, 13);
+            this.label12.Size = new System.Drawing.Size(0, 13);
             this.label12.TabIndex = 25;
             // 
             // label11
@@ -680,7 +648,7 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(150, 20);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(24, 13);
+            this.label11.Size = new System.Drawing.Size(0, 13);
             this.label11.TabIndex = 24;
             // 
             // numericUpDown2
@@ -712,7 +680,7 @@
             this.checkBox1.AutoSize = true;
             this.checkBox1.Location = new System.Drawing.Point(179, 20);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(115, 17);
+            this.checkBox1.Size = new System.Drawing.Size(15, 14);
             this.checkBox1.TabIndex = 19;
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
@@ -722,7 +690,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(5, 45);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(84, 13);
+            this.label2.Size = new System.Drawing.Size(0, 13);
             this.label2.TabIndex = 18;
             // 
             // numericUpDown3
@@ -771,7 +739,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(5, 20);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(48, 13);
+            this.label1.Size = new System.Drawing.Size(0, 13);
             this.label1.TabIndex = 16;
             // 
             // label6
@@ -825,7 +793,7 @@
             this.checkBox2.AutoSize = true;
             this.checkBox2.Location = new System.Drawing.Point(179, 20);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(119, 17);
+            this.checkBox2.Size = new System.Drawing.Size(15, 14);
             this.checkBox2.TabIndex = 27;
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
@@ -996,7 +964,7 @@
             this.checkBox3.AutoSize = true;
             this.checkBox3.Location = new System.Drawing.Point(179, 20);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(116, 17);
+            this.checkBox3.Size = new System.Drawing.Size(15, 14);
             this.checkBox3.TabIndex = 28;
             this.checkBox3.UseVisualStyleBackColor = true;
             this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
@@ -1172,7 +1140,7 @@
             this.checkBox4.AutoSize = true;
             this.checkBox4.Location = new System.Drawing.Point(179, 20);
             this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(116, 17);
+            this.checkBox4.Size = new System.Drawing.Size(15, 14);
             this.checkBox4.TabIndex = 20;
             this.checkBox4.UseVisualStyleBackColor = true;
             this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
@@ -1208,21 +1176,6 @@
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(0, 13);
             this.label7.TabIndex = 16;
-            // 
-            // Switch_dnsTSMitem
-            // 
-            this.Switch_dnsTSMitem.Name = "Switch_dnsTSMitem";
-            this.Switch_dnsTSMitem.Size = new System.Drawing.Size(180, 22);
-            // 
-            // Switch_idTSMitem
-            // 
-            this.Switch_idTSMitem.Name = "Switch_idTSMitem";
-            this.Switch_idTSMitem.Size = new System.Drawing.Size(180, 22);
-            // 
-            // Switch_ipTSMitem
-            // 
-            this.Switch_ipTSMitem.Name = "Switch_ipTSMitem";
-            this.Switch_ipTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // Form1
             // 
@@ -1348,27 +1301,22 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2c;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2d;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2e;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2f;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3a;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3b;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3c;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3d;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3e;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3f;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4a;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4b;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4c;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4d;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4e;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column4f;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1a;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1b;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1c;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1d;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1e;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1f;
         private System.Windows.Forms.ToolStripMenuItem Switch_dnsTSMitem;
-        private System.Windows.Forms.ToolStripMenuItem Switch_idTSMitem;
         private System.Windows.Forms.ToolStripMenuItem Switch_ipTSMitem;
     }
 }

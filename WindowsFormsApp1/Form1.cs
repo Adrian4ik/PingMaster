@@ -16,6 +16,7 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
+        bool is_english;
         string[] al;
         //private string abonent;
         //List<string> testlist = new List<string>();
@@ -55,7 +56,7 @@ namespace WindowsFormsApp1
             InitializeComponent();
         }
 
-        private void Translate(bool is_english)
+        private void Translate()
         {
             if(is_english)
             {
@@ -69,7 +70,6 @@ namespace WindowsFormsApp1
                         Lang_engTSMitem.Text = "English";
                     ViewTSMitem.Text = "View";
                         Switch_dnsTSMitem.Text = "On/Off DNS";
-                        Switch_ipTSMitem.Text = "On/Off IP";
                 toolStripButton4.Text = "Help";
                     User_guideTSMitem.Text = "User's guide";
                     AboutTSMitem.Text = "About";
@@ -110,7 +110,6 @@ namespace WindowsFormsApp1
                         Lang_engTSMitem.Text = "Английский";
                     ViewTSMitem.Text = "Вид";
                         Switch_dnsTSMitem.Text = "Вкл/Выкл DNS";
-                        Switch_ipTSMitem.Text = "Вкл/Выкл IP";
                 toolStripButton4.Text = "Помощь";
                     User_guideTSMitem.Text = "Руководство пользователя";
                     AboutTSMitem.Text = "О программе";
@@ -196,8 +195,6 @@ namespace WindowsFormsApp1
             al = File.ReadAllLines("Abonents.txt");
             ab = new abonent[al.Count()];
 
-            /*Timer0.Start();*/
-            Timer0.Interval = 1;
             Timer1a.Interval = (int)numericUpDown1.Value * C_sec;
             Timer1b.Interval = (int)numericUpDown2.Value * C_min;
             Timer2a.Interval = (int)numericUpDown4.Value * C_sec;
@@ -363,7 +360,8 @@ namespace WindowsFormsApp1
         #region События
         private void Form1_Load(object sender, EventArgs e)
         {
-            Translate(false);
+            is_english = false;
+            Translate();
             CopyElements();
 
             Column1b.Visible = false;
@@ -432,13 +430,15 @@ namespace WindowsFormsApp1
 
         private void Lang_rusTSMitem_Click(object sender, EventArgs e)
         {
-            Translate(false);
+            is_english = false;
+            Translate();
             CopyElements();
         }
 
         private void Lang_engTSMitem_Click(object sender, EventArgs e)
         {
-            Translate(true);
+            is_english = true;
+            Translate();
             CopyElements();
         }
 
@@ -621,26 +621,41 @@ namespace WindowsFormsApp1
             string s_dns = dataGridView1[1, selected_row].Value.ToString();
             string s_ip = dataGridView1[2, selected_row].Value.ToString();
 
-            Tracking tr = new Tracking(s_name, s_dns, s_ip);
-            tr.Activate();
+            Tracking tr = new Tracking(is_english, s_name, s_dns, s_ip);
+            tr.Show();
         }
 
         private void dataGridView2_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             int selected_row = dataGridView2.SelectedCells[0].RowIndex;
-            label3.Text = dataGridView2[2, selected_row].Value.ToString();
+            string s_name = dataGridView2[0, selected_row].Value.ToString();
+            string s_dns = dataGridView2[1, selected_row].Value.ToString();
+            string s_ip = dataGridView2[2, selected_row].Value.ToString();
+
+            Tracking tr = new Tracking(is_english, s_name, s_dns, s_ip);
+            tr.Show();
         }
 
         private void dataGridView3_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             int selected_row = dataGridView3.SelectedCells[0].RowIndex;
-            label5.Text = dataGridView3[2, selected_row].Value.ToString();
+            string s_name = dataGridView3[0, selected_row].Value.ToString();
+            string s_dns = dataGridView3[1, selected_row].Value.ToString();
+            string s_ip = dataGridView3[2, selected_row].Value.ToString();
+
+            Tracking tr = new Tracking(is_english, s_name, s_dns, s_ip);
+            tr.Show();
         }
 
         private void dataGridView4_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             int selected_row = dataGridView4.SelectedCells[0].RowIndex;
-            label7.Text = dataGridView4[2, selected_row].Value.ToString();
+            string s_name = dataGridView4[0, selected_row].Value.ToString();
+            string s_dns = dataGridView4[1, selected_row].Value.ToString();
+            string s_ip = dataGridView4[2, selected_row].Value.ToString();
+
+            Tracking tr = new Tracking(is_english, s_name, s_dns, s_ip);
+            tr.Show();
         }
 
         private void Switch_dnsTSMitem_Click(object sender, EventArgs e)
@@ -664,6 +679,12 @@ namespace WindowsFormsApp1
                 MinimumSize = new Size(896, 519);
             }
             FormResized();
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            Tracking tr = new Tracking(is_english, "", "", "");
+            tr.Show();
         }
 
         private void Form_ChangedSize(object sender, EventArgs e)

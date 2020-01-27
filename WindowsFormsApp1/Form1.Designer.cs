@@ -45,12 +45,9 @@
             this.Lang_engTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.ViewTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.Switch_dnsTSMitem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Switch_ipTSMitem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Options_3TSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripDropDownButton();
             this.User_guideTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutTSMitem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Timer0 = new System.Windows.Forms.Timer(this.components);
             this.Timer1a = new System.Windows.Forms.Timer(this.components);
             this.Timer1b = new System.Windows.Forms.Timer(this.components);
             this.Timer2a = new System.Windows.Forms.Timer(this.components);
@@ -170,6 +167,7 @@
             this.toolStripButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Open_iniTSMitem,
             this.Open_logTSMitem});
+            this.toolStripButton1.Enabled = false;
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
@@ -178,12 +176,12 @@
             // Open_iniTSMitem
             // 
             this.Open_iniTSMitem.Name = "Open_iniTSMitem";
-            this.Open_iniTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.Open_iniTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // Open_logTSMitem
             // 
             this.Open_logTSMitem.Name = "Open_logTSMitem";
-            this.Open_logTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.Open_logTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // toolStripButton2
             // 
@@ -193,14 +191,14 @@
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // toolStripButton3
             // 
             this.toolStripButton3.AutoToolTip = false;
             this.toolStripButton3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LanguageTSMitem,
-            this.ViewTSMitem,
-            this.Options_3TSMitem});
+            this.ViewTSMitem});
             this.toolStripButton3.Name = "toolStripButton3";
             this.toolStripButton3.Size = new System.Drawing.Size(13, 22);
             // 
@@ -210,43 +208,32 @@
             this.Lang_rusTSMitem,
             this.Lang_engTSMitem});
             this.LanguageTSMitem.Name = "LanguageTSMitem";
-            this.LanguageTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.LanguageTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // Lang_rusTSMitem
             // 
             this.Lang_rusTSMitem.Name = "Lang_rusTSMitem";
-            this.Lang_rusTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.Lang_rusTSMitem.Size = new System.Drawing.Size(180, 22);
             this.Lang_rusTSMitem.Click += new System.EventHandler(this.Lang_rusTSMitem_Click);
             // 
             // Lang_engTSMitem
             // 
             this.Lang_engTSMitem.Name = "Lang_engTSMitem";
-            this.Lang_engTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.Lang_engTSMitem.Size = new System.Drawing.Size(180, 22);
             this.Lang_engTSMitem.Click += new System.EventHandler(this.Lang_engTSMitem_Click);
             // 
             // ViewTSMitem
             // 
             this.ViewTSMitem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Switch_dnsTSMitem,
-            this.Switch_ipTSMitem});
+            this.Switch_dnsTSMitem});
             this.ViewTSMitem.Name = "ViewTSMitem";
-            this.ViewTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.ViewTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // Switch_dnsTSMitem
             // 
             this.Switch_dnsTSMitem.Name = "Switch_dnsTSMitem";
-            this.Switch_dnsTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.Switch_dnsTSMitem.Size = new System.Drawing.Size(180, 22);
             this.Switch_dnsTSMitem.Click += new System.EventHandler(this.Switch_dnsTSMitem_Click);
-            // 
-            // Switch_ipTSMitem
-            // 
-            this.Switch_ipTSMitem.Name = "Switch_ipTSMitem";
-            this.Switch_ipTSMitem.Size = new System.Drawing.Size(67, 22);
-            // 
-            // Options_3TSMitem
-            // 
-            this.Options_3TSMitem.Name = "Options_3TSMitem";
-            this.Options_3TSMitem.Size = new System.Drawing.Size(67, 22);
             // 
             // toolStripButton4
             // 
@@ -255,6 +242,7 @@
             this.toolStripButton4.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.User_guideTSMitem,
             this.AboutTSMitem});
+            this.toolStripButton4.Enabled = false;
             this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
             this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton4.Name = "toolStripButton4";
@@ -263,16 +251,12 @@
             // User_guideTSMitem
             // 
             this.User_guideTSMitem.Name = "User_guideTSMitem";
-            this.User_guideTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.User_guideTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // AboutTSMitem
             // 
             this.AboutTSMitem.Name = "AboutTSMitem";
-            this.AboutTSMitem.Size = new System.Drawing.Size(67, 22);
-            // 
-            // Timer0
-            // 
-            this.Timer0.Tick += new System.EventHandler(this.timer0_Tick);
+            this.AboutTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // Timer1a
             // 
@@ -1229,7 +1213,6 @@
         private System.Windows.Forms.ToolStripDropDownButton toolStripButton3;
         private System.Windows.Forms.ToolStripMenuItem LanguageTSMitem;
         private System.Windows.Forms.ToolStripMenuItem ViewTSMitem;
-        private System.Windows.Forms.ToolStripMenuItem Options_3TSMitem;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.DataGridView dataGridView3;
         private System.Windows.Forms.DataGridView dataGridView4;
@@ -1239,7 +1222,6 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Timer Timer0;
         private System.Windows.Forms.Timer Timer1a;
         private System.Windows.Forms.Timer Timer1b;
         private System.Windows.Forms.Timer Timer2a;
@@ -1317,7 +1299,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1d;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1e;
         private System.Windows.Forms.ToolStripMenuItem Switch_dnsTSMitem;
-        private System.Windows.Forms.ToolStripMenuItem Switch_ipTSMitem;
     }
 }
 

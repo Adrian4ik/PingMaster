@@ -38,14 +38,14 @@
             this.toolStripButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.Open_iniTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.Open_logTSMitem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton4 = new System.Windows.Forms.ToolStripDropDownButton();
             this.LanguageTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.Lang_rusTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.Lang_engTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.ViewTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.Switch_dnsTSMitem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripButton4 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripButton5 = new System.Windows.Forms.ToolStripDropDownButton();
             this.User_guideTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.Timer1 = new System.Windows.Forms.Timer(this.components);
@@ -120,6 +120,7 @@
             this.label17 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
@@ -150,7 +151,8 @@
             this.toolStripButton1,
             this.toolStripButton2,
             this.toolStripButton3,
-            this.toolStripButton4});
+            this.toolStripButton4,
+            this.toolStripButton5});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(640, 25);
@@ -172,31 +174,31 @@
             // Open_iniTSMitem
             // 
             this.Open_iniTSMitem.Name = "Open_iniTSMitem";
-            this.Open_iniTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.Open_iniTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // Open_logTSMitem
             // 
             this.Open_logTSMitem.Name = "Open_logTSMitem";
-            this.Open_logTSMitem.Size = new System.Drawing.Size(67, 22);
-            // 
-            // toolStripButton2
-            // 
-            this.toolStripButton2.AutoToolTip = false;
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+            this.Open_logTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // toolStripButton3
             // 
             this.toolStripButton3.AutoToolTip = false;
-            this.toolStripButton3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
+            // 
+            // toolStripButton4
+            // 
+            this.toolStripButton4.AutoToolTip = false;
+            this.toolStripButton4.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LanguageTSMitem,
             this.ViewTSMitem});
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(13, 22);
+            this.toolStripButton4.Name = "toolStripButton4";
+            this.toolStripButton4.Size = new System.Drawing.Size(13, 22);
             // 
             // LanguageTSMitem
             // 
@@ -204,7 +206,7 @@
             this.Lang_rusTSMitem,
             this.Lang_engTSMitem});
             this.LanguageTSMitem.Name = "LanguageTSMitem";
-            this.LanguageTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.LanguageTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // Lang_rusTSMitem
             // 
@@ -223,7 +225,7 @@
             this.ViewTSMitem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Switch_dnsTSMitem});
             this.ViewTSMitem.Name = "ViewTSMitem";
-            this.ViewTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.ViewTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // Switch_dnsTSMitem
             // 
@@ -231,28 +233,28 @@
             this.Switch_dnsTSMitem.Size = new System.Drawing.Size(67, 22);
             this.Switch_dnsTSMitem.Click += new System.EventHandler(this.Switch_dnsTSMitem_Click);
             // 
-            // toolStripButton4
+            // toolStripButton5
             // 
-            this.toolStripButton4.AutoToolTip = false;
-            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton4.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton5.AutoToolTip = false;
+            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton5.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.User_guideTSMitem,
             this.AboutTSMitem});
-            this.toolStripButton4.Enabled = false;
-            this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
-            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(13, 22);
+            this.toolStripButton5.Enabled = false;
+            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
+            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton5.Name = "toolStripButton5";
+            this.toolStripButton5.Size = new System.Drawing.Size(13, 22);
             // 
             // User_guideTSMitem
             // 
             this.User_guideTSMitem.Name = "User_guideTSMitem";
-            this.User_guideTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.User_guideTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // AboutTSMitem
             // 
             this.AboutTSMitem.Name = "AboutTSMitem";
-            this.AboutTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.AboutTSMitem.Size = new System.Drawing.Size(180, 22);
             // 
             // Timer1
             // 
@@ -1133,6 +1135,15 @@
             this.label7.Size = new System.Drawing.Size(0, 13);
             this.label7.TabIndex = 16;
             // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1182,13 +1193,13 @@
 
         #endregion
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripButton3;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripButton4;
         private System.Windows.Forms.ToolStripMenuItem LanguageTSMitem;
         private System.Windows.Forms.ToolStripMenuItem ViewTSMitem;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.DataGridView dataGridView3;
         private System.Windows.Forms.DataGridView dataGridView4;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
@@ -1241,7 +1252,7 @@
         private System.Windows.Forms.ToolStripDropDownButton toolStripButton1;
         private System.Windows.Forms.ToolStripMenuItem Open_iniTSMitem;
         private System.Windows.Forms.ToolStripMenuItem Open_logTSMitem;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripButton4;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripButton5;
         private System.Windows.Forms.ToolStripMenuItem Lang_rusTSMitem;
         private System.Windows.Forms.ToolStripMenuItem Lang_engTSMitem;
         private System.Windows.Forms.ToolStripMenuItem User_guideTSMitem;
@@ -1267,6 +1278,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1d;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1e;
         private System.Windows.Forms.ToolStripMenuItem Switch_dnsTSMitem;
+        private System.Windows.Forms.ToolStripButton toolStripButton2;
     }
 }
 

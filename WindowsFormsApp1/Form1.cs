@@ -16,13 +16,14 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        bool is_english;
-        int g1, g2, g3, g4;
+        bool is_english = false, fl = true;
+        int curcl, g1, g2, g3, g4;
         string[] al;
-        //private string abonent;
-        //List<string> testlist = new List<string>();
 
-        public struct abonent
+        System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
+        System.Net.NetworkInformation.PingReply reply;
+
+        public struct client
         {
             public int Group;
 
@@ -31,7 +32,7 @@ namespace WindowsFormsApp1
             public string IP;
         }
 
-        public abonent[] ab;
+        public client[] ab;
 
         #region Константы
         public const int C_sec = 1000, C_min = 60000;
@@ -56,14 +57,15 @@ namespace WindowsFormsApp1
                 toolStripButton1.Text = "File";
                     Open_iniTSMitem.Text = "Open .INI file";
                     Open_logTSMitem.Text = "Open log file";
-                toolStripButton2.Text = "Tracking";
-                toolStripButton3.Text = "Settings";
+                toolStripButton2.Text = "Ping all";
+                toolStripButton3.Text = "Tracking";
+                toolStripButton4.Text = "Settings";
                     LanguageTSMitem.Text = "Language";
                         Lang_rusTSMitem.Text = "Russian";
                         Lang_engTSMitem.Text = "English";
                     ViewTSMitem.Text = "View";
                         Switch_dnsTSMitem.Text = "On/Off DNS";
-                toolStripButton4.Text = "Help";
+                toolStripButton5.Text = "Help";
                     User_guideTSMitem.Text = "User's guide";
                     AboutTSMitem.Text = "About";
 
@@ -96,14 +98,15 @@ namespace WindowsFormsApp1
                 toolStripButton1.Text = "Файл";
                     Open_iniTSMitem.Text = "Открыть .INI файл";
                     Open_logTSMitem.Text = "Открыть лог файл";
-                toolStripButton2.Text = "Слежение";
-                toolStripButton3.Text = "Настройки";
+                toolStripButton2.Text = "Пинг всех";
+                toolStripButton3.Text = "Слежение";
+                toolStripButton4.Text = "Настройки";
                     LanguageTSMitem.Text = "Язык";
                         Lang_rusTSMitem.Text = "Русский";
                         Lang_engTSMitem.Text = "Английский";
                     ViewTSMitem.Text = "Вид";
                         Switch_dnsTSMitem.Text = "Вкл/Выкл DNS";
-                toolStripButton4.Text = "Помощь";
+                toolStripButton5.Text = "Помощь";
                     User_guideTSMitem.Text = "Руководство пользователя";
                     AboutTSMitem.Text = "О программе";
 
@@ -178,15 +181,15 @@ namespace WindowsFormsApp1
 
         private void PreProcessing()
         {
-            if (!File.Exists("Abonents.txt"))
+            if (!File.Exists("Clients.txt"))
             {
-                FileStream f = File.Create("Abonents.txt");
+                FileStream f = File.Create("Clients.txt");
                 f.Close();
-                File.WriteAllLines("Abonents.txt", StandartList);
+                File.WriteAllLines("Clients.txt", StandartList);
                 al = StandartList;
             }
-            al = File.ReadAllLines("Abonents.txt");
-            ab = new abonent[al.Count()];
+            al = File.ReadAllLines("Clients.txt");
+            ab = new client[al.Count()];
 
             Timer1.Interval = (int)numericUpDown2.Value * C_min;
             Timer2.Interval = (int)numericUpDown5.Value * C_min;
@@ -257,6 +260,9 @@ namespace WindowsFormsApp1
                         break;
                 }
             }
+            g2--;
+            g3--;
+            g4--;
         }
 
         private void FillGrids()
@@ -296,89 +302,114 @@ namespace WindowsFormsApp1
 
         private void PingGroup(int group)
         {
-            System.Net.NetworkInformation.PingReply reply;
-
-            switch (group)
+            if(fl)
             {
-                case 1:
-                    for (int i = 0; i < g1; i++)
-                    {
-                        reply = Ping_cl(dataGridView1[2, i].Value.ToString(), (int)numericUpDown1.Value * C_sec);
-
-                        dataGridView1[3, i].Value = reply.Status;
-
-                        if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                switch (group)
+                {
+                    case 1:
+                        for (int i = 0; i < g1; i++)
                         {
-                            dataGridView1[4, i].Style.BackColor = Color.GreenYellow;
+                            reply = Ping_cl(dataGridView1[2, i].Value.ToString(), (int)numericUpDown1.Value * C_sec);
+
+                            dataGridView1[3, i].Value = reply.Status;
+
+                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                            {
+                                dataGridView1[4, i].Style.BackColor = Color.GreenYellow;
+                            }
+                            else
+                            {
+                                dataGridView1[4, i].Style.BackColor = Color.Red;
+                                //dataGridView1[4, 0].Style.BackColor = Color.GreenYellow;
+                                //dataGridView1[4, 2].Style.BackColor = Color.Red;
+                                //dataGridView1[4, 5].Style.BackColor = Color.Cyan;
+                            }
                         }
+                        break;
+                    case 2:
+                        for (int i = 0; i < g2; i++)
+                        {
+                            reply = Ping_cl(dataGridView2[2, i].Value.ToString(), (int)numericUpDown4.Value * C_sec);
+
+                            dataGridView2[3, i].Value = reply.Status;
+
+                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                            {
+                                dataGridView2[4, i].Style.BackColor = Color.GreenYellow;
+                            }
+                            else
+                            {
+                                dataGridView2[4, i].Style.BackColor = Color.Red;
+                            }
+                        }
+                        break;
+                    case 3:
+                        for (int i = 0; i < g3; i++)
+                        {
+                            reply = Ping_cl(dataGridView3[2, i].Value.ToString(), (int)numericUpDown7.Value * C_sec);
+
+                            dataGridView3[3, i].Value = reply.Status;
+
+                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                            {
+                                dataGridView3[4, i].Style.BackColor = Color.GreenYellow;
+                            }
+                            else
+                            {
+                                dataGridView3[4, i].Style.BackColor = Color.Red;
+                            }
+                        }
+                        break;
+                    case 4:
+                        for (int i = 0; i < g4; i++)
+                        {
+                            reply = Ping_cl(dataGridView4[2, i].Value.ToString(), (int)numericUpDown10.Value * C_sec);
+
+                            dataGridView4[3, i].Value = reply.Status;
+
+                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                            {
+                                dataGridView4[4, i].Style.BackColor = Color.GreenYellow;
+                            }
+                            else
+                            {
+                                dataGridView4[4, i].Style.BackColor = Color.Red;
+                            }
+                        }
+                        break;
+                }
+
+                fl = false;
+            }
+            else
+            {
+                switch(group)
+                {
+                    case 1:
+                        if (curcl == g1)
+                            fl = true;
                         else
-                        {
-                            dataGridView1[4, i].Style.BackColor = Color.Red;
-                            //dataGridView1[4, 0].Style.BackColor = Color.GreenYellow;
-                            //dataGridView1[4, 2].Style.BackColor = Color.Red;
-                            //dataGridView1[4, 5].Style.BackColor = Color.Cyan;
-                        }
-                    }
-                    break;
-                case 2:
-                    for (int i = 0; i < g2; i++)
-                    {
-                        reply = Ping_cl(dataGridView2[2, i].Value.ToString(), (int)numericUpDown4.Value * C_sec);
-
-                        dataGridView2[3, i].Value = reply.Status;
-
-                        if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
-                        {
-                            dataGridView2[4, i].Style.BackColor = Color.GreenYellow;
-                        }
-                        else
-                        {
-                            dataGridView2[4, i].Style.BackColor = Color.Red;
-                        }
-                    }
-                    break;
-                case 3:
-                    for (int i = 0; i < g3; i++)
-                    {
-                        reply = Ping_cl(dataGridView3[2, i].Value.ToString(), (int)numericUpDown7.Value * C_sec);
-
-                        dataGridView3[3, i].Value = reply.Status;
-
-                        if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
-                        {
-                            dataGridView3[4, i].Style.BackColor = Color.GreenYellow;
-                        }
-                        else
-                        {
-                            dataGridView3[4, i].Style.BackColor = Color.Red;
-                        }
-                    }
-                    break;
-                case 4:
-                    for (int i = 0; i < g4; i++)
-                    {
-                        reply = Ping_cl(dataGridView4[2, i].Value.ToString(), (int)numericUpDown10.Value * C_sec);
-
-                        dataGridView4[3, i].Value = reply.Status;
-
-                        if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
-                        {
-                            dataGridView4[4, i].Style.BackColor = Color.GreenYellow;
-                        }
-                        else
-                        {
-                            dataGridView4[4, i].Style.BackColor = Color.Red;
-                        }
-                    }
-                    break;
+                            fl = false; // Продолжение программы (занесение ответа в таблицу и запрос нового пинга)
+                        break;
+                    case 2:
+                        if (curcl == g2)
+                            fl = true;
+                        break;
+                    case 3:
+                        if (curcl == g3)
+                            fl = true;
+                        break;
+                    case 4:
+                        if (curcl == g4)
+                            fl = true;
+                        break;
+                }
             }
         }
         
         private System.Net.NetworkInformation.PingReply Ping_cl(string address, int timeout)
         {
-            System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
-            //if (ping)
-                System.Net.NetworkInformation.PingReply reply = ping.Send(address, timeout);
+            System.Net.NetworkInformation.PingReply reply = ping.Send(address, timeout);
 
             return reply;
         }
@@ -433,7 +464,6 @@ namespace WindowsFormsApp1
         #region События
         private void Form1_Load(object sender, EventArgs e)
         {
-            is_english = false;
             Translate();
             CopyElements();
 
@@ -446,10 +476,12 @@ namespace WindowsFormsApp1
             FillAL();
             FillGrids();
 
-            //PingGroup(1);
-            //PingGroup(2);
-            //PingGroup(3);
-            //PingGroup(4);
+            ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply);
+
+            PingGroup(1);
+            PingGroup(2);
+            PingGroup(3);
+            PingGroup(4);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -654,6 +686,20 @@ namespace WindowsFormsApp1
             tr.Show();
         }
 
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            PingGroup(1);
+            PingGroup(2);
+            PingGroup(3);
+            PingGroup(4);
+        }
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            Tracking tr = new Tracking(is_english, "", "", "");
+            tr.Show();
+        }
+
         private void Switch_dnsTSMitem_Click(object sender, EventArgs e)
         {
             if (Column1b.Visible)
@@ -677,10 +723,11 @@ namespace WindowsFormsApp1
             FormResized();
         }
 
-        private void toolStripButton2_Click(object sender, EventArgs e)
+        private void Received_reply(object sender, System.Net.NetworkInformation.PingCompletedEventArgs e)
         {
-            Tracking tr = new Tracking(is_english, "", "", "");
-            tr.Show();
+            ((AutoResetEvent)e.UserState).Set();
+
+
         }
 
         private void Form_ChangedSize(object sender, EventArgs e)
@@ -688,5 +735,13 @@ namespace WindowsFormsApp1
             FormResized();
         }
         #endregion События
+    }
+
+    class CurrentClient
+    {
+        public int counter { get; set; }
+        public int group { get; set; }
+        public string ip { get; set; }
+        public string status { get; set; }
     }
 }

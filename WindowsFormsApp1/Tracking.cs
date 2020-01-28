@@ -77,8 +77,6 @@ namespace WindowsFormsApp1
 
                 dataGridView1[0, cur_row].Value = DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString();
 
-                dataGridView1[2, cur_row].Value = pingReply.Status.ToString();
-
                 if (pingReply.Status == System.Net.NetworkInformation.IPStatus.Success)
                 {
                     dataGridView1[1, cur_row].Value = pingReply.RoundtripTime.ToString() + " ms";

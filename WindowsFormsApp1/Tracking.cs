@@ -67,6 +67,7 @@ namespace WindowsFormsApp1
 
             timer1.Interval = 1;
         }
+
         private void Ping_cl()
         {
             dataGridView1.Rows.Add();
@@ -94,6 +95,13 @@ namespace WindowsFormsApp1
                     dataGridView1.FirstDisplayedScrollingRowIndex = cur_row - 19;
 
                 cur_row++;
+            }
+        }
+        private void Tracking_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                button1.PerformClick();
             }
         }
 
@@ -125,6 +133,7 @@ namespace WindowsFormsApp1
         {
             Translate();
             Preprocessing();
+            KeyPreview = true;
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -17,7 +17,7 @@ namespace WindowsFormsApp1
     public partial class Form1 : Form
     {
         bool is_english = false, fl = true;
-        int curcl, g1, g2, g3, g4;
+        int curcl, g1, g2, g3, g4, t1, t2, t3, t4;
         string[] al;
 
         System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
@@ -136,7 +136,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void CopyElements()
+        private void CopyNames()
         {
             Column2a.HeaderText = Column1a.HeaderText;
             Column3a.HeaderText = Column1a.HeaderText;
@@ -299,19 +299,20 @@ namespace WindowsFormsApp1
                 }
             }
         }
-
-        private void PingGroup(int group)
+        private void PingGroup()
         {
-            if(fl)
+            int group = 1;
+            if (fl)
             {
+                int i = 0;
                 switch (group)
                 {
                     case 1:
-                        for (int i = 0; i < g1; i++)
+                        if (i < g1)
                         {
-                            reply = Ping_cl(dataGridView1[2, i].Value.ToString(), (int)numericUpDown1.Value * C_sec);
+                            ping.SendAsync(dataGridView1[2, i].Value.ToString(), (int)numericUpDown1.Value * C_sec);
 
-                            dataGridView1[3, i].Value = reply.Status;
+                            /*dataGridView1[3, i].Value = reply.Status;
 
                             if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
                             {
@@ -323,15 +324,15 @@ namespace WindowsFormsApp1
                                 //dataGridView1[4, 0].Style.BackColor = Color.GreenYellow;
                                 //dataGridView1[4, 2].Style.BackColor = Color.Red;
                                 //dataGridView1[4, 5].Style.BackColor = Color.Cyan;
-                            }
+                            }*/
                         }
                         break;
                     case 2:
-                        for (int i = 0; i < g2; i++)
+                        if (i < g2)
                         {
-                            reply = Ping_cl(dataGridView2[2, i].Value.ToString(), (int)numericUpDown4.Value * C_sec);
+                            ping.SendAsync(dataGridView2[2, i].Value.ToString(), (int)numericUpDown4.Value * C_sec);
 
-                            dataGridView2[3, i].Value = reply.Status;
+                            /*dataGridView2[3, i].Value = reply.Status;
 
                             if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
                             {
@@ -340,15 +341,15 @@ namespace WindowsFormsApp1
                             else
                             {
                                 dataGridView2[4, i].Style.BackColor = Color.Red;
-                            }
+                            }*/
                         }
                         break;
                     case 3:
-                        for (int i = 0; i < g3; i++)
+                        if (i < g3)
                         {
-                            reply = Ping_cl(dataGridView3[2, i].Value.ToString(), (int)numericUpDown7.Value * C_sec);
+                            ping.SendAsync(dataGridView3[2, i].Value.ToString(), (int)numericUpDown7.Value * C_sec);
 
-                            dataGridView3[3, i].Value = reply.Status;
+                            /*dataGridView3[3, i].Value = reply.Status;
 
                             if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
                             {
@@ -357,15 +358,15 @@ namespace WindowsFormsApp1
                             else
                             {
                                 dataGridView3[4, i].Style.BackColor = Color.Red;
-                            }
+                            }*/
                         }
                         break;
                     case 4:
-                        for (int i = 0; i < g4; i++)
+                        if (i < g4)
                         {
-                            reply = Ping_cl(dataGridView4[2, i].Value.ToString(), (int)numericUpDown10.Value * C_sec);
+                            ping.SendAsync(dataGridView4[2, i].Value.ToString(), (int)numericUpDown10.Value * C_sec);
 
-                            dataGridView4[3, i].Value = reply.Status;
+                            /*dataGridView4[3, i].Value = reply.Status;
 
                             if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
                             {
@@ -374,10 +375,119 @@ namespace WindowsFormsApp1
                             else
                             {
                                 dataGridView4[4, i].Style.BackColor = Color.Red;
-                            }
+                            }*/
                         }
                         break;
                 }
+                i++;
+
+                fl = false;
+            }
+            else
+            {
+                switch (group)
+                {
+                    case 1:
+                        if (curcl == g1)
+                            fl = true;
+                        else
+                            fl = false; // Продолжение программы (занесение ответа в таблицу и запрос нового пинга)
+                        break;
+                    case 2:
+                        if (curcl == g2)
+                            fl = true;
+                        break;
+                    case 3:
+                        if (curcl == g3)
+                            fl = true;
+                        break;
+                    case 4:
+                        if (curcl == g4)
+                            fl = true;
+                        break;
+                }
+            }
+        }
+        private void PingGroup(int group)
+        {
+            if(fl)
+            {
+                int i = 0;
+                switch (group)
+                {
+                    case 1:
+                        if (i < g1)
+                        {
+                            ping.SendAsync(dataGridView1[2, i].Value.ToString(), (int)numericUpDown1.Value * C_sec);
+
+                            /*dataGridView1[3, i].Value = reply.Status;
+
+                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                            {
+                                dataGridView1[4, i].Style.BackColor = Color.GreenYellow;
+                            }
+                            else
+                            {
+                                dataGridView1[4, i].Style.BackColor = Color.Red;
+                                //dataGridView1[4, 0].Style.BackColor = Color.GreenYellow;
+                                //dataGridView1[4, 2].Style.BackColor = Color.Red;
+                                //dataGridView1[4, 5].Style.BackColor = Color.Cyan;
+                            }*/
+                        }
+                        break;
+                    case 2:
+                        if(i < g2)
+                        {
+                            ping.SendAsync(dataGridView2[2, i].Value.ToString(), (int)numericUpDown4.Value * C_sec);
+
+                            /*dataGridView2[3, i].Value = reply.Status;
+
+                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                            {
+                                dataGridView2[4, i].Style.BackColor = Color.GreenYellow;
+                            }
+                            else
+                            {
+                                dataGridView2[4, i].Style.BackColor = Color.Red;
+                            }*/
+                        }
+                        break;
+                    case 3:
+                        if(i < g3)
+                        {
+                            ping.SendAsync(dataGridView3[2, i].Value.ToString(), (int)numericUpDown7.Value * C_sec);
+
+                            /*dataGridView3[3, i].Value = reply.Status;
+
+                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                            {
+                                dataGridView3[4, i].Style.BackColor = Color.GreenYellow;
+                            }
+                            else
+                            {
+                                dataGridView3[4, i].Style.BackColor = Color.Red;
+                            }*/
+                        }
+                        break;
+                    case 4:
+                        if(i < g4)
+                        {
+                            ping.SendAsync(dataGridView4[2, i].Value.ToString(), (int)numericUpDown10.Value * C_sec);
+
+                            /*dataGridView4[3, i].Value = reply.Status;
+
+                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                            {
+                                dataGridView4[4, i].Style.BackColor = Color.GreenYellow;
+                            }
+                            else
+                            {
+                                dataGridView4[4, i].Style.BackColor = Color.Red;
+                            }*/
+                        }
+                        break;
+                }
+                i++;
 
                 fl = false;
             }
@@ -405,13 +515,6 @@ namespace WindowsFormsApp1
                         break;
                 }
             }
-        }
-        
-        private System.Net.NetworkInformation.PingReply Ping_cl(string address, int timeout)
-        {
-            System.Net.NetworkInformation.PingReply reply = ping.Send(address, timeout);
-
-            return reply;
         }
 
         private void FormResized() // form adds height and width to client size: x16, y39
@@ -464,24 +567,36 @@ namespace WindowsFormsApp1
         #region События
         private void Form1_Load(object sender, EventArgs e)
         {
-            Translate();
-            CopyElements();
-
+            /*
+            is_english = false;
             Column1b.Visible = false;
             Column2b.Visible = false;
             Column3b.Visible = false;
             Column4b.Visible = false;
 
+            numericUpDown1.Value = ;
+            numericUpDown2.Value = ;
+            numericUpDown3.Value = ;
+            numericUpDown4.Value = ;
+            numericUpDown5.Value = ;
+            numericUpDown6.Value = ;
+            numericUpDown7.Value = ;
+            numericUpDown8.Value = ;
+            numericUpDown9.Value = ;
+            numericUpDown10.Value = ;
+            numericUpDown11.Value = ;
+            numericUpDown12.Value = ;
+            */
+
+            Translate();
+            CopyNames();
             PreProcessing();
             FillAL();
             FillGrids();
 
-            ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply);
+            //ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply); // обращаться к строчке 1167 дизайнера
 
-            PingGroup(1);
-            PingGroup(2);
-            PingGroup(3);
-            PingGroup(4);
+            PingGroup();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -508,14 +623,14 @@ namespace WindowsFormsApp1
         {
             is_english = false;
             Translate();
-            CopyElements();
+            CopyNames();
         }
 
         private void Lang_engTSMitem_Click(object sender, EventArgs e)
         {
             is_english = true;
             Translate();
-            CopyElements();
+            CopyNames();
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -595,9 +710,19 @@ namespace WindowsFormsApp1
             Timer1.Interval = (int)numericUpDown2.Value * C_min;
         }
 
+        private void numericUpDown3_ValueChanged(object sender, EventArgs e)
+        {
+            t1 = (int)numericUpDown3.Value;
+        }
+
         private void numericUpDown5_ValueChanged(object sender, EventArgs e)
         {
             Timer2.Interval = (int)numericUpDown5.Value * C_min;
+        }
+
+        private void numericUpDown6_ValueChanged(object sender, EventArgs e)
+        {
+            t2 = (int)numericUpDown6.Value;
         }
 
         private void numericUpDown8_ValueChanged(object sender, EventArgs e)
@@ -605,11 +730,21 @@ namespace WindowsFormsApp1
             Timer3.Interval = (int)numericUpDown8.Value * C_min;
         }
 
+        private void numericUpDown9_ValueChanged(object sender, EventArgs e)
+        {
+            t3 = (int)numericUpDown9.Value;
+        }
+
         private void numericUpDown11_ValueChanged(object sender, EventArgs e)
         {
             Timer4.Interval = (int)numericUpDown11.Value * C_min;
         }
-        
+
+        private void numericUpDown12_ValueChanged(object sender, EventArgs e)
+        {
+            t4 = (int)numericUpDown12.Value;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             if (Timer1.Enabled)
@@ -688,10 +823,7 @@ namespace WindowsFormsApp1
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            PingGroup(1);
-            PingGroup(2);
-            PingGroup(3);
-            PingGroup(4);
+            PingGroup();
         }
 
         private void toolStripButton3_Click(object sender, EventArgs e)
@@ -723,11 +855,31 @@ namespace WindowsFormsApp1
             FormResized();
         }
 
-        private void Received_reply(object sender, System.Net.NetworkInformation.PingCompletedEventArgs e)
+        private static void Received_reply(object sender, System.Net.NetworkInformation.PingCompletedEventArgs e)
         {
+            // If the operation was canceled, display a message to the user.
+            if (e.Cancelled)
+            {
+                Console.WriteLine("Ping canceled.");
+
+                // Let the main thread resume. 
+                // UserToken is the AutoResetEvent object that the main thread 
+                // is waiting for.
+                ((AutoResetEvent)e.UserState).Set();
+            }
+
+            // If an error occurred, display the exception to the user.
+            if (e.Error != null)
+            {
+                Console.WriteLine("Ping failed:");
+                Console.WriteLine(e.Error.ToString());
+
+                // Let the main thread resume. 
+                ((AutoResetEvent)e.UserState).Set();
+            }
+
+            // Let the main thread resume.
             ((AutoResetEvent)e.UserState).Set();
-
-
         }
 
         private void Form_ChangedSize(object sender, EventArgs e)

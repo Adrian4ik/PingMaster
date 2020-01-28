@@ -173,6 +173,7 @@
             this.TopMost = true;
             this.Load += new System.EventHandler(this.Tracking_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Tracking_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -17,6 +17,7 @@ namespace WindowsFormsApp1
     public partial class Form1 : Form
     {
         bool is_english;
+        int g1, g2, g3, g4;
         string[] al;
         //private string abonent;
         //List<string> testlist = new List<string>();
@@ -31,14 +32,6 @@ namespace WindowsFormsApp1
         }
 
         public abonent[] ab;
-
-        public struct reply
-        {
-            public int Time;
-            public int TTT;
-            public string IP;
-            public string Rep;
-        }
 
         #region Константы
         public const int C_sec = 1000, C_min = 60000;
@@ -195,14 +188,10 @@ namespace WindowsFormsApp1
             al = File.ReadAllLines("Abonents.txt");
             ab = new abonent[al.Count()];
 
-            Timer1a.Interval = (int)numericUpDown1.Value * C_sec;
-            Timer1b.Interval = (int)numericUpDown2.Value * C_min;
-            Timer2a.Interval = (int)numericUpDown4.Value * C_sec;
-            Timer2b.Interval = (int)numericUpDown5.Value * C_min;
-            Timer3a.Interval = (int)numericUpDown7.Value * C_sec;
-            Timer3b.Interval = (int)numericUpDown8.Value * C_min;
-            Timer4a.Interval = (int)numericUpDown10.Value * C_sec;
-            Timer4b.Interval = (int)numericUpDown11.Value * C_min;
+            Timer1.Interval = (int)numericUpDown2.Value * C_min;
+            Timer2.Interval = (int)numericUpDown5.Value * C_min;
+            Timer3.Interval = (int)numericUpDown8.Value * C_min;
+            Timer4.Interval = (int)numericUpDown11.Value * C_min;
 
             int c;
             if (al.Count() <= 60)
@@ -251,6 +240,22 @@ namespace WindowsFormsApp1
                     }
                 }
                 ab[s].Group = grid;
+
+                switch (grid)
+                {
+                    case 1:
+                        g1++;
+                        break;
+                    case 2:
+                        g2++;
+                        break;
+                    case 3:
+                        g3++;
+                        break;
+                    case 4:
+                        g4++;
+                        break;
+                }
             }
         }
 
@@ -288,26 +293,94 @@ namespace WindowsFormsApp1
                 }
             }
         }
-        // дописать
-        private reply Ping_cl(abonent a)
+
+        private void PingGroup(int group)
         {
-            reply r;
+            System.Net.NetworkInformation.PingReply reply;
 
-            r.TTT = 0;
-            r.Time = 0;
-            r.IP = "null";
-            r.Rep = "null";
-
-            /*if (textBox1.Text != "")
+            switch (group)
             {
-                System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
-                System.Net.NetworkInformation.PingReply pingReply = ping.Send(textBox1.Text);
+                case 1:
+                    for (int i = 0; i < g1; i++)
+                    {
+                        reply = Ping_cl(dataGridView1[2, i].Value.ToString(), (int)numericUpDown1.Value * C_sec);
 
-                label2.Text = pingReply.RoundtripTime.ToString() + " ms";
-                label3.Text = pingReply.Status.ToString();
-            }*/
-            //Count();
-            return r;
+                        dataGridView1[3, i].Value = reply.Status;
+
+                        if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                        {
+                            dataGridView1[4, i].Style.BackColor = Color.GreenYellow;
+                        }
+                        else
+                        {
+                            dataGridView1[4, i].Style.BackColor = Color.Red;
+                            //dataGridView1[4, 0].Style.BackColor = Color.GreenYellow;
+                            //dataGridView1[4, 2].Style.BackColor = Color.Red;
+                            //dataGridView1[4, 5].Style.BackColor = Color.Cyan;
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < g2; i++)
+                    {
+                        reply = Ping_cl(dataGridView2[2, i].Value.ToString(), (int)numericUpDown4.Value * C_sec);
+
+                        dataGridView2[3, i].Value = reply.Status;
+
+                        if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                        {
+                            dataGridView2[4, i].Style.BackColor = Color.GreenYellow;
+                        }
+                        else
+                        {
+                            dataGridView2[4, i].Style.BackColor = Color.Red;
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i < g3; i++)
+                    {
+                        reply = Ping_cl(dataGridView3[2, i].Value.ToString(), (int)numericUpDown7.Value * C_sec);
+
+                        dataGridView3[3, i].Value = reply.Status;
+
+                        if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                        {
+                            dataGridView3[4, i].Style.BackColor = Color.GreenYellow;
+                        }
+                        else
+                        {
+                            dataGridView3[4, i].Style.BackColor = Color.Red;
+                        }
+                    }
+                    break;
+                case 4:
+                    for (int i = 0; i < g4; i++)
+                    {
+                        reply = Ping_cl(dataGridView4[2, i].Value.ToString(), (int)numericUpDown10.Value * C_sec);
+
+                        dataGridView4[3, i].Value = reply.Status;
+
+                        if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                        {
+                            dataGridView4[4, i].Style.BackColor = Color.GreenYellow;
+                        }
+                        else
+                        {
+                            dataGridView4[4, i].Style.BackColor = Color.Red;
+                        }
+                    }
+                    break;
+            }
+        }
+        
+        private System.Net.NetworkInformation.PingReply Ping_cl(string address, int timeout)
+        {
+            System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
+            //if (ping)
+                System.Net.NetworkInformation.PingReply reply = ping.Send(address, timeout);
+
+            return reply;
         }
 
         private void FormResized() // form adds height and width to client size: x16, y39
@@ -373,60 +446,31 @@ namespace WindowsFormsApp1
             FillAL();
             FillGrids();
 
-            dataGridView1[4, 0].Style.BackColor = Color.GreenYellow;
-            dataGridView1[4, 1].Style.BackColor = Color.GreenYellow;
-            dataGridView1[4, 2].Style.BackColor = Color.Red;
-            dataGridView1[4, 3].Style.BackColor = Color.Red;
-            dataGridView1[4, 4].Style.BackColor = Color.Red;
-            dataGridView1[4, 5].Style.BackColor = Color.Cyan;
+            //PingGroup(1);
+            //PingGroup(2);
+            //PingGroup(3);
+            //PingGroup(4);
         }
 
-        #region Таймеры
-        private void timer0_Tick(object sender, EventArgs e)
+        private void timer1_Tick(object sender, EventArgs e)
         {
-
+            PingGroup(1);
         }
 
-        private void timer1a_Tick(object sender, EventArgs e)
+        private void timer2_Tick(object sender, EventArgs e)
         {
-
+            PingGroup(2);
         }
 
-        private void timer1b_Tick(object sender, EventArgs e)
+        private void timer3_Tick(object sender, EventArgs e)
         {
-
+            PingGroup(3);
         }
 
-        private void timer2a_Tick(object sender, EventArgs e)
+        private void timer4_Tick(object sender, EventArgs e)
         {
-
+            PingGroup(4);
         }
-
-        private void timer2b_Tick(object sender, EventArgs e)
-        {
-
-        }
-
-        private void timer3a_Tick(object sender, EventArgs e)
-        {
-
-        }
-
-        private void timer3b_Tick(object sender, EventArgs e)
-        {
-
-        }
-
-        private void timer4a_Tick(object sender, EventArgs e)
-        {
-
-        }
-
-        private void timer4b_Tick(object sender, EventArgs e)
-        {
-
-        }
-        #endregion Таймеры
 
         private void Lang_rusTSMitem_Click(object sender, EventArgs e)
         {
@@ -444,174 +488,126 @@ namespace WindowsFormsApp1
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
+            if (Timer1.Enabled)
+                Timer1.Stop();
+
             if (checkBox1.Checked)
+            {
                 numericUpDown2.Enabled = true;
+
+                Timer1.Interval = (int)numericUpDown2.Value * C_min;
+                Timer1.Start();
+
+                PingGroup(1);
+            }
             else
                 numericUpDown2.Enabled = false;
-
-            if (Timer1a.Enabled)
-                Timer1a.Stop();
-
-            if (Timer1b.Enabled)
-                Timer1b.Stop();
-
-            Timer1a.Interval = (int)numericUpDown1.Value * C_sec;
-            Timer1a.Start();
-            Timer1b.Interval = (int)numericUpDown2.Value * C_min;
-            Timer1b.Start();
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
+            if (Timer2.Enabled)
+                Timer2.Stop();
+
             if (checkBox2.Checked)
+            {
                 numericUpDown5.Enabled = true;
+
+                Timer2.Interval = (int)numericUpDown5.Value * C_min;
+                Timer2.Start();
+
+                PingGroup(2);
+            }
             else
                 numericUpDown5.Enabled = false;
-
-            if (Timer2a.Enabled)
-                Timer2a.Stop();
-
-            if (Timer2b.Enabled)
-                Timer2b.Stop();
-
-            Timer2a.Interval = (int)numericUpDown4.Value * C_sec;
-            Timer2a.Start();
-            Timer2b.Interval = (int)numericUpDown5.Value * C_min;
-            Timer2b.Start();
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
+            if (Timer3.Enabled)
+                Timer3.Stop();
+
             if (checkBox3.Checked)
+            {
                 numericUpDown8.Enabled = true;
+
+                Timer3.Interval = (int)numericUpDown8.Value * C_min;
+                Timer3.Start();
+
+                PingGroup(3);
+            }
             else
                 numericUpDown8.Enabled = false;
-
-            if (Timer3a.Enabled)
-                Timer3a.Stop();
-
-            if (Timer3b.Enabled)
-                Timer3b.Stop();
-
-            Timer3a.Interval = (int)numericUpDown7.Value * C_sec;
-            Timer3a.Start();
-            Timer3b.Interval = (int)numericUpDown8.Value * C_min;
-            Timer3b.Start();
         }
 
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
+            if (Timer4.Enabled)
+                Timer4.Stop();
+
             if (checkBox4.Checked)
+            {
                 numericUpDown11.Enabled = true;
+
+                Timer4.Interval = (int)numericUpDown11.Value * C_min;
+                Timer4.Start();
+
+                PingGroup(4);
+            }
             else
                 numericUpDown11.Enabled = false;
-
-            if (Timer4a.Enabled)
-                Timer4a.Stop();
-
-            if (Timer4b.Enabled)
-                Timer4b.Stop();
-
-            Timer4a.Interval = (int)numericUpDown10.Value * C_sec;
-            Timer4a.Start();
-            Timer4b.Interval = (int)numericUpDown11.Value * C_min;
-            Timer4b.Start();
-        }
-
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-        {
-            Timer1a.Interval = (int)numericUpDown1.Value * C_sec;
         }
 
         private void numericUpDown2_ValueChanged(object sender, EventArgs e)
         {
-            Timer1b.Interval = (int)numericUpDown2.Value * C_min;
-        }
-
-        private void numericUpDown3_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void numericUpDown4_ValueChanged(object sender, EventArgs e)
-        {
-            Timer2a.Interval = (int)numericUpDown4.Value * C_sec;
+            Timer1.Interval = (int)numericUpDown2.Value * C_min;
         }
 
         private void numericUpDown5_ValueChanged(object sender, EventArgs e)
         {
-            Timer2b.Interval = (int)numericUpDown5.Value * C_min;
-        }
-
-        private void numericUpDown6_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void numericUpDown7_ValueChanged(object sender, EventArgs e)
-        {
-            Timer3a.Interval = (int)numericUpDown7.Value * C_sec;
+            Timer2.Interval = (int)numericUpDown5.Value * C_min;
         }
 
         private void numericUpDown8_ValueChanged(object sender, EventArgs e)
         {
-            Timer3b.Interval = (int)numericUpDown8.Value * C_min;
-        }
-
-        private void numericUpDown9_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void numericUpDown10_ValueChanged(object sender, EventArgs e)
-        {
-            Timer4a.Interval = (int)numericUpDown10.Value * C_sec;
+            Timer3.Interval = (int)numericUpDown8.Value * C_min;
         }
 
         private void numericUpDown11_ValueChanged(object sender, EventArgs e)
         {
-            Timer4b.Interval = (int)numericUpDown11.Value * C_min;
+            Timer4.Interval = (int)numericUpDown11.Value * C_min;
         }
-
-        private void numericUpDown12_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-        // дописать
+        
         private void button1_Click(object sender, EventArgs e)
         {
-            if (Timer1a.Enabled)
-                Timer1a.Stop();
+            if (Timer1.Enabled)
+                Timer1.Stop();
 
-            Timer1a.Interval = (int)numericUpDown1.Value * C_sec;
-            Timer1a.Start();
+            PingGroup(1);
         }
-        // дописать
+
         private void button2_Click(object sender, EventArgs e)
         {
-            if (Timer2a.Enabled)
-                Timer2a.Stop();
+            if (Timer2.Enabled)
+                Timer2.Stop();
 
-            Timer2a.Interval = (int)numericUpDown4.Value * C_sec;
-            Timer2a.Start();
+            PingGroup(2);
         }
-        // дописать
+
         private void button3_Click(object sender, EventArgs e)
         {
-            if (Timer3a.Enabled)
-                Timer3a.Stop();
+            if (Timer3.Enabled)
+                Timer3.Stop();
 
-            Timer3a.Interval = (int)numericUpDown7.Value * C_sec;
-            Timer3a.Start();
+            PingGroup(3);
         }
-        // дописать
+
         private void button4_Click(object sender, EventArgs e)
         {
-            if (Timer4a.Enabled)
-                Timer4a.Stop();
+            if (Timer4.Enabled)
+                Timer4.Stop();
 
-            Timer4a.Interval = (int)numericUpDown10.Value * C_sec;
-            Timer4a.Start();
+            PingGroup(4);
         }
 
         private void dataGridView1_MouseDoubleClick(object sender, MouseEventArgs e)

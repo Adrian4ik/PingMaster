@@ -27,7 +27,7 @@ namespace WindowsFormsApp1
 
             InitializeComponent();
         }
-        // дописать
+        
         private void Translate()
         {
             if (is_eng)
@@ -55,12 +55,15 @@ namespace WindowsFormsApp1
         private void Preprocessing()
         {
             if (received_ip != "")
+            {
                 textBox1.Text = received_ip;
+                label1.Text = received_name + " " + received_dns;
+            }
             else
+            {
                 textBox1.Text = "127.0.0.1";
-
-            label1.Text = "Loopback dns.name.jsl.smth.else";
-            label1.Text = received_name + " " + received_dns;
+                label1.Text = "Loopback";
+            }
 
             timer1.Interval = 1;
         }
@@ -72,28 +75,25 @@ namespace WindowsFormsApp1
             {
                 System.Net.NetworkInformation.PingReply pingReply = ping.Send(textBox1.Text);
 
-                dataGridView1[0, cur_row].Value = DateTime.Now.ToString().Substring(11);
-
-                if (pingReply.RoundtripTime == 0)
-                    dataGridView1[1, cur_row].Value = "--";
-                else
-                    dataGridView1[1, cur_row].Value = pingReply.RoundtripTime.ToString() + " ms";
+                dataGridView1[0, cur_row].Value = DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString();
 
                 dataGridView1[2, cur_row].Value = pingReply.Status.ToString();
 
                 if (pingReply.Status == System.Net.NetworkInformation.IPStatus.Success)
                 {
+                    dataGridView1[1, cur_row].Value = pingReply.RoundtripTime.ToString() + " ms";
                     dataGridView1[3, cur_row].Style.BackColor = Color.GreenYellow;
                 }
                 else
                 {
+                    dataGridView1[1, cur_row].Value = "---";
                     dataGridView1[3, cur_row].Style.BackColor = Color.Red;
                 }
 
                 if(cur_row < 20)
                     dataGridView1.FirstDisplayedScrollingRowIndex = 0;
                 else
-                    dataGridView1.FirstDisplayedScrollingRowIndex = cur_row - 20;
+                    dataGridView1.FirstDisplayedScrollingRowIndex = cur_row - 19;
 
                 cur_row++;
             }
@@ -104,7 +104,18 @@ namespace WindowsFormsApp1
             label1.Text = textBox1.Text;
 
             if (timer1.Enabled)
+            {
+                switch (is_eng)
+                {
+                    case true:
+                        button1.Text = "Start";
+                        break;
+                    case false:
+                        button1.Text = "Старт";
+                        break;
+                }
                 timer1.Stop();
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)

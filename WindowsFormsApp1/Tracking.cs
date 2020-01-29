@@ -111,6 +111,10 @@ namespace WindowsFormsApp1
         {
             if (textBox1.Text == "127.0.0.1")
                 label1.Text = "Loopback";
+            else if (textBox1.Text == "8.8.8.8")
+                label1.Text = "Google";
+            else if (textBox1.Text == "4.2.2.2" || textBox1.Text == "77.88.21.11" || textBox1.Text == "5.255.255.50")
+                label1.Text = "Яндекс";
             else
                 label1.Text = textBox1.Text;
 

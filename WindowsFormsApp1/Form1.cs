@@ -21,7 +21,7 @@ namespace WindowsFormsApp1
         int p1, p2, p3, p4;
 
         static bool fl = true;
-        static int curcl, g1, g2, g3, g4, t1, t2, t3, t4;
+        static int curcl, curgr, g1, g2, g3, g4, t1, t2, t3, t4;
         static string[] ip1, ip2, ip3, ip4;
 
         static System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
@@ -36,10 +36,12 @@ namespace WindowsFormsApp1
         public struct client
         {
             public int Group;
+            public int PosInGr;
 
             public string Name;
             public string DNS;
             public string IP;
+            public string State;
         }
 
         public client[] ab;
@@ -48,7 +50,7 @@ namespace WindowsFormsApp1
         public const int C_sec = 1000, C_min = 60000;
 
         private string[] StandartList = new string[]
-            {"Loopback/DNS name/127.0.0.1", "БРИ-1/DNS name/10.1.1.254", "БРИ-2/DNS name/10.1.2.254", "БРИ-3/DNS name/192.168.60.254", "Что-то/DNS name/192.168.68.73", "АСП/DNS name/10.1.2.250", "",
+            {"Loopback/DNS name/127.0.0.1", "БРИ-1/ /10.1.1.254", "БРИ-2/ /10.1.2.254", "БРИ-3/ /192.168.60.254", "Что-то/ /192.168.68.73", "АСП/ /10.1.2.250", "",
             "Ещё что-то/ /192.168.67.25", "USL ER-SWA1,2/ /192.168.60.253", "ISS Server 1/ /192.168.60.51", "LS1/ /192.168.60.53", "Lab printer/ /192.168.60.82", "",
             "RSE1/ /10.1.1.3", "RSK1/ /10.1.1.4", "RSK2/ /10.1.1.5", "RSS1/ /10.1.2.1", "RSS2/ /10.1.1.1", "SM Printer/ /192.168.60.81", "Mediaserver AGAT/ /10.1.1.80", "RSE-Med/ /10.1.1.7", "",
             "FS1/ /10.1.1.100", "БСПН (PLS)/ /10.1.3.4", "ТВМ1-Н/ /10.1.3.1", "БПИ-НЧ (TRPU)/ /192.168.249.1", "БЗУ/ /10.1.11.5"};
@@ -218,7 +220,7 @@ namespace WindowsFormsApp1
             dataGridView4.Rows.Add(c);
         }
 
-        private void FillAL()
+        private void FillClientsList()
         {
             for (int s = 0, grid = 1; s < al.Count(); s++)
             {
@@ -257,15 +259,19 @@ namespace WindowsFormsApp1
                 switch (grid)
                 {
                     case 1:
+                        ab[s].PosInGr = s;
                         g1++;
                         break;
                     case 2:
+                        ab[s].PosInGr = s - g1;
                         g2++;
                         break;
                     case 3:
+                        ab[s].PosInGr = s - g1 - g2;
                         g3++;
                         break;
                     case 4:
+                        ab[s].PosInGr = s - g1 - g2 - g3;
                         g4++;
                         break;
                 }
@@ -319,7 +325,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        private static void PingGroup()
+        private void PingAll()
         {
             int group = 1;
             if (fl)
@@ -332,7 +338,8 @@ namespace WindowsFormsApp1
                         {
                             ping.SendAsync(ip1[i], t1, waiter); // (int)numericUpDown1.Value * C_sec
 
-                            /*dataGridView1[3, i].Value = reply.Status;
+                            /*
+                            dataGridView1[3, i].Value = reply.Status;
 
                             if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
                             {
@@ -344,7 +351,8 @@ namespace WindowsFormsApp1
                                 //dataGridView1[4, 0].Style.BackColor = Color.GreenYellow;
                                 //dataGridView1[4, 2].Style.BackColor = Color.Red;
                                 //dataGridView1[4, 5].Style.BackColor = Color.Cyan;
-                            }*/
+                            }
+                            */
                         }
                         break;
                     case 2:
@@ -352,7 +360,8 @@ namespace WindowsFormsApp1
                         {
                             ping.SendAsync(ip2[i], t2, waiter); // (int)numericUpDown4.Value * C_sec
 
-                            /*dataGridView2[3, i].Value = reply.Status;
+                            /*
+                            dataGridView2[3, i].Value = reply.Status;
 
                             if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
                             {
@@ -361,7 +370,8 @@ namespace WindowsFormsApp1
                             else
                             {
                                 dataGridView2[4, i].Style.BackColor = Color.Red;
-                            }*/
+                            }
+                            */
                         }
                         break;
                     case 3:
@@ -369,7 +379,8 @@ namespace WindowsFormsApp1
                         {
                             ping.SendAsync(ip3[i], t3, waiter); // (int)numericUpDown7.Value * C_sec
 
-                            /*dataGridView3[3, i].Value = reply.Status;
+                            /*
+                            dataGridView3[3, i].Value = reply.Status;
 
                             if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
                             {
@@ -378,7 +389,8 @@ namespace WindowsFormsApp1
                             else
                             {
                                 dataGridView3[4, i].Style.BackColor = Color.Red;
-                            }*/
+                            }
+                            */
                         }
                         break;
                     case 4:
@@ -386,7 +398,8 @@ namespace WindowsFormsApp1
                         {
                             ping.SendAsync(ip4[i], t4, waiter); // (int)numericUpDown10.Value * C_sec
 
-                            /*dataGridView4[3, i].Value = reply.Status;
+                            /*
+                            dataGridView4[3, i].Value = reply.Status;
 
                             if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
                             {
@@ -395,7 +408,8 @@ namespace WindowsFormsApp1
                             else
                             {
                                 dataGridView4[4, i].Style.BackColor = Color.Red;
-                            }*/
+                            }
+                            */
                         }
                         break;
                 }
@@ -428,19 +442,23 @@ namespace WindowsFormsApp1
                 }
             }
         }
-        private void PingGroup(int group)
+
+        private void PingGroup()
         {
             if(fl)
             {
-                int i = 0;
-                switch (group)
+                switch (curgr)
                 {
                     case 1:
-                        if (i < g1)
+                        if (curcl < g1)
                         {
-                            ping.SendAsync(dataGridView1[2, i].Value.ToString(), (int)numericUpDown1.Value * C_sec, waiter);
+                            if(is_english)
+                                dataGridView1[3, curcl].Value = "Pinging...";
+                            else
+                                dataGridView1[3, curcl].Value = "Опрос...";
+                            dataGridView1[4, curcl].Style.BackColor = Color.Cyan;
 
-                            waiter.WaitOne();
+                            PingCl(dataGridView1[2, curcl].Value.ToString(), (int)numericUpDown1.Value * C_sec);
 
                             /*dataGridView1[3, i].Value = reply.Status;
 
@@ -458,11 +476,9 @@ namespace WindowsFormsApp1
                         }
                         break;
                     case 2:
-                        if(i < g2)
+                        if(curcl < g2)
                         {
-                            ping.SendAsync(dataGridView2[2, i].Value.ToString(), (int)numericUpDown4.Value * C_sec, waiter);
-
-                            waiter.WaitOne();
+                            PingCl(dataGridView2[2, curcl].Value.ToString(), (int)numericUpDown4.Value * C_sec);
 
                             /*dataGridView2[3, i].Value = reply.Status;
 
@@ -477,11 +493,9 @@ namespace WindowsFormsApp1
                         }
                         break;
                     case 3:
-                        if(i < g3)
+                        if(curcl < g3)
                         {
-                            ping.SendAsync(dataGridView3[2, i].Value.ToString(), (int)numericUpDown7.Value * C_sec, waiter);
-
-                            waiter.WaitOne();
+                            PingCl(dataGridView3[2, curcl].Value.ToString(), (int)numericUpDown7.Value * C_sec);
 
                             /*dataGridView3[3, i].Value = reply.Status;
 
@@ -496,11 +510,9 @@ namespace WindowsFormsApp1
                         }
                         break;
                     case 4:
-                        if(i < g4)
+                        if(curcl < g4)
                         {
-                            ping.SendAsync(dataGridView4[2, i].Value.ToString(), (int)numericUpDown10.Value * C_sec, waiter);
-
-                            waiter.WaitOne();
+                            PingCl(dataGridView4[2, curcl].Value.ToString(), (int)numericUpDown10.Value * C_sec);
 
                             /*dataGridView4[3, i].Value = reply.Status;
 
@@ -515,7 +527,6 @@ namespace WindowsFormsApp1
                         }
                         break;
                 }
-                i++;
 
                 fl = false;
             }
@@ -527,7 +538,7 @@ namespace WindowsFormsApp1
                 // 4. Переключение на нового клиента
                 // 5. Повтор операций 1-4 до тех пор пока не заполнится группа
                 // 6. Повтор операций 1-5 до тех пор пока не заполнятся все таблицы
-                switch (group)
+                switch (curgr)
                 {
                     case 1:
                         if (curcl == g1)
@@ -549,6 +560,31 @@ namespace WindowsFormsApp1
                         break;
                 }
             }
+        }
+        
+        private static void PingCl(string address, int timeout)
+        {
+            ping.SendAsync(address, timeout, waiter);
+
+            waiter.WaitOne();
+        }
+
+        private void change(System.Windows.Forms.Timer timer, CheckBox check, NumericUpDown numupdown)
+        {
+            if (timer.Enabled)
+                timer.Stop();
+
+            if (check.Checked)
+            {
+                numupdown.Enabled = true;
+
+                timer.Interval = (int)numupdown.Value * C_min;
+                timer.Start();
+                
+                PingGroup();
+            }
+            else
+                numupdown.Enabled = false;
         }
 
         private void FormResized() // form adds height and width to client size: x16, y39
@@ -601,13 +637,13 @@ namespace WindowsFormsApp1
         #region События
         private void Form1_Load(object sender, EventArgs e)
         {
-            /*
             is_english = false;
             Column1b.Visible = false;
             Column2b.Visible = false;
             Column3b.Visible = false;
             Column4b.Visible = false;
 
+            /*
             numericUpDown1.Value = ;
             numericUpDown2.Value = ;
             numericUpDown3.Value = ;
@@ -625,39 +661,47 @@ namespace WindowsFormsApp1
             Translate();
             CopyNames();
             PreProcessing();
-            FillAL();
+            FillClientsList();
             FillGrids();
 
             //ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply); // обращаться к строчке 1167 дизайнера
 
-            // Supply the state information required by the task.
-            ThreadWithState tws = new ThreadWithState("This report displays the number {0}.", 42, new ExampleCallback(ResultCallback));
 
-            Thread t1 = new Thread(new ThreadStart(tws.ThreadProc));//PingGroup
-            t1.Start();
-            t1.Join();
+
+            // Supply the state information required by the task.
+            //ThreadWithState tws = new ThreadWithState("This report displays the number {0}.", 42, new ExampleCallback(ResultCallback));
+
+            //Thread t1 = new Thread(new ThreadStart(tws.ThreadProc));//PingGroup
+            //t1.Start();
+            //t1.Join();
+
+
 
             //PingGroup();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            PingGroup(1);
+            curgr = 1;
+            PingGroup();
         }
 
         private void timer2_Tick(object sender, EventArgs e)
         {
-            PingGroup(2);
+            curgr = 2;
+            PingGroup();
         }
 
         private void timer3_Tick(object sender, EventArgs e)
         {
-            PingGroup(3);
+            curgr = 3;
+            PingGroup();
         }
 
         private void timer4_Tick(object sender, EventArgs e)
         {
-            PingGroup(4);
+            curgr = 4;
+            PingGroup();
         }
 
         private void Lang_rusTSMitem_Click(object sender, EventArgs e)
@@ -676,74 +720,26 @@ namespace WindowsFormsApp1
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            if (Timer1.Enabled)
-                Timer1.Stop();
-
-            if (checkBox1.Checked)
-            {
-                numericUpDown2.Enabled = true;
-
-                Timer1.Interval = (int)numericUpDown2.Value * C_min;
-                Timer1.Start();
-
-                PingGroup(1);
-            }
-            else
-                numericUpDown2.Enabled = false;
+            curgr = 1;
+            change(Timer1, checkBox1, numericUpDown2);
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            if (Timer2.Enabled)
-                Timer2.Stop();
-
-            if (checkBox2.Checked)
-            {
-                numericUpDown5.Enabled = true;
-
-                Timer2.Interval = (int)numericUpDown5.Value * C_min;
-                Timer2.Start();
-
-                PingGroup(2);
-            }
-            else
-                numericUpDown5.Enabled = false;
+            curgr = 2;
+            change(Timer2, checkBox2, numericUpDown5);
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
-            if (Timer3.Enabled)
-                Timer3.Stop();
-
-            if (checkBox3.Checked)
-            {
-                numericUpDown8.Enabled = true;
-
-                Timer3.Interval = (int)numericUpDown8.Value * C_min;
-                Timer3.Start();
-
-                PingGroup(3);
-            }
-            else
-                numericUpDown8.Enabled = false;
+            curgr = 3;
+            change(Timer3, checkBox3, numericUpDown8);
         }
 
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
-            if (Timer4.Enabled)
-                Timer4.Stop();
-
-            if (checkBox4.Checked)
-            {
-                numericUpDown11.Enabled = true;
-
-                Timer4.Interval = (int)numericUpDown11.Value * C_min;
-                Timer4.Start();
-
-                PingGroup(4);
-            }
-            else
-                numericUpDown11.Enabled = false;
+            curgr = 4;
+            change(Timer4, checkBox4, numericUpDown11);
         }
 
         private void numericUpDown2_ValueChanged(object sender, EventArgs e)
@@ -790,32 +786,36 @@ namespace WindowsFormsApp1
         {
             if (Timer1.Enabled)
                 Timer1.Stop();
-
-            PingGroup(1);
+            
+            curgr = 1;
+            PingGroup();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             if (Timer2.Enabled)
                 Timer2.Stop();
-
-            PingGroup(2);
+            
+            curgr = 2;
+            PingGroup();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             if (Timer3.Enabled)
                 Timer3.Stop();
-
-            PingGroup(3);
+            
+            curgr = 3;
+            PingGroup();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             if (Timer4.Enabled)
                 Timer4.Stop();
-
-            PingGroup(4);
+            
+            curgr = 4;
+            PingGroup();
         }
 
         private void dataGridView1_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -896,32 +896,72 @@ namespace WindowsFormsApp1
             FormResized();
         }
         
-        //this.ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply);
-        private static void Received_reply(object sender, System.Net.NetworkInformation.PingCompletedEventArgs e)
+        private void Received_reply(object sender, System.Net.NetworkInformation.PingCompletedEventArgs e)
         {
-            // If the operation was canceled, display a message to the user.
+            //this.ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply);
             if (e.Cancelled)
-            {
-                Console.WriteLine("Ping canceled.");
-
-                // Let the main thread resume. 
-                // UserToken is the AutoResetEvent object that the main thread 
-                // is waiting for.
                 ((AutoResetEvent)e.UserState).Set();
-            }
 
-            // If an error occurred, display the exception to the user.
             if (e.Error != null)
-            {
-                Console.WriteLine("Ping failed:");
-                Console.WriteLine(e.Error.ToString());
-
-                // Let the main thread resume. 
                 ((AutoResetEvent)e.UserState).Set();
-            }
 
             // Let the main thread resume.
             ((AutoResetEvent)e.UserState).Set();
+
+            reply = e.Reply;
+
+            DisplayReply();
+        }
+
+        private void DisplayReply()
+        {
+            switch(curgr)
+            {
+                case 1:
+                    dataGridView1[3, curcl].Value = reply.Status;
+
+                    if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                        dataGridView1[4, curcl].Style.BackColor = Color.GreenYellow;
+                    else
+                        dataGridView1[4, curcl].Style.BackColor = Color.Red;
+
+                    if(curcl < g1)
+                        PingGroup();
+                    break;
+                case 2:
+                    dataGridView2[3, curcl].Value = reply.Status;
+
+                    if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                        dataGridView2[4, curcl].Style.BackColor = Color.GreenYellow;
+                    else
+                        dataGridView2[4, curcl].Style.BackColor = Color.Red;
+
+                    if(curcl < g2)
+                        PingGroup();
+                    break;
+                case 3:
+                    dataGridView3[3, curcl].Value = reply.Status;
+
+                    if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                        dataGridView3[4, curcl].Style.BackColor = Color.GreenYellow;
+                    else
+                        dataGridView3[4, curcl].Style.BackColor = Color.Red;
+
+                    if(curcl < g3)
+                        PingGroup();
+                    break;
+                case 4:
+                    dataGridView4[3, curcl].Value = reply.Status;
+
+                    if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                        dataGridView4[4, curcl].Style.BackColor = Color.GreenYellow;
+                    else
+                        dataGridView4[4, curcl].Style.BackColor = Color.Red;
+
+                    if(curcl < g4)
+                        PingGroup();
+                    break;
+            }
         }
         
         private void Form_ChangedSize(object sender, EventArgs e)
@@ -944,13 +984,7 @@ namespace WindowsFormsApp1
 
         public void Count()
         {
-            for(int i = 0; i < 100; i++)
-            {
-                if(i == 71)
-                {
-                    OnCount(); // вызов события
-                }
-            }
+            OnCount(); // вызов события
         }
     }
 

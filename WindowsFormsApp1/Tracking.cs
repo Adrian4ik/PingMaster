@@ -80,12 +80,21 @@ namespace WindowsFormsApp1
 
                 if (pingReply.Status == System.Net.NetworkInformation.IPStatus.Success)
                 {
-                    dataGridView1[1, cur_row].Value = pingReply.RoundtripTime.ToString() + " ms";
+                    if (pingReply.RoundtripTime > 999)
+                        if (pingReply.RoundtripTime.ToString().Substring(1)[0] == '0' && pingReply.RoundtripTime.ToString().Substring(1)[1] == '0')
+                            dataGridView1[1, cur_row].Value = pingReply.RoundtripTime.ToString().Substring(0, 1) + " s " + pingReply.RoundtripTime.ToString().Substring(3) + " ms";
+                        else if (pingReply.RoundtripTime.ToString().Substring(1)[0] == '0')
+                            dataGridView1[1, cur_row].Value = pingReply.RoundtripTime.ToString().Substring(0, 1) + " s " + pingReply.RoundtripTime.ToString().Substring(2) + " ms";
+                        else
+                            dataGridView1[1, cur_row].Value = pingReply.RoundtripTime.ToString().Substring(0, 1) + " s " + pingReply.RoundtripTime.ToString().Substring(1) + " ms";
+                    else
+                        dataGridView1[1, cur_row].Value = pingReply.RoundtripTime.ToString() + " ms";
                     dataGridView1[3, cur_row].Style.BackColor = Color.GreenYellow;
                 }
                 else
                 {
                     dataGridView1[1, cur_row].Value = "---";
+                    dataGridView1[2, cur_row].Value = pingReply.Status;
                     dataGridView1[3, cur_row].Style.BackColor = Color.Red;
                 }
 
@@ -97,17 +106,13 @@ namespace WindowsFormsApp1
                 cur_row++;
             }
         }
-        private void Tracking_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                button1.PerformClick();
-            }
-        }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            label1.Text = textBox1.Text;
+            if (textBox1.Text == "127.0.0.1")
+                label1.Text = "Loopback";
+            else
+                label1.Text = textBox1.Text;
 
             if (timer1.Enabled)
             {
@@ -133,7 +138,6 @@ namespace WindowsFormsApp1
         {
             Translate();
             Preprocessing();
-            KeyPreview = true;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -149,6 +153,7 @@ namespace WindowsFormsApp1
                         button1.Text = "Стоп";
                         break;
                 }
+
                 timer1.Start();
             }
             else
@@ -162,6 +167,7 @@ namespace WindowsFormsApp1
                         button1.Text = "Старт";
                         break;
                 }
+
                 timer1.Stop();
             }
         }

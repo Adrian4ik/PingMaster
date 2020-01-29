@@ -16,12 +16,22 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        bool is_english = false, fl = true;
-        int curcl, g1, g2, g3, g4, t1, t2, t3, t4;
+        bool is_english = false;
         string[] al;
+        int p1, p2, p3, p4;
 
-        System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
-        System.Net.NetworkInformation.PingReply reply;
+        static bool fl = true;
+        static int curcl, g1, g2, g3, g4, t1, t2, t3, t4;
+        static string[] ip1, ip2, ip3, ip4;
+
+        static System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
+        static System.Net.NetworkInformation.PingReply reply;
+        static AutoResetEvent waiter = new AutoResetEvent(false);
+        public static void ResultCallback(int lineCount)
+        {
+            Console.WriteLine(
+                "Independent task printed {0} lines.", lineCount);
+        }
 
         public struct client
         {
@@ -263,6 +273,11 @@ namespace WindowsFormsApp1
             g2--;
             g3--;
             g4--;
+
+            ip1 = new string[g1];
+            ip2 = new string[g2];
+            ip3 = new string[g3];
+            ip4 = new string[g4];
         }
 
         private void FillGrids()
@@ -279,27 +294,32 @@ namespace WindowsFormsApp1
                             dataGridView1[0, j].Value = ab[i].Name;
                             dataGridView1[1, j].Value = ab[i].DNS;
                             dataGridView1[2, j].Value = ab[i].IP;
+                            ip1[j] = ab[i].IP;
                             break;
                         case 2:
                             dataGridView2[0, j].Value = ab[i].Name;
                             dataGridView2[1, j].Value = ab[i].DNS;
                             dataGridView2[2, j].Value = ab[i].IP;
+                            ip2[j] = ab[i].IP;
                             break;
                         case 3:
                             dataGridView3[0, j].Value = ab[i].Name;
                             dataGridView3[1, j].Value = ab[i].DNS;
                             dataGridView3[2, j].Value = ab[i].IP;
+                            ip3[j] = ab[i].IP;
                             break;
                         case 4:
                             dataGridView4[0, j].Value = ab[i].Name;
                             dataGridView4[1, j].Value = ab[i].DNS;
                             dataGridView4[2, j].Value = ab[i].IP;
+                            ip4[j] = ab[i].IP;
                             break;
                     }
                 }
             }
         }
-        private void PingGroup()
+
+        private static void PingGroup()
         {
             int group = 1;
             if (fl)
@@ -310,7 +330,7 @@ namespace WindowsFormsApp1
                     case 1:
                         if (i < g1)
                         {
-                            ping.SendAsync(dataGridView1[2, i].Value.ToString(), (int)numericUpDown1.Value * C_sec);
+                            ping.SendAsync(ip1[i], t1, waiter); // (int)numericUpDown1.Value * C_sec
 
                             /*dataGridView1[3, i].Value = reply.Status;
 
@@ -330,7 +350,7 @@ namespace WindowsFormsApp1
                     case 2:
                         if (i < g2)
                         {
-                            ping.SendAsync(dataGridView2[2, i].Value.ToString(), (int)numericUpDown4.Value * C_sec);
+                            ping.SendAsync(ip2[i], t2, waiter); // (int)numericUpDown4.Value * C_sec
 
                             /*dataGridView2[3, i].Value = reply.Status;
 
@@ -347,7 +367,7 @@ namespace WindowsFormsApp1
                     case 3:
                         if (i < g3)
                         {
-                            ping.SendAsync(dataGridView3[2, i].Value.ToString(), (int)numericUpDown7.Value * C_sec);
+                            ping.SendAsync(ip3[i], t3, waiter); // (int)numericUpDown7.Value * C_sec
 
                             /*dataGridView3[3, i].Value = reply.Status;
 
@@ -364,7 +384,7 @@ namespace WindowsFormsApp1
                     case 4:
                         if (i < g4)
                         {
-                            ping.SendAsync(dataGridView4[2, i].Value.ToString(), (int)numericUpDown10.Value * C_sec);
+                            ping.SendAsync(ip4[i], t4, waiter); // (int)numericUpDown10.Value * C_sec
 
                             /*dataGridView4[3, i].Value = reply.Status;
 
@@ -418,7 +438,9 @@ namespace WindowsFormsApp1
                     case 1:
                         if (i < g1)
                         {
-                            ping.SendAsync(dataGridView1[2, i].Value.ToString(), (int)numericUpDown1.Value * C_sec);
+                            ping.SendAsync(dataGridView1[2, i].Value.ToString(), (int)numericUpDown1.Value * C_sec, waiter);
+
+                            waiter.WaitOne();
 
                             /*dataGridView1[3, i].Value = reply.Status;
 
@@ -438,7 +460,9 @@ namespace WindowsFormsApp1
                     case 2:
                         if(i < g2)
                         {
-                            ping.SendAsync(dataGridView2[2, i].Value.ToString(), (int)numericUpDown4.Value * C_sec);
+                            ping.SendAsync(dataGridView2[2, i].Value.ToString(), (int)numericUpDown4.Value * C_sec, waiter);
+
+                            waiter.WaitOne();
 
                             /*dataGridView2[3, i].Value = reply.Status;
 
@@ -455,7 +479,9 @@ namespace WindowsFormsApp1
                     case 3:
                         if(i < g3)
                         {
-                            ping.SendAsync(dataGridView3[2, i].Value.ToString(), (int)numericUpDown7.Value * C_sec);
+                            ping.SendAsync(dataGridView3[2, i].Value.ToString(), (int)numericUpDown7.Value * C_sec, waiter);
+
+                            waiter.WaitOne();
 
                             /*dataGridView3[3, i].Value = reply.Status;
 
@@ -472,7 +498,9 @@ namespace WindowsFormsApp1
                     case 4:
                         if(i < g4)
                         {
-                            ping.SendAsync(dataGridView4[2, i].Value.ToString(), (int)numericUpDown10.Value * C_sec);
+                            ping.SendAsync(dataGridView4[2, i].Value.ToString(), (int)numericUpDown10.Value * C_sec, waiter);
+
+                            waiter.WaitOne();
 
                             /*dataGridView4[3, i].Value = reply.Status;
 
@@ -493,7 +521,13 @@ namespace WindowsFormsApp1
             }
             else
             {
-                switch(group)
+                // 1. Отправка пинга по второму потоку, перекрашивание ячейки в бирюзовый цвет
+                // 2. При получении ответа отправка данных обратно в таблицу
+                // 3. Заполение таблицы на основе полученных данных
+                // 4. Переключение на нового клиента
+                // 5. Повтор операций 1-4 до тех пор пока не заполнится группа
+                // 6. Повтор операций 1-5 до тех пор пока не заполнятся все таблицы
+                switch (group)
                 {
                     case 1:
                         if (curcl == g1)
@@ -596,7 +630,14 @@ namespace WindowsFormsApp1
 
             //ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply); // обращаться к строчке 1167 дизайнера
 
-            PingGroup();
+            // Supply the state information required by the task.
+            ThreadWithState tws = new ThreadWithState("This report displays the number {0}.", 42, new ExampleCallback(ResultCallback));
+
+            Thread t1 = new Thread(new ThreadStart(tws.ThreadProc));//PingGroup
+            t1.Start();
+            t1.Join();
+
+            //PingGroup();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -712,7 +753,7 @@ namespace WindowsFormsApp1
 
         private void numericUpDown3_ValueChanged(object sender, EventArgs e)
         {
-            t1 = (int)numericUpDown3.Value;
+            p1 = (int)numericUpDown3.Value;
         }
 
         private void numericUpDown5_ValueChanged(object sender, EventArgs e)
@@ -722,7 +763,7 @@ namespace WindowsFormsApp1
 
         private void numericUpDown6_ValueChanged(object sender, EventArgs e)
         {
-            t2 = (int)numericUpDown6.Value;
+            p2 = (int)numericUpDown6.Value;
         }
 
         private void numericUpDown8_ValueChanged(object sender, EventArgs e)
@@ -732,7 +773,7 @@ namespace WindowsFormsApp1
 
         private void numericUpDown9_ValueChanged(object sender, EventArgs e)
         {
-            t3 = (int)numericUpDown9.Value;
+            p3 = (int)numericUpDown9.Value;
         }
 
         private void numericUpDown11_ValueChanged(object sender, EventArgs e)
@@ -742,7 +783,7 @@ namespace WindowsFormsApp1
 
         private void numericUpDown12_ValueChanged(object sender, EventArgs e)
         {
-            t4 = (int)numericUpDown12.Value;
+            p4 = (int)numericUpDown12.Value;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -854,7 +895,8 @@ namespace WindowsFormsApp1
             }
             FormResized();
         }
-
+        
+        //this.ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply);
         private static void Received_reply(object sender, System.Net.NetworkInformation.PingCompletedEventArgs e)
         {
             // If the operation was canceled, display a message to the user.
@@ -881,7 +923,7 @@ namespace WindowsFormsApp1
             // Let the main thread resume.
             ((AutoResetEvent)e.UserState).Set();
         }
-
+        
         private void Form_ChangedSize(object sender, EventArgs e)
         {
             FormResized();
@@ -895,5 +937,55 @@ namespace WindowsFormsApp1
         public int group { get; set; }
         public string ip { get; set; }
         public string status { get; set; }
+
+        public delegate void MethodContainer(); // создание делегата для события
+
+        public event MethodContainer OnCount; // создание события с типом делегата
+
+        public void Count()
+        {
+            for(int i = 0; i < 100; i++)
+            {
+                if(i == 71)
+                {
+                    OnCount(); // вызов события
+                }
+            }
+        }
     }
+
+    public class ThreadWithState
+    {
+        // State information used in the task.
+        private string boilerplate;
+        private int numberValue;
+
+        // Delegate used to execute the callback method when the
+        // task is complete.
+        private ExampleCallback callback;
+
+        // The constructor obtains the state information and the
+        // callback delegate.
+        public ThreadWithState(string text, int number,
+            ExampleCallback callbackDelegate)
+        {
+            boilerplate = text;
+            numberValue = number;
+            callback = callbackDelegate;
+        }
+
+        // The thread procedure performs the task, such as
+        // formatting and printing a document, and then invokes
+        // the callback delegate with the number of lines printed.
+        public void ThreadProc()
+        {
+            Console.WriteLine(boilerplate, numberValue);
+            if (callback != null)
+                callback(1);
+        }
+    }
+
+    // Delegate that defines the signature for the callback method.
+    //
+    public delegate void ExampleCallback(int lineCount);
 }

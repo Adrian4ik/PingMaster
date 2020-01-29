@@ -32,14 +32,14 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.Col0 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -89,6 +89,38 @@
             this.dataGridView1.Size = new System.Drawing.Size(400, 520);
             this.dataGridView1.TabIndex = 1;
             // 
+            // Col0
+            // 
+            this.Col0.FillWeight = 80.60453F;
+            this.Col0.HeaderText = "Col0";
+            this.Col0.Name = "Col0";
+            this.Col0.ReadOnly = true;
+            this.Col0.Width = 80;
+            // 
+            // Col1
+            // 
+            this.Col1.FillWeight = 60.15413F;
+            this.Col1.HeaderText = "Col1";
+            this.Col1.Name = "Col1";
+            this.Col1.ReadOnly = true;
+            this.Col1.Width = 60;
+            // 
+            // Col2
+            // 
+            this.Col2.FillWeight = 243.3896F;
+            this.Col2.HeaderText = "Col2";
+            this.Col2.Name = "Col2";
+            this.Col2.ReadOnly = true;
+            this.Col2.Width = 215;
+            // 
+            // Col3
+            // 
+            this.Col3.FillWeight = 15.85169F;
+            this.Col3.HeaderText = "";
+            this.Col3.Name = "Col3";
+            this.Col3.ReadOnly = true;
+            this.Col3.Width = 25;
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -122,40 +154,9 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // Col0
-            // 
-            this.Col0.FillWeight = 80.60453F;
-            this.Col0.HeaderText = "Col0";
-            this.Col0.Name = "Col0";
-            this.Col0.ReadOnly = true;
-            this.Col0.Width = 80;
-            // 
-            // Col1
-            // 
-            this.Col1.FillWeight = 60.15413F;
-            this.Col1.HeaderText = "Col1";
-            this.Col1.Name = "Col1";
-            this.Col1.ReadOnly = true;
-            this.Col1.Width = 60;
-            // 
-            // Col2
-            // 
-            this.Col2.FillWeight = 243.3896F;
-            this.Col2.HeaderText = "Col2";
-            this.Col2.Name = "Col2";
-            this.Col2.ReadOnly = true;
-            this.Col2.Width = 215;
-            // 
-            // Col3
-            // 
-            this.Col3.FillWeight = 15.85169F;
-            this.Col3.HeaderText = "";
-            this.Col3.Name = "Col3";
-            this.Col3.ReadOnly = true;
-            this.Col3.Width = 25;
-            // 
             // Tracking
             // 
+            this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
@@ -165,7 +166,8 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Tracking";
@@ -173,7 +175,6 @@
             this.TopMost = true;
             this.Load += new System.EventHandler(this.Tracking_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Tracking_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -1164,7 +1164,7 @@
             this.Text = "Ping";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.SizeChanged += new System.EventHandler(this.Form_ChangedSize);
-            this.ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply);
+            ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

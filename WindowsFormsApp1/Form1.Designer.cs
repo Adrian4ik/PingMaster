@@ -1165,6 +1165,7 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.SizeChanged += new System.EventHandler(this.Form_ChangedSize);
             ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply);
+            cc.OnCount += new CurrentClient.SomeEvent(PingGroup);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

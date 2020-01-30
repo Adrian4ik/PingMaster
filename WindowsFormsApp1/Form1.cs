@@ -33,6 +33,8 @@ namespace WindowsFormsApp1
                 "Independent task printed {0} lines.", lineCount);
         }
 
+        CurrentClient cc = new CurrentClient();
+
         public struct client
         {
             public int Group;
@@ -601,13 +603,12 @@ namespace WindowsFormsApp1
         #region События
         private void Form1_Load(object sender, EventArgs e)
         {
-            /*
             is_english = false;
             Column1b.Visible = false;
             Column2b.Visible = false;
             Column3b.Visible = false;
             Column4b.Visible = false;
-
+            /*
             numericUpDown1.Value = ;
             numericUpDown2.Value = ;
             numericUpDown3.Value = ;
@@ -630,12 +631,16 @@ namespace WindowsFormsApp1
 
             //ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply); // обращаться к строчке 1167 дизайнера
 
-            // Supply the state information required by the task.
-            ThreadWithState tws = new ThreadWithState("This report displays the number {0}.", 42, new ExampleCallback(ResultCallback));
 
-            Thread t1 = new Thread(new ThreadStart(tws.ThreadProc));//PingGroup
-            t1.Start();
-            t1.Join();
+
+            // Supply the state information required by the task.
+            //ThreadWithState tws = new ThreadWithState("This report displays the number {0}.", 42, new ExampleCallback(ResultCallback));
+
+            //Thread t1 = new Thread(new ThreadStart(tws.ThreadProc));//PingGroup
+            //t1.Start();
+            //t1.Join();
+
+
 
             //PingGroup();
         }
@@ -897,7 +902,7 @@ namespace WindowsFormsApp1
         }
         
         //this.ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply);
-        private static void Received_reply(object sender, System.Net.NetworkInformation.PingCompletedEventArgs e)
+        private void Received_reply(object sender, System.Net.NetworkInformation.PingCompletedEventArgs e)
         {
             // If the operation was canceled, display a message to the user.
             if (e.Cancelled)
@@ -920,6 +925,12 @@ namespace WindowsFormsApp1
                 ((AutoResetEvent)e.UserState).Set();
             }
 
+            reply = e.Reply;
+
+            cc.Count();
+
+            PingGroup();
+
             // Let the main thread resume.
             ((AutoResetEvent)e.UserState).Set();
         }
@@ -938,9 +949,9 @@ namespace WindowsFormsApp1
         public string ip { get; set; }
         public string status { get; set; }
 
-        public delegate void MethodContainer(); // создание делегата для события
+        public delegate void SomeEvent(); // создание делегата для события
 
-        public event MethodContainer OnCount; // создание события с типом делегата
+        public event SomeEvent OnCount; // создание события с типом делегата
 
         public void Count()
         {

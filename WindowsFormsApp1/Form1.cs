@@ -20,18 +20,13 @@ namespace WindowsFormsApp1
         string[] al;
         int p1, p2, p3, p4;
 
-        static bool fl = true;
-        static int curcl, curgr, g1, g2, g3, g4, t1, t2, t3, t4;
-        static string[] ip1, ip2, ip3, ip4;
+        bool ping_all = true;
+        int curcl, curgr, g1, g2, g3, g4;
+        string[] ip1, ip2, ip3, ip4;
 
         static System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
-        static System.Net.NetworkInformation.PingReply reply;
+        System.Net.NetworkInformation.PingReply reply;
         static AutoResetEvent waiter = new AutoResetEvent(false);
-        public static void ResultCallback(int lineCount)
-        {
-            Console.WriteLine(
-                "Independent task printed {0} lines.", lineCount);
-        }
 
         public struct client
         {
@@ -336,7 +331,7 @@ namespace WindowsFormsApp1
                             dataGridView1[3, curcl].Value = "Pinging...";
                         else
                             dataGridView1[3, curcl].Value = "Опрос...";
-                        dataGridView1[4, curcl].Style.BackColor = Color.Cyan;
+                        dataGridView1[3, curcl].Style.BackColor = Color.Cyan;
 
                         PingCl(dataGridView1[2, curcl].Value.ToString(), (int)numericUpDown1.Value * C_sec);
 
@@ -358,6 +353,12 @@ namespace WindowsFormsApp1
                 case 2:
                     if(curcl < g2)
                     {
+                        if (is_english)
+                            dataGridView2[3, curcl].Value = "Pinging...";
+                        else
+                            dataGridView2[3, curcl].Value = "Опрос...";
+                        dataGridView2[4, curcl].Style.BackColor = Color.Cyan;
+
                         PingCl(dataGridView2[2, curcl].Value.ToString(), (int)numericUpDown4.Value * C_sec);
 
                         /*dataGridView2[3, i].Value = reply.Status;
@@ -375,6 +376,13 @@ namespace WindowsFormsApp1
                 case 3:
                     if(curcl < g3)
                     {
+                        if (is_english)
+                            dataGridView3[3, curcl].Value = "Pinging...";
+                        else
+                            dataGridView3[3, curcl].Value = "Опрос...";
+                        dataGridView3[4, curcl].Style.BackColor = Color.Cyan;
+
+
                         PingCl(dataGridView3[2, curcl].Value.ToString(), (int)numericUpDown7.Value * C_sec);
 
                         /*dataGridView3[3, i].Value = reply.Status;
@@ -392,6 +400,13 @@ namespace WindowsFormsApp1
                 case 4:
                     if(curcl < g4)
                     {
+                        if (is_english)
+                            dataGridView4[3, curcl].Value = "Pinging...";
+                        else
+                            dataGridView4[3, curcl].Value = "Опрос...";
+                        dataGridView4[4, curcl].Style.BackColor = Color.Cyan;
+
+
                         PingCl(dataGridView4[2, curcl].Value.ToString(), (int)numericUpDown10.Value * C_sec);
 
                         /*dataGridView4[3, i].Value = reply.Status;
@@ -416,7 +431,74 @@ namespace WindowsFormsApp1
             //waiter.WaitOne();
         }
 
-        private void change(System.Windows.Forms.Timer timer, CheckBox check, NumericUpDown numupdown)
+        private void DisplayReply()
+        {
+            switch (curgr)
+            {
+                case 1:
+                    dataGridView1[3, curcl].Value = reply.Status;
+
+                    if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                        dataGridView1[3, curcl].Style.BackColor = Color.GreenYellow;
+                    else
+                        dataGridView1[3, curcl].Style.BackColor = Color.Red;
+
+                    curcl++;
+
+                    if (curcl < g1)
+                        PingGroup();
+                    else
+                        curcl = 0;
+                    break;
+                case 2:
+                    dataGridView2[3, curcl].Value = reply.Status;
+
+                    if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                        dataGridView2[4, curcl].Style.BackColor = Color.GreenYellow;
+                    else
+                        dataGridView2[4, curcl].Style.BackColor = Color.Red;
+
+                    curcl++;
+
+                    if (curcl < g2)
+                        PingGroup();
+                    else
+                        curcl = 0;
+                    break;
+                case 3:
+                    dataGridView3[3, curcl].Value = reply.Status;
+
+                    if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                        dataGridView3[4, curcl].Style.BackColor = Color.GreenYellow;
+                    else
+                        dataGridView3[4, curcl].Style.BackColor = Color.Red;
+
+                    curcl++;
+
+                    if (curcl < g3)
+                        PingGroup();
+                    else
+                        curcl = 0;
+                    break;
+                case 4:
+                    dataGridView4[3, curcl].Value = reply.Status;
+
+                    if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                        dataGridView4[4, curcl].Style.BackColor = Color.GreenYellow;
+                    else
+                        dataGridView4[4, curcl].Style.BackColor = Color.Red;
+
+                    curcl++;
+
+                    if (curcl < g4)
+                        PingGroup();
+                    else
+                        curcl = 0;
+                    break;
+            }
+        }
+
+        private void CheckChange(System.Windows.Forms.Timer timer, CheckBox check, NumericUpDown numupdown)
         {
             if (timer.Enabled)
                 timer.Stop();
@@ -432,6 +514,13 @@ namespace WindowsFormsApp1
             }
             else
                 numupdown.Enabled = false;
+        }
+
+        // MSDN
+        public static void ResultCallback(int lineCount)
+        {
+            Console.WriteLine(
+                "Independent task printed {0} lines.", lineCount);
         }
 
         private void FormResized() // form adds height and width to client size: x16, y39
@@ -461,22 +550,22 @@ namespace WindowsFormsApp1
 
             if(Column1b.Visible)
             {
-                Column1a.Width = (dataGridView1.Width - 195) / 2;
-                Column2a.Width = (dataGridView1.Width - 195) / 2;
-                Column3a.Width = (dataGridView1.Width - 195) / 2;
-                Column4a.Width = (dataGridView1.Width - 195) / 2;
+                Column1b.Width = (dataGridView1.Width - 195) / 2;
+                Column2b.Width = (dataGridView1.Width - 195) / 2;
+                Column3b.Width = (dataGridView1.Width - 195) / 2;
+                Column4b.Width = (dataGridView1.Width - 195) / 2;
 
-                Column1b.Width = Column1a.Width;
-                Column2b.Width = Column2a.Width;
-                Column3b.Width = Column3a.Width;
-                Column4b.Width = Column4a.Width;
+                Column1d.Width = Column1b.Width;
+                Column2d.Width = Column1b.Width;
+                Column3d.Width = Column1b.Width;
+                Column4d.Width = Column1b.Width;
             }
             else
             {
-                Column1a.Width = dataGridView1.Width - 195;
-                Column2a.Width = dataGridView1.Width - 195;
-                Column3a.Width = dataGridView1.Width - 195;
-                Column4a.Width = dataGridView1.Width - 195;
+                Column1d.Width = dataGridView1.Width - 230;
+                Column2d.Width = dataGridView1.Width - 230;
+                Column3d.Width = dataGridView1.Width - 230;
+                Column4d.Width = dataGridView1.Width - 230;
             }
         }
         #endregion Методы
@@ -511,7 +600,7 @@ namespace WindowsFormsApp1
             FillClientsList();
             FillGrids();
 
-            //ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply); // обращаться к строчке 1167 дизайнера
+            ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply);
 
 
 
@@ -568,25 +657,25 @@ namespace WindowsFormsApp1
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             curgr = 1;
-            change(Timer1, checkBox1, numericUpDown2);
+            CheckChange(Timer1, checkBox1, numericUpDown2);
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             curgr = 2;
-            change(Timer2, checkBox2, numericUpDown5);
+            CheckChange(Timer2, checkBox2, numericUpDown5);
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
             curgr = 3;
-            change(Timer3, checkBox3, numericUpDown8);
+            CheckChange(Timer3, checkBox3, numericUpDown8);
         }
 
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
             curgr = 4;
-            change(Timer4, checkBox4, numericUpDown11);
+            CheckChange(Timer4, checkBox4, numericUpDown11);
         }
 
         private void numericUpDown2_ValueChanged(object sender, EventArgs e)
@@ -634,7 +723,8 @@ namespace WindowsFormsApp1
             if (Timer1.Enabled)
                 Timer1.Stop();
             
-            curgr = 1;
+            //if(ping.semd)
+                curgr = 1;
             PingGroup();
         }
 
@@ -745,7 +835,6 @@ namespace WindowsFormsApp1
         
         private void Received_reply(object sender, System.Net.NetworkInformation.PingCompletedEventArgs e)
         {
-            //this.ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply);
             if (e.Cancelled)
                 ((AutoResetEvent)e.UserState).Set();
 
@@ -758,73 +847,6 @@ namespace WindowsFormsApp1
             reply = e.Reply;
 
             DisplayReply();
-        }
-
-        private void DisplayReply()
-        {
-            switch(curgr)
-            {
-                case 1:
-                    dataGridView1[3, curcl].Value = reply.Status;
-
-                    if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
-                        dataGridView1[4, curcl].Style.BackColor = Color.GreenYellow;
-                    else
-                        dataGridView1[4, curcl].Style.BackColor = Color.Red;
-
-                    curcl++;
-
-                    if (curcl < g1)
-                        PingGroup();
-                    else
-                        curcl = 0;
-                    break;
-                case 2:
-                    dataGridView2[3, curcl].Value = reply.Status;
-
-                    if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
-                        dataGridView2[4, curcl].Style.BackColor = Color.GreenYellow;
-                    else
-                        dataGridView2[4, curcl].Style.BackColor = Color.Red;
-
-                    curcl++;
-
-                    if (curcl < g2)
-                        PingGroup();
-                    else
-                        curcl = 0;
-                    break;
-                case 3:
-                    dataGridView3[3, curcl].Value = reply.Status;
-
-                    if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
-                        dataGridView3[4, curcl].Style.BackColor = Color.GreenYellow;
-                    else
-                        dataGridView3[4, curcl].Style.BackColor = Color.Red;
-
-                    curcl++;
-
-                    if (curcl < g3)
-                        PingGroup();
-                    else
-                        curcl = 0;
-                    break;
-                case 4:
-                    dataGridView4[3, curcl].Value = reply.Status;
-
-                    if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
-                        dataGridView4[4, curcl].Style.BackColor = Color.GreenYellow;
-                    else
-                        dataGridView4[4, curcl].Style.BackColor = Color.Red;
-
-                    curcl++;
-
-                    if (curcl < g4)
-                        PingGroup();
-                    else
-                        curcl = 0;
-                    break;
-            }
         }
         
         private void Form_ChangedSize(object sender, EventArgs e)

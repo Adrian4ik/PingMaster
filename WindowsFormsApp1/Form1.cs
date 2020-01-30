@@ -355,6 +355,8 @@ namespace WindowsFormsApp1
                         //else
                             //dataGridView1[3, curcl].Value = "Опрос...";
                         dataGridView1[3, curcl_g1].Style.BackColor = Color.Cyan;
+                        dataGridView1[3, curcl_g1].Style.SelectionForeColor = Color.White;
+                        dataGridView1[3, curcl_g1].Style.SelectionBackColor = Color.DarkCyan;
 
                         dataGridView1[0, curcl_g1].Selected = true;
 
@@ -369,6 +371,7 @@ namespace WindowsFormsApp1
                         else
                             dataGridView2[3, curcl_g2].Value = "Опрос...";
                         dataGridView2[4, curcl_g2].Style.BackColor = Color.Cyan;
+                        dataGridView2[4, curcl_g2].Style.SelectionBackColor = Color.DarkCyan;
 
                         dataGridView2[0, curcl_g2].Selected = true;
 
@@ -421,9 +424,15 @@ namespace WindowsFormsApp1
                     dataGridView1[3, curcl_g1].Value = reply_g1.Status;
 
                     if (reply_g1.Status == System.Net.NetworkInformation.IPStatus.Success)
+                    {
                         dataGridView1[3, curcl_g1].Style.BackColor = Color.GreenYellow;
+                        dataGridView1[3, curcl_g1].Style.SelectionBackColor = Color.DarkGreen;
+                    }
                     else
+                    {
                         dataGridView1[3, curcl_g1].Style.BackColor = Color.Red;
+                        dataGridView1[3, curcl_g1].Style.SelectionBackColor = Color.DarkRed;
+                    }
 
                     curcl_g1++;
 

@@ -297,7 +297,7 @@
             dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.Color.DeepSkyBlue;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.Color.LightGray;
             dataGridViewCellStyle13.SelectionForeColor = System.Drawing.Color.Black;
             dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle13;
@@ -1281,6 +1281,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1c;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1d;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1e;
+        private System.Windows.Forms.DataGridViewTextBoxColumn[,] ColumnArray;
         private System.Windows.Forms.ToolStripMenuItem Switch_dnsTSMitem;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
     }

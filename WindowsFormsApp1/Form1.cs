@@ -325,240 +325,87 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void PingAll()
-        {
-            int group = 1;
-            if (fl)
-            {
-                int i = 0;
-                switch (group)
-                {
-                    case 1:
-                        if (i < g1)
-                        {
-                            ping.SendAsync(ip1[i], t1, waiter); // (int)numericUpDown1.Value * C_sec
-
-                            /*
-                            dataGridView1[3, i].Value = reply.Status;
-
-                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
-                            {
-                                dataGridView1[4, i].Style.BackColor = Color.GreenYellow;
-                            }
-                            else
-                            {
-                                dataGridView1[4, i].Style.BackColor = Color.Red;
-                                //dataGridView1[4, 0].Style.BackColor = Color.GreenYellow;
-                                //dataGridView1[4, 2].Style.BackColor = Color.Red;
-                                //dataGridView1[4, 5].Style.BackColor = Color.Cyan;
-                            }
-                            */
-                        }
-                        break;
-                    case 2:
-                        if (i < g2)
-                        {
-                            ping.SendAsync(ip2[i], t2, waiter); // (int)numericUpDown4.Value * C_sec
-
-                            /*
-                            dataGridView2[3, i].Value = reply.Status;
-
-                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
-                            {
-                                dataGridView2[4, i].Style.BackColor = Color.GreenYellow;
-                            }
-                            else
-                            {
-                                dataGridView2[4, i].Style.BackColor = Color.Red;
-                            }
-                            */
-                        }
-                        break;
-                    case 3:
-                        if (i < g3)
-                        {
-                            ping.SendAsync(ip3[i], t3, waiter); // (int)numericUpDown7.Value * C_sec
-
-                            /*
-                            dataGridView3[3, i].Value = reply.Status;
-
-                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
-                            {
-                                dataGridView3[4, i].Style.BackColor = Color.GreenYellow;
-                            }
-                            else
-                            {
-                                dataGridView3[4, i].Style.BackColor = Color.Red;
-                            }
-                            */
-                        }
-                        break;
-                    case 4:
-                        if (i < g4)
-                        {
-                            ping.SendAsync(ip4[i], t4, waiter); // (int)numericUpDown10.Value * C_sec
-
-                            /*
-                            dataGridView4[3, i].Value = reply.Status;
-
-                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
-                            {
-                                dataGridView4[4, i].Style.BackColor = Color.GreenYellow;
-                            }
-                            else
-                            {
-                                dataGridView4[4, i].Style.BackColor = Color.Red;
-                            }
-                            */
-                        }
-                        break;
-                }
-                i++;
-
-                fl = false;
-            }
-            else
-            {
-                switch (group)
-                {
-                    case 1:
-                        if (curcl == g1)
-                            fl = true;
-                        else
-                            fl = false; // Продолжение программы (занесение ответа в таблицу и запрос нового пинга)
-                        break;
-                    case 2:
-                        if (curcl == g2)
-                            fl = true;
-                        break;
-                    case 3:
-                        if (curcl == g3)
-                            fl = true;
-                        break;
-                    case 4:
-                        if (curcl == g4)
-                            fl = true;
-                        break;
-                }
-            }
-        }
-
         private void PingGroup()
         {
-            if(fl)
+            switch (curgr)
             {
-                switch (curgr)
-                {
-                    case 1:
-                        if (curcl < g1)
-                        {
-                            if(is_english)
-                                dataGridView1[3, curcl].Value = "Pinging...";
-                            else
-                                dataGridView1[3, curcl].Value = "Опрос...";
-                            dataGridView1[4, curcl].Style.BackColor = Color.Cyan;
-
-                            PingCl(dataGridView1[2, curcl].Value.ToString(), (int)numericUpDown1.Value * C_sec);
-
-                            /*dataGridView1[3, i].Value = reply.Status;
-
-                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
-                            {
-                                dataGridView1[4, i].Style.BackColor = Color.GreenYellow;
-                            }
-                            else
-                            {
-                                dataGridView1[4, i].Style.BackColor = Color.Red;
-                                //dataGridView1[4, 0].Style.BackColor = Color.GreenYellow;
-                                //dataGridView1[4, 2].Style.BackColor = Color.Red;
-                                //dataGridView1[4, 5].Style.BackColor = Color.Cyan;
-                            }*/
-                        }
-                        break;
-                    case 2:
-                        if(curcl < g2)
-                        {
-                            PingCl(dataGridView2[2, curcl].Value.ToString(), (int)numericUpDown4.Value * C_sec);
-
-                            /*dataGridView2[3, i].Value = reply.Status;
-
-                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
-                            {
-                                dataGridView2[4, i].Style.BackColor = Color.GreenYellow;
-                            }
-                            else
-                            {
-                                dataGridView2[4, i].Style.BackColor = Color.Red;
-                            }*/
-                        }
-                        break;
-                    case 3:
-                        if(curcl < g3)
-                        {
-                            PingCl(dataGridView3[2, curcl].Value.ToString(), (int)numericUpDown7.Value * C_sec);
-
-                            /*dataGridView3[3, i].Value = reply.Status;
-
-                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
-                            {
-                                dataGridView3[4, i].Style.BackColor = Color.GreenYellow;
-                            }
-                            else
-                            {
-                                dataGridView3[4, i].Style.BackColor = Color.Red;
-                            }*/
-                        }
-                        break;
-                    case 4:
-                        if(curcl < g4)
-                        {
-                            PingCl(dataGridView4[2, curcl].Value.ToString(), (int)numericUpDown10.Value * C_sec);
-
-                            /*dataGridView4[3, i].Value = reply.Status;
-
-                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
-                            {
-                                dataGridView4[4, i].Style.BackColor = Color.GreenYellow;
-                            }
-                            else
-                            {
-                                dataGridView4[4, i].Style.BackColor = Color.Red;
-                            }*/
-                        }
-                        break;
-                }
-
-                fl = false;
-            }
-            else
-            {
-                // 1. Отправка пинга по второму потоку, перекрашивание ячейки в бирюзовый цвет
-                // 2. При получении ответа отправка данных обратно в таблицу
-                // 3. Заполение таблицы на основе полученных данных
-                // 4. Переключение на нового клиента
-                // 5. Повтор операций 1-4 до тех пор пока не заполнится группа
-                // 6. Повтор операций 1-5 до тех пор пока не заполнятся все таблицы
-                switch (curgr)
-                {
-                    case 1:
-                        if (curcl == g1)
-                            fl = true;
+                case 1:
+                    if (curcl < g1)
+                    {
+                        if(is_english)
+                            dataGridView1[3, curcl].Value = "Pinging...";
                         else
-                            fl = false; // Продолжение программы (занесение ответа в таблицу и запрос нового пинга)
-                        break;
-                    case 2:
-                        if (curcl == g2)
-                            fl = true;
-                        break;
-                    case 3:
-                        if (curcl == g3)
-                            fl = true;
-                        break;
-                    case 4:
-                        if (curcl == g4)
-                            fl = true;
-                        break;
-                }
+                            dataGridView1[3, curcl].Value = "Опрос...";
+                        dataGridView1[4, curcl].Style.BackColor = Color.Cyan;
+
+                        PingCl(dataGridView1[2, curcl].Value.ToString(), (int)numericUpDown1.Value * C_sec);
+
+                        /*dataGridView1[3, i].Value = reply.Status;
+
+                        if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                        {
+                            dataGridView1[4, i].Style.BackColor = Color.GreenYellow;
+                        }
+                        else
+                        {
+                            dataGridView1[4, i].Style.BackColor = Color.Red;
+                            //dataGridView1[4, 0].Style.BackColor = Color.GreenYellow;
+                            //dataGridView1[4, 2].Style.BackColor = Color.Red;
+                            //dataGridView1[4, 5].Style.BackColor = Color.Cyan;
+                        }*/
+                    }
+                    break;
+                case 2:
+                    if(curcl < g2)
+                    {
+                        PingCl(dataGridView2[2, curcl].Value.ToString(), (int)numericUpDown4.Value * C_sec);
+
+                        /*dataGridView2[3, i].Value = reply.Status;
+
+                        if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                        {
+                            dataGridView2[4, i].Style.BackColor = Color.GreenYellow;
+                        }
+                        else
+                        {
+                            dataGridView2[4, i].Style.BackColor = Color.Red;
+                        }*/
+                    }
+                    break;
+                case 3:
+                    if(curcl < g3)
+                    {
+                        PingCl(dataGridView3[2, curcl].Value.ToString(), (int)numericUpDown7.Value * C_sec);
+
+                        /*dataGridView3[3, i].Value = reply.Status;
+
+                        if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                        {
+                            dataGridView3[4, i].Style.BackColor = Color.GreenYellow;
+                        }
+                        else
+                        {
+                            dataGridView3[4, i].Style.BackColor = Color.Red;
+                        }*/
+                    }
+                    break;
+                case 4:
+                    if(curcl < g4)
+                    {
+                        PingCl(dataGridView4[2, curcl].Value.ToString(), (int)numericUpDown10.Value * C_sec);
+
+                        /*dataGridView4[3, i].Value = reply.Status;
+
+                        if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                        {
+                            dataGridView4[4, i].Style.BackColor = Color.GreenYellow;
+                        }
+                        else
+                        {
+                            dataGridView4[4, i].Style.BackColor = Color.Red;
+                        }*/
+                    }
+                    break;
             }
         }
         
@@ -566,7 +413,7 @@ namespace WindowsFormsApp1
         {
             ping.SendAsync(address, timeout, waiter);
 
-            waiter.WaitOne();
+            //waiter.WaitOne();
         }
 
         private void change(System.Windows.Forms.Timer timer, CheckBox check, NumericUpDown numupdown)
@@ -925,8 +772,12 @@ namespace WindowsFormsApp1
                     else
                         dataGridView1[4, curcl].Style.BackColor = Color.Red;
 
-                    if(curcl < g1)
+                    curcl++;
+
+                    if (curcl < g1)
                         PingGroup();
+                    else
+                        curcl = 0;
                     break;
                 case 2:
                     dataGridView2[3, curcl].Value = reply.Status;
@@ -936,8 +787,12 @@ namespace WindowsFormsApp1
                     else
                         dataGridView2[4, curcl].Style.BackColor = Color.Red;
 
-                    if(curcl < g2)
+                    curcl++;
+
+                    if (curcl < g2)
                         PingGroup();
+                    else
+                        curcl = 0;
                     break;
                 case 3:
                     dataGridView3[3, curcl].Value = reply.Status;
@@ -947,8 +802,12 @@ namespace WindowsFormsApp1
                     else
                         dataGridView3[4, curcl].Style.BackColor = Color.Red;
 
-                    if(curcl < g3)
+                    curcl++;
+
+                    if (curcl < g3)
                         PingGroup();
+                    else
+                        curcl = 0;
                     break;
                 case 4:
                     dataGridView4[3, curcl].Value = reply.Status;
@@ -958,8 +817,12 @@ namespace WindowsFormsApp1
                     else
                         dataGridView4[4, curcl].Style.BackColor = Color.Red;
 
-                    if(curcl < g4)
+                    curcl++;
+
+                    if (curcl < g4)
                         PingGroup();
+                    else
+                        curcl = 0;
                     break;
             }
         }

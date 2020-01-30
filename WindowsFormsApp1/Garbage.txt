@@ -26,7 +26,129 @@
 192.168.249.1
 10.1.11.5
 
+
+
 //label1.Text = dataGridView1.VerticalScrollingOffset.ToString();
 //label1.Text = "Form size: " + ClientSize.Width + "x" + ClientSize.Height + " gb size: " + groupBox1.Width + "x" + groupBox1.Height + " dgv size: " + dataGridView1.Width + "x" + dataGridView1.Height;
 //dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 //label1.Text = checkBox1.Location.X.ToString();
+
+
+
+        private void PingAll()
+        {
+            int group = 1;
+            if (fl)
+            {
+                int i = 0;
+                switch (group)
+                {
+                    case 1:
+                        if (i < g1)
+                        {
+                            ping.SendAsync(ip1[i], t1, waiter); // (int)numericUpDown1.Value * C_sec
+
+                            /*
+                            dataGridView1[3, i].Value = reply.Status;
+
+                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                            {
+                                dataGridView1[4, i].Style.BackColor = Color.GreenYellow;
+                            }
+                            else
+                            {
+                                dataGridView1[4, i].Style.BackColor = Color.Red;
+                                //dataGridView1[4, 0].Style.BackColor = Color.GreenYellow;
+                                //dataGridView1[4, 2].Style.BackColor = Color.Red;
+                                //dataGridView1[4, 5].Style.BackColor = Color.Cyan;
+                            }
+                            */
+                        }
+                        break;
+                    case 2:
+                        if (i < g2)
+                        {
+                            ping.SendAsync(ip2[i], t2, waiter); // (int)numericUpDown4.Value * C_sec
+
+                            /*
+                            dataGridView2[3, i].Value = reply.Status;
+
+                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                            {
+                                dataGridView2[4, i].Style.BackColor = Color.GreenYellow;
+                            }
+                            else
+                            {
+                                dataGridView2[4, i].Style.BackColor = Color.Red;
+                            }
+                            */
+                        }
+                        break;
+                    case 3:
+                        if (i < g3)
+                        {
+                            ping.SendAsync(ip3[i], t3, waiter); // (int)numericUpDown7.Value * C_sec
+
+                            /*
+                            dataGridView3[3, i].Value = reply.Status;
+
+                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                            {
+                                dataGridView3[4, i].Style.BackColor = Color.GreenYellow;
+                            }
+                            else
+                            {
+                                dataGridView3[4, i].Style.BackColor = Color.Red;
+                            }
+                            */
+                        }
+                        break;
+                    case 4:
+                        if (i < g4)
+                        {
+                            ping.SendAsync(ip4[i], t4, waiter); // (int)numericUpDown10.Value * C_sec
+
+                            /*
+                            dataGridView4[3, i].Value = reply.Status;
+
+                            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                            {
+                                dataGridView4[4, i].Style.BackColor = Color.GreenYellow;
+                            }
+                            else
+                            {
+                                dataGridView4[4, i].Style.BackColor = Color.Red;
+                            }
+                            */
+                        }
+                        break;
+                }
+                i++;
+
+                fl = false;
+            }
+            else
+            {
+                switch (group)
+                {
+                    case 1:
+                        if (curcl == g1)
+                            fl = true;
+                        else
+                            fl = false; // Продолжение программы (занесение ответа в таблицу и запрос нового пинга)
+                        break;
+                    case 2:
+                        if (curcl == g2)
+                            fl = true;
+                        break;
+                    case 3:
+                        if (curcl == g3)
+                            fl = true;
+                        break;
+                    case 4:
+                        if (curcl == g4)
+                            fl = true;
+                        break;
+                }
+            }
+        }

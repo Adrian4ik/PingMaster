@@ -20,9 +20,9 @@ namespace WindowsFormsApp1
         string[] al;
         int p1, p2, p3, p4;
 
-        bool ping_all = true;
+        int[] grid_packets = new int[8], grid_p_current = new int[8];
         int curcl_g1, curcl_g2, curcl_g3, curcl_g4, g1, g2, g3, g4;
-        string[] ip1, ip2, ip3, ip4;
+        string[] ip_g1, ip_g2, ip_g3, ip_g4;
 
         static System.Net.NetworkInformation.Ping ping_g1 = new System.Net.NetworkInformation.Ping();
         static System.Net.NetworkInformation.Ping ping_g2 = new System.Net.NetworkInformation.Ping();
@@ -82,22 +82,24 @@ namespace WindowsFormsApp1
 
         private void Translate()
         {
-            if(is_english)
+            if (is_english)
             {
                 toolStripButton1.Text = "File";
-                    Open_iniTSMitem.Text = "Open .INI file";
-                    Open_logTSMitem.Text = "Open log file";
+                Open_iniTSMitem.Text = "Open .INI file";
+                Open_logTSMitem.Text = "Open log file";
                 toolStripButton2.Text = "Ping all";
                 toolStripButton3.Text = "Tracking";
                 toolStripButton4.Text = "Settings";
-                    LanguageTSMitem.Text = "Language";
-                        Lang_rusTSMitem.Text = "Russian";
-                        Lang_engTSMitem.Text = "English";
-                    ViewTSMitem.Text = "View";
-                        Switch_dnsTSMitem.Text = "On/Off DNS";
+                LanguageTSMitem.Text = "Language";
+                Lang_rusTSMitem.Text = "Russian";
+                Lang_engTSMitem.Text = "English";
+                TablesTSMitem.Text = "Tables";
+                Switch_dnsTSMitem.Text = "On/Off DNS";
+                Switch_ipTSMitem.Text = "On/Off IP";
+                Switch_timeTSMitem.Text = "On/Off Time";
                 toolStripButton5.Text = "Help";
-                    User_guideTSMitem.Text = "User's guide";
-                    AboutTSMitem.Text = "About";
+                User_guideTSMitem.Text = "User's guide";
+                AboutTSMitem.Text = "About";
 
                 groupBox1.Text = "Group 1";
                 groupBox2.Text = "Group 2";
@@ -126,19 +128,21 @@ namespace WindowsFormsApp1
             else
             {
                 toolStripButton1.Text = "Файл";
-                    Open_iniTSMitem.Text = "Открыть .INI файл";
-                    Open_logTSMitem.Text = "Открыть лог файл";
+                Open_iniTSMitem.Text = "Открыть .INI файл";
+                Open_logTSMitem.Text = "Открыть лог файл";
                 toolStripButton2.Text = "Пинг всех";
                 toolStripButton3.Text = "Слежение";
                 toolStripButton4.Text = "Настройки";
-                    LanguageTSMitem.Text = "Язык";
-                        Lang_rusTSMitem.Text = "Русский";
-                        Lang_engTSMitem.Text = "Английский";
-                    ViewTSMitem.Text = "Вид";
-                        Switch_dnsTSMitem.Text = "Вкл/Выкл DNS";
+                LanguageTSMitem.Text = "Язык";
+                Lang_rusTSMitem.Text = "Русский";
+                Lang_engTSMitem.Text = "Английский";
+                TablesTSMitem.Text = "Таблицы";
+                Switch_dnsTSMitem.Text = "Вкл/Выкл DNS";
+                Switch_ipTSMitem.Text = "Вкл/Выкл IP";
+                Switch_timeTSMitem.Text = "Вкл/Выкл Время";
                 toolStripButton5.Text = "Помощь";
-                    User_guideTSMitem.Text = "Руководство пользователя";
-                    AboutTSMitem.Text = "О программе";
+                User_guideTSMitem.Text = "Руководство пользователя";
+                AboutTSMitem.Text = "О программе";
 
                 groupBox1.Text = "Группа 1";
                 groupBox2.Text = "Группа 2";
@@ -251,7 +255,7 @@ namespace WindowsFormsApp1
                 {
                     string str = al[s];
 
-                    for(int c = 0, flag = 1; c < al[s].Length; c++)
+                    for (int c = 0, flag = 1; c < al[s].Length; c++)
                     {
                         if (str[c] == '/') // Правило разбиения строки на компоненты абонента (Имя абонента/DNS/IP)
                             flag++;
@@ -298,17 +302,17 @@ namespace WindowsFormsApp1
             g3--;
             g4--;
 
-            ip1 = new string[g1];
-            ip2 = new string[g2];
-            ip3 = new string[g3];
-            ip4 = new string[g4];
+            ip_g1 = new string[g1];
+            ip_g2 = new string[g2];
+            ip_g3 = new string[g3];
+            ip_g4 = new string[g4];
         }
 
         private void FillGrids()
         {
-            for(int i = 0, j = 0; i < ab.Count(); i++, j++)
+            for (int i = 0, j = 0; i < ab.Count(); i++, j++)
             {
-                if(ab[i].Name == "")
+                if (ab[i].Name == "")
                     j = -1;
                 else
                 {
@@ -318,25 +322,25 @@ namespace WindowsFormsApp1
                             dataGridView1[0, j].Value = ab[i].Name;
                             dataGridView1[1, j].Value = ab[i].DNS;
                             dataGridView1[2, j].Value = ab[i].IP;
-                            ip1[j] = ab[i].IP;
+                            ip_g1[j] = ab[i].IP;
                             break;
                         case 2:
                             dataGridView2[0, j].Value = ab[i].Name;
                             dataGridView2[1, j].Value = ab[i].DNS;
                             dataGridView2[2, j].Value = ab[i].IP;
-                            ip2[j] = ab[i].IP;
+                            ip_g2[j] = ab[i].IP;
                             break;
                         case 3:
                             dataGridView3[0, j].Value = ab[i].Name;
                             dataGridView3[1, j].Value = ab[i].DNS;
                             dataGridView3[2, j].Value = ab[i].IP;
-                            ip3[j] = ab[i].IP;
+                            ip_g3[j] = ab[i].IP;
                             break;
                         case 4:
                             dataGridView4[0, j].Value = ab[i].Name;
                             dataGridView4[1, j].Value = ab[i].DNS;
                             dataGridView4[2, j].Value = ab[i].IP;
-                            ip4[j] = ab[i].IP;
+                            ip_g4[j] = ab[i].IP;
                             break;
                     }
                 }
@@ -345,15 +349,18 @@ namespace WindowsFormsApp1
 
         private void PingGroup(int curgr)
         {
+            toolStripButton2.Enabled = false;
             switch (curgr)
             {
                 case 1:
                     if (curcl_g1 < g1)
                     {
+                        button1.Enabled = false;
+
                         //if(is_english)
-                            dataGridView1[3, curcl_g1].Value = "Pinging...";
+                        dataGridView1[3, curcl_g1].Value = "Pinging...";
                         //else
-                            //dataGridView1[3, curcl].Value = "Опрос...";
+                        //dataGridView1[3, curcl].Value = "Опрос...";
                         dataGridView1[3, curcl_g1].Style.BackColor = Color.Cyan;
                         dataGridView1[3, curcl_g1].Style.SelectionForeColor = Color.White;
                         dataGridView1[3, curcl_g1].Style.SelectionBackColor = Color.DarkCyan;
@@ -364,8 +371,10 @@ namespace WindowsFormsApp1
                     }
                     break;
                 case 2:
-                    if(curcl_g2 < g2)
+                    if (curcl_g2 < g2)
                     {
+                        button2.Enabled = false;
+
                         if (is_english)
                             dataGridView2[3, curcl_g2].Value = "Pinging...";
                         else
@@ -379,22 +388,26 @@ namespace WindowsFormsApp1
                     }
                     break;
                 case 3:
-                    if(curcl_g3 < g3)
+                    if (curcl_g3 < g3)
                     {
+                        button3.Enabled = false;
+
                         if (is_english)
                             dataGridView3[3, curcl_g3].Value = "Pinging...";
                         else
                             dataGridView3[3, curcl_g3].Value = "Опрос...";
                         dataGridView3[4, curcl_g3].Style.BackColor = Color.Cyan;
-                        
+
                         dataGridView3[0, curcl_g3].Selected = true;
 
                         PingCl(ping_g3, dataGridView3[2, curcl_g3].Value.ToString(), (int)numericUpDown7.Value * C_sec, waiter3);
                     }
                     break;
                 case 4:
-                    if(curcl_g4 < g4)
+                    if (curcl_g4 < g4)
                     {
+                        button4.Enabled = false;
+
                         if (is_english)
                             dataGridView4[3, curcl_g4].Value = "Pinging...";
                         else
@@ -408,7 +421,7 @@ namespace WindowsFormsApp1
                     break;
             }
         }
-        
+
         private static void PingCl(System.Net.NetworkInformation.Ping ping, string address, int timeout, AutoResetEvent waiter)
         {
             ping.SendAsync(address, timeout, waiter);
@@ -434,45 +447,92 @@ namespace WindowsFormsApp1
                         dataGridView1[3, curcl_g1].Style.SelectionBackColor = Color.DarkRed;
                     }
 
-                    curcl_g1++;
+                    if (grid_p_current[0] == grid_packets[0])
+                    {
+                        curcl_g1++;
+                        grid_p_current[0] = 0;
+                    }
+                    else
+                        grid_p_current[0]++;
 
                     if (curcl_g1 < g1)
                         PingGroup(1);
                     else
+                    {
                         curcl_g1 = 0;
+                        toolStripButton2.Enabled = true;
+                        button1.Enabled = true;
+                    }
                     break;
                 case 2:
                     dataGridView2[3, curcl_g2].Value = reply_g2.Status;
 
                     if (reply_g2.Status == System.Net.NetworkInformation.IPStatus.Success)
+                    {
                         dataGridView2[4, curcl_g2].Style.BackColor = Color.GreenYellow;
+                        dataGridView2[4, curcl_g2].Style.SelectionBackColor = Color.DarkGreen;
+                    }
                     else
+                    {
                         dataGridView2[4, curcl_g2].Style.BackColor = Color.Red;
+                        dataGridView2[4, curcl_g2].Style.SelectionBackColor = Color.DarkRed;
+                    }
 
-                    curcl_g2++;
+                    if (grid_p_current[1] == grid_packets[1])
+                    {
+                        curcl_g2++;
+                        grid_p_current[1] = 0;
+                    }
+                    else
+                        grid_p_current[1]++;
 
                     if (curcl_g2 < g2)
                         PingGroup(2);
                     else
+                    {
                         curcl_g2 = 0;
+                        toolStripButton2.Enabled = true;
+                        button2.Enabled = true;
+                    }
                     break;
                 case 3:
                     DisplayReply(dataGridView3, reply_g3, curcl_g3);
-                    curcl_g3++;
+                    if (grid_p_current[2] == grid_packets[2])
+                    {
+                        curcl_g3++;
+                        grid_p_current[2] = 0;
+                    }
+                    else
+                        grid_p_current[2]++;
 
                     if (curcl_g3 < g3)
                         PingGroup(3);
                     else
+                    {
                         curcl_g3 = 0;
+                        toolStripButton2.Enabled = true;
+                        button3.Enabled = true;
+                    }
                     break;
                 case 4:
                     DisplayReply(dataGridView4, reply_g4, curcl_g4);
-                    curcl_g4++;
+
+                    if (grid_p_current[3] == grid_packets[3])
+                    {
+                        curcl_g4++;
+                        grid_p_current[0] = 0;
+                    }
+                    else
+                        grid_p_current[0]++;
 
                     if (curcl_g4 < g4)
                         PingGroup(4);
                     else
+                    {
                         curcl_g4 = 0;
+                        toolStripButton2.Enabled = true;
+                        button4.Enabled = true;
+                    }
                     break;
             }
         }
@@ -487,22 +547,34 @@ namespace WindowsFormsApp1
                 grid[4, current_client].Style.BackColor = Color.Red;
         }
 
-        private void CheckChange(System.Windows.Forms.Timer timer, CheckBox check, NumericUpDown numupdown, int curgr)
+        private void CheckChange(DataGridView grid, System.Windows.Forms.Timer timer, CheckBox check, NumericUpDown numupdown, Label label_a, Label label_b, int curgr, int count)
         {
             if (timer.Enabled)
                 timer.Stop();
 
             if (check.Checked)
             {
+                label_a.Enabled = true;
+                label_b.Enabled = true;
                 numupdown.Enabled = true;
 
                 timer.Interval = (int)numupdown.Value * C_min;
                 timer.Start();
-                
+
+                foreach (int i in grid_p_current)
+                {
+                    grid_p_current[i] = 0;
+                }
+
+                ClearGrid(grid, count);
                 PingGroup(curgr);
             }
             else
+            {
+                label_a.Enabled = false;
+                label_b.Enabled = false;
                 numupdown.Enabled = false;
+            }
         }
 
         // MSDN
@@ -510,6 +582,21 @@ namespace WindowsFormsApp1
         {
             Console.WriteLine(
                 "Independent task printed {0} lines.", lineCount);
+        }
+
+        private void ClearGrid(DataGridView dataGrid, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                dataGrid[3, i].Value = "";
+                dataGrid[4, i].Value = "";
+
+                dataGrid[3, i].Style.BackColor = Color.White;
+                dataGrid[3, i].Style.SelectionForeColor = Color.Black;
+                dataGrid[3, i].Style.SelectionBackColor = Color.LightGray;
+                dataGrid[4, i].Style.BackColor = Color.White;
+                dataGrid[4, i].Style.SelectionBackColor = Color.LightGray;
+            }
         }
 
         private void FormResized() // form adds height and width to client size: x16, y39
@@ -617,60 +704,51 @@ namespace WindowsFormsApp1
             //PingGroup();
             
             FormResized();
+            //label2.Text = checkBox1.ForeColor.Name.ToString();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            ClearGrid(dataGridView1, g1);
             PingGroup(1);
         }
 
         private void timer2_Tick(object sender, EventArgs e)
         {
+            ClearGrid(dataGridView2, g2);
             PingGroup(2);
         }
 
         private void timer3_Tick(object sender, EventArgs e)
         {
+            ClearGrid(dataGridView3, g3);
             PingGroup(3);
         }
 
         private void timer4_Tick(object sender, EventArgs e)
         {
+            ClearGrid(dataGridView4, g4);
             PingGroup(4);
-        }
-
-        private void Lang_rusTSMitem_Click(object sender, EventArgs e)
-        {
-            is_english = false;
-            Translate();
-            CopyNames();
-        }
-
-        private void Lang_engTSMitem_Click(object sender, EventArgs e)
-        {
-            is_english = true;
-            Translate();
-            CopyNames();
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            CheckChange(Timer1, checkBox1, numericUpDown2, 1);
+            CheckChange(dataGridView1,Timer1, checkBox1, numericUpDown2, label2, label12, 1, g1);
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            CheckChange(Timer2, checkBox2, numericUpDown5, 2);
+            CheckChange(dataGridView2, Timer2, checkBox2, numericUpDown5, label4, label14, 2, g2);
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
-            CheckChange(Timer3, checkBox3, numericUpDown8, 3);
+            CheckChange(dataGridView3, Timer3, checkBox3, numericUpDown8, label6, label16, 3, g3);
         }
 
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
         {
-            CheckChange(Timer4, checkBox4, numericUpDown11, 4);
+            CheckChange(dataGridView4, Timer4, checkBox4, numericUpDown11, label8, label18, 4, g4);
         }
 
         private void numericUpDown2_ValueChanged(object sender, EventArgs e)
@@ -680,7 +758,7 @@ namespace WindowsFormsApp1
 
         private void numericUpDown3_ValueChanged(object sender, EventArgs e)
         {
-            p1 = (int)numericUpDown3.Value;
+            grid_packets[0] = (int)numericUpDown3.Value;
         }
 
         private void numericUpDown5_ValueChanged(object sender, EventArgs e)
@@ -690,7 +768,7 @@ namespace WindowsFormsApp1
 
         private void numericUpDown6_ValueChanged(object sender, EventArgs e)
         {
-            p2 = (int)numericUpDown6.Value;
+            grid_packets[1] = (int)numericUpDown6.Value;
         }
 
         private void numericUpDown8_ValueChanged(object sender, EventArgs e)
@@ -700,7 +778,7 @@ namespace WindowsFormsApp1
 
         private void numericUpDown9_ValueChanged(object sender, EventArgs e)
         {
-            p3 = (int)numericUpDown9.Value;
+            grid_packets[2] = (int)numericUpDown9.Value;
         }
 
         private void numericUpDown11_ValueChanged(object sender, EventArgs e)
@@ -710,15 +788,16 @@ namespace WindowsFormsApp1
 
         private void numericUpDown12_ValueChanged(object sender, EventArgs e)
         {
-            p4 = (int)numericUpDown12.Value;
+            grid_packets[3] = (int)numericUpDown12.Value;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             if (Timer1.Enabled)
                 Timer1.Stop();
-            
+
             //if(ping.semd)
+            ClearGrid(dataGridView1, g1);
             PingGroup(1);
         }
 
@@ -726,7 +805,8 @@ namespace WindowsFormsApp1
         {
             if (Timer2.Enabled)
                 Timer2.Stop();
-            
+
+            ClearGrid(dataGridView2, g2);
             PingGroup(2);
         }
 
@@ -734,7 +814,8 @@ namespace WindowsFormsApp1
         {
             if (Timer3.Enabled)
                 Timer3.Stop();
-            
+
+            ClearGrid(dataGridView3, g3);
             PingGroup(3);
         }
 
@@ -742,7 +823,8 @@ namespace WindowsFormsApp1
         {
             if (Timer4.Enabled)
                 Timer4.Stop();
-            
+
+            ClearGrid(dataGridView4, g4);
             PingGroup(4);
         }
 
@@ -792,6 +874,11 @@ namespace WindowsFormsApp1
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
+            ClearGrid(dataGridView1, g1);
+            ClearGrid(dataGridView2, g2);
+            ClearGrid(dataGridView3, g3);
+            ClearGrid(dataGridView4, g4);
+
             PingGroup(1);
             PingGroup(2);
             PingGroup(3);
@@ -802,6 +889,20 @@ namespace WindowsFormsApp1
         {
             Tracking tr = new Tracking(is_english, "", "", "");
             tr.Show();
+        }
+
+        private void Lang_rusTSMitem_Click(object sender, EventArgs e)
+        {
+            is_english = false;
+            Translate();
+            CopyNames();
+        }
+
+        private void Lang_engTSMitem_Click(object sender, EventArgs e)
+        {
+            is_english = true;
+            Translate();
+            CopyNames();
         }
 
         private void Switch_dnsTSMitem_Click(object sender, EventArgs e)
@@ -960,23 +1061,6 @@ namespace WindowsFormsApp1
             FormResized();
         }
         #endregion События
-    }
-
-    class CurrentClient
-    {
-        public int counter { get; set; }
-        public int group { get; set; }
-        public string ip { get; set; }
-        public string status { get; set; }
-
-        public delegate void MethodContainer(); // создание делегата для события
-
-        public event MethodContainer OnCount; // создание события с типом делегата
-
-        public void Count()
-        {
-            OnCount(); // вызов события
-        }
     }
 
     public class ThreadWithState

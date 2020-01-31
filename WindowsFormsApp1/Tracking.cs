@@ -13,8 +13,8 @@ namespace WindowsFormsApp1
     public partial class Tracking : Form
     {
         bool is_eng;
-        string received_name, received_dns, received_ip;
         int cur_row = 0;
+        string received_name, received_dns, received_ip;
 
         System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
 
@@ -34,7 +34,7 @@ namespace WindowsFormsApp1
             {
                 Text = "Tracking";
                 label1.Text = "Name/DNS";
-                label2.Text = "Type ip that will pinging:";
+                label2.Text = "Type ip that will ping:";
                 Col0.HeaderText = "Time";
                 Col1.HeaderText = "Reply";
                 Col2.HeaderText = "Status";
@@ -81,12 +81,16 @@ namespace WindowsFormsApp1
                 if (pingReply.Status == System.Net.NetworkInformation.IPStatus.Success)
                 {
                     if (pingReply.RoundtripTime > 999)
+                    {
                         if (pingReply.RoundtripTime.ToString().Substring(1)[0] == '0' && pingReply.RoundtripTime.ToString().Substring(1)[1] == '0')
                             dataGridView1[1, cur_row].Value = pingReply.RoundtripTime.ToString().Substring(0, 1) + " s " + pingReply.RoundtripTime.ToString().Substring(3) + " ms";
                         else if (pingReply.RoundtripTime.ToString().Substring(1)[0] == '0')
                             dataGridView1[1, cur_row].Value = pingReply.RoundtripTime.ToString().Substring(0, 1) + " s " + pingReply.RoundtripTime.ToString().Substring(2) + " ms";
                         else
                             dataGridView1[1, cur_row].Value = pingReply.RoundtripTime.ToString().Substring(0, 1) + " s " + pingReply.RoundtripTime.ToString().Substring(1) + " ms";
+                    }
+                    else if (pingReply.RoundtripTime == 0)
+                        dataGridView1[1, cur_row].Value = "<1 ms";
                     else
                         dataGridView1[1, cur_row].Value = pingReply.RoundtripTime.ToString() + " ms";
                     dataGridView1[3, cur_row].Style.BackColor = Color.GreenYellow;
@@ -109,15 +113,6 @@ namespace WindowsFormsApp1
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            if (textBox1.Text == "127.0.0.1")
-                label1.Text = "Loopback";
-            else if (textBox1.Text == "8.8.8.8")
-                label1.Text = "Google";
-            else if (textBox1.Text == "4.2.2.2" || textBox1.Text == "77.88.21.11" || textBox1.Text == "5.255.255.50")
-                label1.Text = "Яндекс";
-            else
-                label1.Text = textBox1.Text;
-
             if (timer1.Enabled)
             {
                 switch (is_eng)
@@ -131,6 +126,18 @@ namespace WindowsFormsApp1
                 }
                 timer1.Stop();
             }
+
+            dataGridView1.Rows.Clear();
+            cur_row = 0;
+
+                if (textBox1.Text == "127.0.0.1")
+                    label1.Text = "Loopback";
+                else if (textBox1.Text == "8.8.8.8")
+                    label1.Text = "Google";
+                else if (textBox1.Text == "4.2.2.2" || textBox1.Text == "77.88.21.11" || textBox1.Text == "5.255.255.50")
+                    label1.Text = "Яндекс";
+                else
+                    label1.Text = textBox1.Text;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -148,17 +155,68 @@ namespace WindowsFormsApp1
         {
             if(button1.Text == "Старт" || button1.Text == "Start")
             {
-                switch(is_eng)
-                {
-                    case true:
-                        button1.Text = "Stop";
-                        break;
-                    case false:
-                        button1.Text = "Стоп";
-                        break;
-                }
+                int num = 0;
 
-                timer1.Start();
+                if (textBox1.TextLength < 7)
+                {
+                    if (is_eng)
+                        MessageBox.Show("Input correct ip address");
+                    else
+                        MessageBox.Show("Введите правильный ip адрес");
+                }
+                else
+                {
+                    bool norm = true;
+                    for (int i = 0, j = 0, dot = 0; i < textBox1.Text.Length; i++)
+                    {
+                        if (textBox1.Text[i] == '0' || textBox1.Text[i] == '1' || textBox1.Text[i] == '2' || textBox1.Text[i] == '3' || textBox1.Text[i] == '4' || textBox1.Text[i] == '5' || textBox1.Text[i] == '6' || textBox1.Text[i] == '7' || textBox1.Text[i] == '8' || textBox1.Text[i] == '9')
+                        {
+                            if (j == 0)
+                                num = textBox1.Text[i];
+                            else if (j > 0 && j < 3)
+                                num = num * 10 + textBox1.Text[i];
+                            else
+                            {
+                                norm = false;
+                                Message_error();
+                            }
+
+                            j++;
+                        }
+                        else if (textBox1.Text[i] == '.' && dot < 3 && (num >= 0 || num < 255))
+                        {
+                            if (j > 3)
+                            {
+                                norm = false;
+                                Message_error();
+                            }
+
+                            num = 0;
+                            j = 0;
+                            dot++;
+                        }
+                        else
+                        {
+                            norm = false;
+                            Message_error();
+                        }
+                    }
+
+                    if(norm)
+                    {
+                        switch (is_eng)
+                        {
+                            case true:
+                                button1.Text = "Stop";
+                                break;
+                            case false:
+                                button1.Text = "Стоп";
+                                break;
+                        }
+
+                        timer1.Start();
+                    }
+                }
             }
             else
             {
@@ -174,6 +232,14 @@ namespace WindowsFormsApp1
 
                 timer1.Stop();
             }
+        }
+
+        private void Message_error()
+        {
+            if (is_eng)
+                MessageBox.Show("Input correct ip address");
+            else
+                MessageBox.Show("Введите правильный ip адрес");
         }
     }
 }

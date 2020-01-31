@@ -30,10 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.Open_iniTSMitem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,8 +44,10 @@
             this.LanguageTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.Lang_rusTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.Lang_engTSMitem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ViewTSMitem = new System.Windows.Forms.ToolStripMenuItem();
+            this.TablesTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.Switch_dnsTSMitem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Switch_ipTSMitem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Switch_timeTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripDropDownButton();
             this.User_guideTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutTSMitem = new System.Windows.Forms.ToolStripMenuItem();
@@ -205,7 +207,7 @@
             this.toolStripButton4.AutoToolTip = false;
             this.toolStripButton4.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LanguageTSMitem,
-            this.ViewTSMitem});
+            this.TablesTSMitem});
             this.toolStripButton4.Name = "toolStripButton4";
             this.toolStripButton4.Size = new System.Drawing.Size(13, 22);
             // 
@@ -229,18 +231,30 @@
             this.Lang_engTSMitem.Size = new System.Drawing.Size(67, 22);
             this.Lang_engTSMitem.Click += new System.EventHandler(this.Lang_engTSMitem_Click);
             // 
-            // ViewTSMitem
+            // TablesTSMitem
             // 
-            this.ViewTSMitem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Switch_dnsTSMitem});
-            this.ViewTSMitem.Name = "ViewTSMitem";
-            this.ViewTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.TablesTSMitem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Switch_dnsTSMitem,
+            this.Switch_ipTSMitem,
+            this.Switch_timeTSMitem});
+            this.TablesTSMitem.Name = "TablesTSMitem";
+            this.TablesTSMitem.Size = new System.Drawing.Size(67, 22);
             // 
             // Switch_dnsTSMitem
             // 
             this.Switch_dnsTSMitem.Name = "Switch_dnsTSMitem";
             this.Switch_dnsTSMitem.Size = new System.Drawing.Size(67, 22);
             this.Switch_dnsTSMitem.Click += new System.EventHandler(this.Switch_dnsTSMitem_Click);
+            // 
+            // Switch_ipTSMitem
+            // 
+            this.Switch_ipTSMitem.Name = "Switch_ipTSMitem";
+            this.Switch_ipTSMitem.Size = new System.Drawing.Size(67, 22);
+            // 
+            // Switch_timeTSMitem
+            // 
+            this.Switch_timeTSMitem.Name = "Switch_timeTSMitem";
+            this.Switch_timeTSMitem.Size = new System.Drawing.Size(67, 22);
             // 
             // toolStripButton5
             // 
@@ -293,14 +307,14 @@
             this.Column1c,
             this.Column1d,
             this.Column1e});
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView1.Location = new System.Drawing.Point(5, 90);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(2);
@@ -368,14 +382,14 @@
             this.Column2c,
             this.Column2d,
             this.Column2e});
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.Color.DeepSkyBlue;
-            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.DeepSkyBlue;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView2.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView2.Location = new System.Drawing.Point(5, 90);
             this.dataGridView2.Margin = new System.Windows.Forms.Padding(2);
@@ -440,14 +454,14 @@
             this.Column3c,
             this.Column3d,
             this.Column3e});
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.Color.DeepSkyBlue;
-            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView3.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.DeepSkyBlue;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView3.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView3.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView3.Location = new System.Drawing.Point(5, 90);
             this.dataGridView3.Margin = new System.Windows.Forms.Padding(2);
@@ -512,14 +526,14 @@
             this.Column4c,
             this.Column4d,
             this.Column4e});
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.Color.DeepSkyBlue;
-            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView4.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.DeepSkyBlue;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView4.DefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridView4.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView4.Location = new System.Drawing.Point(5, 90);
             this.dataGridView4.Margin = new System.Windows.Forms.Padding(2);
@@ -613,6 +627,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
+            this.label12.Enabled = false;
             this.label12.Location = new System.Drawing.Point(150, 45);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(0, 13);
@@ -663,6 +678,8 @@
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.Enabled = false;
+            this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label2.Location = new System.Drawing.Point(5, 45);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(0, 13);
@@ -719,6 +736,8 @@
             // label6
             // 
             this.label6.AutoSize = true;
+            this.label6.Enabled = false;
+            this.label6.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label6.Location = new System.Drawing.Point(5, 45);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(0, 13);
@@ -775,6 +794,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
+            this.label14.Enabled = false;
             this.label14.Location = new System.Drawing.Point(150, 45);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(0, 13);
@@ -863,6 +883,8 @@
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.Enabled = false;
+            this.label4.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label4.Location = new System.Drawing.Point(5, 45);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(0, 13);
@@ -945,6 +967,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
+            this.label16.Enabled = false;
             this.label16.Location = new System.Drawing.Point(150, 45);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(0, 13);
@@ -1119,6 +1142,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
+            this.label18.Enabled = false;
             this.label18.Location = new System.Drawing.Point(150, 45);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(0, 13);
@@ -1135,6 +1159,8 @@
             // label8
             // 
             this.label8.AutoSize = true;
+            this.label8.Enabled = false;
+            this.label8.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label8.Location = new System.Drawing.Point(5, 45);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(0, 13);
@@ -1199,7 +1225,7 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripDropDownButton toolStripButton4;
         private System.Windows.Forms.ToolStripMenuItem LanguageTSMitem;
-        private System.Windows.Forms.ToolStripMenuItem ViewTSMitem;
+        private System.Windows.Forms.ToolStripMenuItem TablesTSMitem;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.DataGridView dataGridView3;
         private System.Windows.Forms.DataGridView dataGridView4;
@@ -1281,9 +1307,16 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1c;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1d;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1e;
-        private System.Windows.Forms.DataGridViewTextBoxColumn[,] ColumnArray;
+        private System.Windows.Forms.DataGridView[] DataGrid;
+        private System.Windows.Forms.DataGridViewTextBoxColumn[,] GridColumn;
+        private System.Windows.Forms.Label[,] GroupLabel;
+        private System.Windows.Forms.CheckBox[] GroupCheck;
+        private System.Windows.Forms.Button[] GroupButton;
+        private System.Windows.Forms.NumericUpDown[,] GroupNumUpDown;
         private System.Windows.Forms.ToolStripMenuItem Switch_dnsTSMitem;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripMenuItem Switch_ipTSMitem;
+        private System.Windows.Forms.ToolStripMenuItem Switch_timeTSMitem;
     }
 }
 

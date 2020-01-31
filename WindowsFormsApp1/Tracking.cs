@@ -13,7 +13,7 @@ namespace WindowsFormsApp1
 {
     public partial class Tracking : Form
     {
-        bool is_eng, to_ping = false;
+        bool is_eng, to_ping = false, to_clear = false;
         int cur_row = 0;
         string received_name, received_dns, received_ip;
 
@@ -38,7 +38,7 @@ namespace WindowsFormsApp1
                 Text = "Tracking";
                 label1.Text = "Name/DNS";
                 label2.Text = "Type ip that will ping:";
-                Col0.HeaderText = "Time";
+                Col0.HeaderText = "Reply time";
                 Col1.HeaderText = "Reply";
                 Col2.HeaderText = "Status";
                 button1.Text = "Start";
@@ -48,7 +48,7 @@ namespace WindowsFormsApp1
                 Text = "Слежение";
                 label1.Text = "Имя/DNS";
                 label2.Text = "Введите пингуемый ip адрес:";
-                Col0.HeaderText = "Время";
+                Col0.HeaderText = "Время ответа";
                 Col1.HeaderText = "Ответ";
                 Col2.HeaderText = "Статус";
                 button1.Text = "Старт";
@@ -85,43 +85,51 @@ namespace WindowsFormsApp1
 
         private void Display_reply()
         {
-            dataGridView1.Rows.Add();
-
-            dataGridView1[0, cur_row].Value = DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString();
-
-            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+            if (to_clear)
             {
-                if (reply.RoundtripTime > 999)
+                cur_row = 0;
+                dataGridView1.Rows.Clear();
+            }
+            else
+            {
+                dataGridView1.Rows.Add();
+
+                dataGridView1[0, cur_row].Value = DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString();
+
+                if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
                 {
-                    if (reply.RoundtripTime.ToString().Substring(1)[0] == '0' && reply.RoundtripTime.ToString().Substring(1)[1] == '0')
-                        dataGridView1[1, cur_row].Value = reply.RoundtripTime.ToString().Substring(0, 1) + " s " + reply.RoundtripTime.ToString().Substring(3) + " ms";
-                    else if (reply.RoundtripTime.ToString().Substring(1)[0] == '0')
-                        dataGridView1[1, cur_row].Value = reply.RoundtripTime.ToString().Substring(0, 1) + " s " + reply.RoundtripTime.ToString().Substring(2) + " ms";
+                    if (reply.RoundtripTime > 999)
+                    {
+                        if (reply.RoundtripTime.ToString().Substring(1)[0] == '0' && reply.RoundtripTime.ToString().Substring(1)[1] == '0')
+                            dataGridView1[1, cur_row].Value = reply.RoundtripTime.ToString().Substring(0, 1) + " s " + reply.RoundtripTime.ToString().Substring(3) + " ms";
+                        else if (reply.RoundtripTime.ToString().Substring(1)[0] == '0')
+                            dataGridView1[1, cur_row].Value = reply.RoundtripTime.ToString().Substring(0, 1) + " s " + reply.RoundtripTime.ToString().Substring(2) + " ms";
+                        else
+                            dataGridView1[1, cur_row].Value = reply.RoundtripTime.ToString().Substring(0, 1) + " s " + reply.RoundtripTime.ToString().Substring(1) + " ms";
+                    }
+                    else if (reply.RoundtripTime == 0)
+                        dataGridView1[1, cur_row].Value = "<1 ms";
                     else
-                        dataGridView1[1, cur_row].Value = reply.RoundtripTime.ToString().Substring(0, 1) + " s " + reply.RoundtripTime.ToString().Substring(1) + " ms";
+                        dataGridView1[1, cur_row].Value = reply.RoundtripTime.ToString() + " ms";
+                    dataGridView1[3, cur_row].Style.BackColor = Color.GreenYellow;
                 }
-                else if (reply.RoundtripTime == 0)
-                    dataGridView1[1, cur_row].Value = "<1 ms";
                 else
-                    dataGridView1[1, cur_row].Value = reply.RoundtripTime.ToString() + " ms";
-                dataGridView1[3, cur_row].Style.BackColor = Color.GreenYellow;
+                {
+                    dataGridView1[1, cur_row].Value = "---";
+                    dataGridView1[2, cur_row].Value = reply.Status;
+                    dataGridView1[3, cur_row].Style.BackColor = Color.Red;
+                }
+
+                if (cur_row < 20)
+                    dataGridView1.FirstDisplayedScrollingRowIndex = 0;
+                else
+                    dataGridView1.FirstDisplayedScrollingRowIndex = cur_row - 19;
+
+                cur_row++;
+
+                if (to_ping)
+                    Ping_cl();
             }
-            else
-            {
-                dataGridView1[1, cur_row].Value = "---";
-                dataGridView1[2, cur_row].Value = reply.Status;
-                dataGridView1[3, cur_row].Style.BackColor = Color.Red;
-            }
-
-            if (cur_row < 20)
-                dataGridView1.FirstDisplayedScrollingRowIndex = 0;
-            else
-                dataGridView1.FirstDisplayedScrollingRowIndex = cur_row - 19;
-
-            cur_row++;
-
-            if(to_ping)
-                Ping_cl();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -136,17 +144,22 @@ namespace WindowsFormsApp1
                     break;
             }
 
-            dataGridView1.Rows.Clear();
-            cur_row = 0;
+            to_clear = true;
 
-                if (textBox1.Text == "127.0.0.1")
-                    label1.Text = "Loopback";
-                else if (textBox1.Text == "8.8.8.8")
-                    label1.Text = "Google";
-                else if (textBox1.Text == "4.2.2.2" || textBox1.Text == "77.88.21.11" || textBox1.Text == "5.255.255.50")
-                    label1.Text = "Яндекс";
-                else
-                    label1.Text = textBox1.Text;
+            if (!to_ping)
+            {
+                cur_row = 0;
+                dataGridView1.Rows.Clear();
+            }
+
+            if (textBox1.Text == "127.0.0.1")
+                label1.Text = "Loopback";
+            else if (textBox1.Text == "8.8.8.8")
+                label1.Text = "Google";
+            else if (textBox1.Text == "4.2.2.2" || textBox1.Text == "77.88.21.11" || textBox1.Text == "5.255.255.50")
+                label1.Text = "Яндекс";
+            else
+                label1.Text = textBox1.Text;
         }
 
         private void Tracking_Load(object sender, EventArgs e)
@@ -221,6 +234,7 @@ namespace WindowsFormsApp1
                         }
 
                         to_ping = true;
+                        to_clear = false;
                         Ping_cl();
                     }
                 }

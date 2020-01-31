@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -12,11 +13,13 @@ namespace WindowsFormsApp1
 {
     public partial class Tracking : Form
     {
-        bool is_eng;
+        bool is_eng, to_ping = false;
         int cur_row = 0;
         string received_name, received_dns, received_ip;
 
         System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
+        System.Net.NetworkInformation.PingReply reply;
+        static AutoResetEvent waiter = new AutoResetEvent(false);
 
         public Tracking(bool loc_eng, string name, string dns, string ip)
         {
@@ -64,67 +67,73 @@ namespace WindowsFormsApp1
                 textBox1.Text = "127.0.0.1";
                 label1.Text = "Loopback";
             }
-
-            timer1.Interval = 1;
         }
 
         private void Ping_cl()
         {
+            if (textBox1.Text != "" && textBox1.Text != "0.0.0.0")
+                ping.SendAsync(textBox1.Text, waiter);
+        }
+
+        private void Message_error()
+        {
+            if (is_eng)
+                MessageBox.Show("Input correct ip address");
+            else
+                MessageBox.Show("Введите правильный ip адрес");
+        }
+
+        private void Display_reply()
+        {
             dataGridView1.Rows.Add();
 
-            if (textBox1.Text != "" && textBox1.Text != "0.0.0.0")
+            dataGridView1[0, cur_row].Value = DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString();
+
+            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
             {
-                System.Net.NetworkInformation.PingReply pingReply = ping.Send(textBox1.Text);
-
-                dataGridView1[0, cur_row].Value = DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString();
-
-                if (pingReply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                if (reply.RoundtripTime > 999)
                 {
-                    if (pingReply.RoundtripTime > 999)
-                    {
-                        if (pingReply.RoundtripTime.ToString().Substring(1)[0] == '0' && pingReply.RoundtripTime.ToString().Substring(1)[1] == '0')
-                            dataGridView1[1, cur_row].Value = pingReply.RoundtripTime.ToString().Substring(0, 1) + " s " + pingReply.RoundtripTime.ToString().Substring(3) + " ms";
-                        else if (pingReply.RoundtripTime.ToString().Substring(1)[0] == '0')
-                            dataGridView1[1, cur_row].Value = pingReply.RoundtripTime.ToString().Substring(0, 1) + " s " + pingReply.RoundtripTime.ToString().Substring(2) + " ms";
-                        else
-                            dataGridView1[1, cur_row].Value = pingReply.RoundtripTime.ToString().Substring(0, 1) + " s " + pingReply.RoundtripTime.ToString().Substring(1) + " ms";
-                    }
-                    else if (pingReply.RoundtripTime == 0)
-                        dataGridView1[1, cur_row].Value = "<1 ms";
+                    if (reply.RoundtripTime.ToString().Substring(1)[0] == '0' && reply.RoundtripTime.ToString().Substring(1)[1] == '0')
+                        dataGridView1[1, cur_row].Value = reply.RoundtripTime.ToString().Substring(0, 1) + " s " + reply.RoundtripTime.ToString().Substring(3) + " ms";
+                    else if (reply.RoundtripTime.ToString().Substring(1)[0] == '0')
+                        dataGridView1[1, cur_row].Value = reply.RoundtripTime.ToString().Substring(0, 1) + " s " + reply.RoundtripTime.ToString().Substring(2) + " ms";
                     else
-                        dataGridView1[1, cur_row].Value = pingReply.RoundtripTime.ToString() + " ms";
-                    dataGridView1[3, cur_row].Style.BackColor = Color.GreenYellow;
+                        dataGridView1[1, cur_row].Value = reply.RoundtripTime.ToString().Substring(0, 1) + " s " + reply.RoundtripTime.ToString().Substring(1) + " ms";
                 }
+                else if (reply.RoundtripTime == 0)
+                    dataGridView1[1, cur_row].Value = "<1 ms";
                 else
-                {
-                    dataGridView1[1, cur_row].Value = "---";
-                    dataGridView1[2, cur_row].Value = pingReply.Status;
-                    dataGridView1[3, cur_row].Style.BackColor = Color.Red;
-                }
-
-                if(cur_row < 20)
-                    dataGridView1.FirstDisplayedScrollingRowIndex = 0;
-                else
-                    dataGridView1.FirstDisplayedScrollingRowIndex = cur_row - 19;
-
-                cur_row++;
+                    dataGridView1[1, cur_row].Value = reply.RoundtripTime.ToString() + " ms";
+                dataGridView1[3, cur_row].Style.BackColor = Color.GreenYellow;
             }
+            else
+            {
+                dataGridView1[1, cur_row].Value = "---";
+                dataGridView1[2, cur_row].Value = reply.Status;
+                dataGridView1[3, cur_row].Style.BackColor = Color.Red;
+            }
+
+            if (cur_row < 20)
+                dataGridView1.FirstDisplayedScrollingRowIndex = 0;
+            else
+                dataGridView1.FirstDisplayedScrollingRowIndex = cur_row - 19;
+
+            cur_row++;
+
+            if(to_ping)
+                Ping_cl();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            if (timer1.Enabled)
+            switch (is_eng)
             {
-                switch (is_eng)
-                {
-                    case true:
-                        button1.Text = "Start";
-                        break;
-                    case false:
-                        button1.Text = "Старт";
-                        break;
-                }
-                timer1.Stop();
+                case true:
+                    button1.Text = "Start";
+                    break;
+                case false:
+                    button1.Text = "Старт";
+                    break;
             }
 
             dataGridView1.Rows.Clear();
@@ -140,15 +149,12 @@ namespace WindowsFormsApp1
                     label1.Text = textBox1.Text;
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            Ping_cl();
-        }
-
         private void Tracking_Load(object sender, EventArgs e)
         {
             Translate();
             Preprocessing();
+
+            ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -214,7 +220,8 @@ namespace WindowsFormsApp1
                                 break;
                         }
 
-                        timer1.Start();
+                        to_ping = true;
+                        Ping_cl();
                     }
                 }
             }
@@ -230,16 +237,24 @@ namespace WindowsFormsApp1
                         break;
                 }
 
-                timer1.Stop();
+                to_ping = false;
             }
         }
 
-        private void Message_error()
+        private void Received_reply(object sender, System.Net.NetworkInformation.PingCompletedEventArgs e)
         {
-            if (is_eng)
-                MessageBox.Show("Input correct ip address");
-            else
-                MessageBox.Show("Введите правильный ip адрес");
+            if (e.Cancelled)
+                ((AutoResetEvent)e.UserState).Set();
+
+            if (e.Error != null)
+                ((AutoResetEvent)e.UserState).Set();
+
+            // Let the main thread resume.
+            ((AutoResetEvent)e.UserState).Set();
+
+            reply = e.Reply;
+
+            Display_reply();
         }
     }
 }

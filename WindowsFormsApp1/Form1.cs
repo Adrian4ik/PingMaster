@@ -356,6 +356,7 @@ namespace WindowsFormsApp1
                     if (curcl_g1 < g1)
                     {
                         button1.Enabled = false;
+                        checkBox1.Enabled = false;
 
                         //if(is_english)
                         dataGridView1[3, curcl_g1].Value = "Pinging...";
@@ -374,6 +375,7 @@ namespace WindowsFormsApp1
                     if (curcl_g2 < g2)
                     {
                         button2.Enabled = false;
+                        checkBox2.Enabled = false;
 
                         if (is_english)
                             dataGridView2[3, curcl_g2].Value = "Pinging...";
@@ -391,6 +393,7 @@ namespace WindowsFormsApp1
                     if (curcl_g3 < g3)
                     {
                         button3.Enabled = false;
+                        checkBox3.Enabled = false;
 
                         if (is_english)
                             dataGridView3[3, curcl_g3].Value = "Pinging...";
@@ -407,6 +410,7 @@ namespace WindowsFormsApp1
                     if (curcl_g4 < g4)
                     {
                         button4.Enabled = false;
+                        checkBox4.Enabled = false;
 
                         if (is_english)
                             dataGridView4[3, curcl_g4].Value = "Pinging...";
@@ -462,6 +466,7 @@ namespace WindowsFormsApp1
                         curcl_g1 = 0;
                         toolStripButton2.Enabled = true;
                         button1.Enabled = true;
+                        checkBox1.Enabled = true;
                     }
                     break;
                 case 2:
@@ -493,6 +498,7 @@ namespace WindowsFormsApp1
                         curcl_g2 = 0;
                         toolStripButton2.Enabled = true;
                         button2.Enabled = true;
+                        checkBox2.Enabled = true;
                     }
                     break;
                 case 3:
@@ -512,6 +518,7 @@ namespace WindowsFormsApp1
                         curcl_g3 = 0;
                         toolStripButton2.Enabled = true;
                         button3.Enabled = true;
+                        checkBox3.Enabled = true;
                     }
                     break;
                 case 4:
@@ -532,6 +539,7 @@ namespace WindowsFormsApp1
                         curcl_g4 = 0;
                         toolStripButton2.Enabled = true;
                         button4.Enabled = true;
+                        checkBox4.Enabled = true;
                     }
                     break;
             }

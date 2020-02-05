@@ -13,9 +13,14 @@ namespace WindowsFormsApp1
 {
     public partial class Tracking : Form
     {
-        bool is_eng, to_ping = false, to_clear = false;
+        bool is_eng, to_ping = false, to_clear = false, to_close = false;
         int cur_row = 0;
         string received_name, received_dns, received_ip;
+
+        DataGridViewTextBoxColumn Col0 = new DataGridViewTextBoxColumn();
+        DataGridViewTextBoxColumn Col1 = new DataGridViewTextBoxColumn();
+        DataGridViewTextBoxColumn Col2 = new DataGridViewTextBoxColumn();
+        DataGridViewTextBoxColumn Col3 = new DataGridViewTextBoxColumn();
 
         System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
         System.Net.NetworkInformation.PingReply reply;
@@ -30,7 +35,37 @@ namespace WindowsFormsApp1
 
             InitializeComponent();
         }
-        
+
+        private void Preprocessing()
+        {
+            if (received_ip != "")
+            {
+                textBox1.Text = received_ip;
+                label1.Text = received_name + " " + received_dns;
+            }
+            else
+            {
+                textBox1.Text = "127.0.0.1";
+                label1.Text = "Loopback";
+            }
+
+            Col0.ReadOnly = true;
+
+            Col1.ReadOnly = true;
+            Col1.Width = 60;
+
+            Col2.ReadOnly = true;
+            Col2.Width = 195;
+
+            Col3.ReadOnly = true;
+            Col3.Width = 25;
+
+            dataGridView1.Columns.Add(Col0);
+            dataGridView1.Columns.Add(Col1);
+            dataGridView1.Columns.Add(Col2);
+            dataGridView1.Columns.Add(Col3);
+        }
+
         private void Translate()
         {
             if (is_eng)
@@ -53,26 +88,17 @@ namespace WindowsFormsApp1
                 Col2.HeaderText = "Статус";
                 button1.Text = "Старт";
             }
-        }
 
-        private void Preprocessing()
-        {
-            if (received_ip != "")
-            {
-                textBox1.Text = received_ip;
-                label1.Text = received_name + " " + received_dns;
-            }
-            else
-            {
-                textBox1.Text = "127.0.0.1";
-                label1.Text = "Loopback";
-            }
+            Col3.HeaderText = "";
         }
 
         private void Ping_cl()
         {
             if (textBox1.Text != "" && textBox1.Text != "0.0.0.0")
+            {
+                dataGridView1.Rows.Add();
                 ping.SendAsync(textBox1.Text, waiter);
+            }
         }
 
         private void Message_error()
@@ -81,6 +107,16 @@ namespace WindowsFormsApp1
                 MessageBox.Show("Input correct ip address");
             else
                 MessageBox.Show("Введите правильный ip адрес");
+        }
+
+        private void Tracking_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ping.SendAsyncCancel();
+
+            /*dataGridView1.Columns.Add(Col0);
+            dataGridView1.Columns.Add(Col1);
+            dataGridView1.Columns.Add(Col2);
+            dataGridView1.Columns.Add(Col3);*/
         }
 
         private void Display_reply()
@@ -92,8 +128,6 @@ namespace WindowsFormsApp1
             }
             else
             {
-                dataGridView1.Rows.Add();
-
                 dataGridView1[0, cur_row].Value = DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString();
 
                 if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
@@ -120,20 +154,27 @@ namespace WindowsFormsApp1
                     dataGridView1[3, cur_row].Style.BackColor = Color.Red;
                 }
 
-                if (cur_row < 20)
-                    dataGridView1.FirstDisplayedScrollingRowIndex = 0;
+                if(cur_row == 0)
+                    dataGridView1[0, cur_row].Selected = true;
                 else
-                    dataGridView1.FirstDisplayedScrollingRowIndex = cur_row - 19;
+                    dataGridView1[0, cur_row - 1].Selected = true;
 
                 cur_row++;
 
                 if (to_ping)
-                    Ping_cl();
+                {
+                    //Ping_cl();
+                    dataGridView1.Rows.Add();
+                    reply = ping.Send(textBox1.Text);
+                    Display_reply();
+                }
             }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            ping.SendAsyncCancel();
+
             switch (is_eng)
             {
                 case true:
@@ -164,8 +205,8 @@ namespace WindowsFormsApp1
 
         private void Tracking_Load(object sender, EventArgs e)
         {
-            Translate();
             Preprocessing();
+            Translate();
 
             ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply);
         }
@@ -268,7 +309,13 @@ namespace WindowsFormsApp1
 
             reply = e.Reply;
 
-            Display_reply();
+            if (to_close)
+            {
+                ping.SendAsyncCancel();
+                Close();
+            }
+            else if(!to_clear && to_ping)
+                Display_reply();
         }
     }
 }

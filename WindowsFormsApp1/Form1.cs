@@ -68,10 +68,10 @@ namespace WindowsFormsApp1
         public const int C_sec = 1000, C_min = 60000;
 
         private string[] StandartList = new string[]
-            {"Loopback/DNS name/127.0.0.1", "БРИ-1/ /10.1.1.254", "БРИ-2/ /10.1.2.254", "БРИ-3/ /192.168.60.254", "Что-то/ /192.168.68.73", "АСП/ /10.1.2.250", "",
-            "Ещё что-то/ /192.168.67.25", "USL ER-SWA1,2/ /192.168.60.253", "ISS Server 1/ /192.168.60.51", "LS1/ /192.168.60.53", "Lab printer/ /192.168.60.82", "",
-            "RSE1/ /10.1.1.3", "RSK1/ /10.1.1.4", "RSK2/ /10.1.1.5", "RSS1/ /10.1.2.1", "RSS2/ /10.1.1.1", "SM Printer/ /192.168.60.81", "Mediaserver AGAT/ /10.1.1.80", "RSE-Med/ /10.1.1.7", "",
-            "FS1/ /10.1.1.100", "БСПН (PLS)/ /10.1.3.4", "ТВМ1-Н/ /10.1.3.1", "БПИ-НЧ (TRPU)/ /192.168.249.1", "БЗУ/ /10.1.11.5"};
+            {"Loopback/ /127.0.0.1", "БРИ-1/ /10.1.1.254", "БРИ-2/ /10.1.2.254", "БРИ-3/ /192.168.60.254", "SM BelAir WAP/ /192.168.68.73", "АСП/ /10.1.2.250", "",
+            "USL ER-SWB-J1,J2/ /192.168.67.250", "USL ER-SWA/ /192.168.60.253", "ISS Server 1/ /192.168.60.51", "LS1/ /192.168.60.53", "Lab printer/ /192.168.60.82", "",
+            "RSE1/ /10.1.1.3", "RSK1/ /10.1.1.4", "RSK2/ /10.1.1.5", "RSS1/ /10.1.2.1", "RSS2/ /10.1.1.1", "RSE-Med/ /10.1.1.7", "Mediaserver AGAT/ /10.1.1.80", "SM Printer/ /192.168.60.81", "",
+            "FS1/ /10.1.1.100", "ТВМ1-Н/ /10.1.3.1", "БПИ-НЧ (TRPU)/ /192.168.249.1", "БЗУ/ /10.1.11.5", "MDM (ШСС)/ /10.1.3.50"};
         #endregion Константы
 
         #region Методы
@@ -429,8 +429,6 @@ namespace WindowsFormsApp1
         private static void PingCl(System.Net.NetworkInformation.Ping ping, string address, int timeout, AutoResetEvent waiter)
         {
             ping.SendAsync(address, timeout, waiter);
-
-            //waiter.WaitOne();
         }
 
         private void SortReply(int curgr)
@@ -444,6 +442,10 @@ namespace WindowsFormsApp1
                     {
                         dataGridView1[3, curcl_g1].Style.BackColor = Color.GreenYellow;
                         dataGridView1[3, curcl_g1].Style.SelectionBackColor = Color.DarkGreen;
+
+                        System.Net.NetworkInformation.IPAddressInformation iP;
+                        long huh = 228;
+                        System.Net.IPAddress kek = new System.Net.IPAddress(huh);
                     }
                     else
                     {
@@ -710,9 +712,15 @@ namespace WindowsFormsApp1
 
 
             //PingGroup();
-            
+
+            Size = new Size(816, 639);
             FormResized();
             //label2.Text = checkBox1.ForeColor.Name.ToString();
+
+            PingGroup(1);
+            PingGroup(2);
+            PingGroup(3);
+            PingGroup(4);
         }
 
         private void timer1_Tick(object sender, EventArgs e)

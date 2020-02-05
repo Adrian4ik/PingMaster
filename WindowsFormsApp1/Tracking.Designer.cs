@@ -34,10 +34,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.Col0 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,11 +52,6 @@
             this.dataGridView1.AllowUserToResizeColumns = false;
             this.dataGridView1.AllowUserToResizeRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Col0,
-            this.Col1,
-            this.Col2,
-            this.Col3});
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -116,37 +107,6 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // Col0
-            // 
-            this.Col0.FillWeight = 80.60453F;
-            this.Col0.HeaderText = "Col0";
-            this.Col0.Name = "Col0";
-            this.Col0.ReadOnly = true;
-            // 
-            // Col1
-            // 
-            this.Col1.FillWeight = 60.15413F;
-            this.Col1.HeaderText = "Col1";
-            this.Col1.Name = "Col1";
-            this.Col1.ReadOnly = true;
-            this.Col1.Width = 60;
-            // 
-            // Col2
-            // 
-            this.Col2.FillWeight = 243.3896F;
-            this.Col2.HeaderText = "Col2";
-            this.Col2.Name = "Col2";
-            this.Col2.ReadOnly = true;
-            this.Col2.Width = 195;
-            // 
-            // Col3
-            // 
-            this.Col3.FillWeight = 15.85169F;
-            this.Col3.HeaderText = "";
-            this.Col3.Name = "Col3";
-            this.Col3.ReadOnly = true;
-            this.Col3.Width = 25;
-            // 
             // Tracking
             // 
             this.AcceptButton = this.button1;
@@ -166,6 +126,7 @@
             this.Name = "Tracking";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.TopMost = true;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Tracking_FormClosing);
             this.Load += new System.EventHandler(this.Tracking_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
@@ -180,9 +141,5 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col0;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col3;
     }
 }

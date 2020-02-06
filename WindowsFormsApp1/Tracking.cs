@@ -111,28 +111,13 @@ namespace WindowsFormsApp1
 
         private void Tracking_FormClosing(object sender, FormClosingEventArgs e)
         {
-            /*if (closef > 0)
-            {
-                e.Cancel = false;
-                this.Close();
-                //Tracking_FormClosed(this, Empty);
-            }
-            else
-            {*/
-                e.Cancel = true;
+            e.Cancel = true;
+            to_clear = true;
 
-                to_clear = true;
+            ping.SendAsyncCancel();
 
-                ping.SendAsyncCancel();
-
-                FormClosing -= new FormClosingEventHandler(Tracking_FormClosing);
-                Close();
-            //}
-
-            /*dataGridView1.Columns.Add(Col0);
-            dataGridView1.Columns.Add(Col1);
-            dataGridView1.Columns.Add(Col2);
-            dataGridView1.Columns.Add(Col3);*/
+            FormClosing -= new FormClosingEventHandler(Tracking_FormClosing);
+            Close();
         }
 
         private void Display_reply()

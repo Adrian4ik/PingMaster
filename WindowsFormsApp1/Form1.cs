@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -26,8 +27,15 @@ namespace WindowsFormsApp1
         int[] grid_packets = new int[8], // количество запросов на каждого клиента во всех группах
             grid_p_current = new int[8]; // попытка замены id текущего клиента в его группе при опросе
 
+        int[,] g_settings = new int[8, 4]; // настройки групп в виде: группа (1-8) / настройки (кол-во клиентов, кол-во запросов, текущий клиент, текущий таймаут)
+
+        string;
+
         string[] ip_g1, ip_g2, ip_g3, ip_g4, ip_g5, ip_g6, ip_g7, ip_g8, //списки ip адресов каждой группы
             al; // список абонентов в сыром виде
+
+        string[,][] g_lists = new string[8,13][];
+        // трёхмерный список клиентов в виде: группа (1-8) / аргументы (имя, dns, ip, время 1 опроса, ответ 1 опроса, время 2 опроса, ..., ответ 5 опроса) / список клиентов
 
         static System.Net.NetworkInformation.Ping ping_g1 = new System.Net.NetworkInformation.Ping();
         static System.Net.NetworkInformation.Ping ping_g2 = new System.Net.NetworkInformation.Ping();
@@ -229,6 +237,22 @@ namespace WindowsFormsApp1
             }
             al = File.ReadAllLines("Clients.txt");
             ab = new client[al.Count()];
+
+            g_lists[1, 0] = new string[322];
+            g_lists[1, 0][228] = "kek";
+
+            if (!File.Exists("Config.ini"))
+            {
+                FileStream conf = File.Create("Config.ini");
+                conf.Close();
+            }
+
+            //label1.Text = File.ReadAllLines("Config.ini")[0];
+            //label2.Text = File.ReadAllLines("Config.ini")[1];
+
+            //label21.Text = File.ReadAllLines("Config.ini").Count().ToString();//File.ReadAllLines("kek.txt")[2];
+            //if(File.Exists("D:\\Амир\\Уст. программы\\Notepad++\\notepad++.exe"))//C:\\Windows\\System32\\notepad.exe
+            //    Process.Start("D:\\Амир\\Уст. программы\\Notepad++\\notepad++.exe", "D:\\Амир\\C#\\FirstP\\WindowsFormsApp1\\WindowsFormsApp1\\bin\\Release\\Clients.txt".Trim());
 
             Timer1.Interval = (int)numericUpDown2.Value * C_min;
             Timer2.Interval = (int)numericUpDown5.Value * C_min;
@@ -438,25 +462,46 @@ namespace WindowsFormsApp1
 
         private void SortReply(int curgr)
         {
+            string c;
+            FileStream f;
+
             switch (curgr)
             {
                 case 1:
                     dataGridView1[3, curcl_g1].Value = reply_g1.Status;
 
+                    if (!File.Exists("Log.txt"))
+                    {
+                        f = File.Create("Log.txt");
+                        f.Close();
+                    }
+
+                    c = "Опрос " + dataGridView1[0, curcl_g1].Value + " " + dataGridView1[1, curcl_g1].Value + " " + dataGridView1[2, curcl_g1].Value + Environment.NewLine;
+
+                    File.AppendAllText("Log.txt", c);
+
+                    c = DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString();
+                    c += " " + reply_g1.Status;
+
                     if (reply_g1.Status == System.Net.NetworkInformation.IPStatus.Success)
                     {
                         dataGridView1[3, curcl_g1].Style.BackColor = Color.GreenYellow;
                         dataGridView1[3, curcl_g1].Style.SelectionBackColor = Color.DarkGreen;
+                        c += " " + reply_g1.RoundtripTime + " ms";
 
-                        System.Net.NetworkInformation.IPAddressInformation iP;
-                        long huh = 228;
-                        System.Net.IPAddress kek = new System.Net.IPAddress(huh);
+                        //System.Net.NetworkInformation.IPAddressInformation iP;
+                        //long huh = 228;
+                        //System.Net.IPAddress kek = new System.Net.IPAddress(huh);
                     }
                     else
                     {
                         dataGridView1[3, curcl_g1].Style.BackColor = Color.Red;
                         dataGridView1[3, curcl_g1].Style.SelectionBackColor = Color.DarkRed;
                     }
+
+                    File.AppendAllText("Log.txt", c + Environment.NewLine);
+
+                    //File.WriteAllText("Log.txt", "");
 
                     if (grid_p_current[0] == grid_packets[0])
                     {

@@ -13,7 +13,7 @@ namespace WindowsFormsApp1
 {
     public partial class Tracking : Form
     {
-        bool is_eng, to_ping = false, to_clear = false, to_close = false;
+        bool is_eng, to_ping = false, to_clear = false;
         int cur_row = 0;
         string received_name, received_dns, received_ip;
 
@@ -111,7 +111,23 @@ namespace WindowsFormsApp1
 
         private void Tracking_FormClosing(object sender, FormClosingEventArgs e)
         {
-            ping.SendAsyncCancel();
+            /*if (closef > 0)
+            {
+                e.Cancel = false;
+                this.Close();
+                //Tracking_FormClosed(this, Empty);
+            }
+            else
+            {*/
+                e.Cancel = true;
+
+                to_clear = true;
+
+                ping.SendAsyncCancel();
+
+                FormClosing -= new FormClosingEventHandler(Tracking_FormClosing);
+                Close();
+            //}
 
             /*dataGridView1.Columns.Add(Col0);
             dataGridView1.Columns.Add(Col1);
@@ -162,12 +178,7 @@ namespace WindowsFormsApp1
                 cur_row++;
 
                 if (to_ping)
-                {
-                    //Ping_cl();
-                    dataGridView1.Rows.Add();
-                    reply = ping.Send(textBox1.Text);
-                    Display_reply();
-                }
+                    Ping_cl();
             }
         }
 
@@ -309,12 +320,7 @@ namespace WindowsFormsApp1
 
             reply = e.Reply;
 
-            if (to_close)
-            {
-                ping.SendAsyncCancel();
-                Close();
-            }
-            else if(!to_clear && to_ping)
+            if(!to_clear && to_ping)
                 Display_reply();
         }
     }

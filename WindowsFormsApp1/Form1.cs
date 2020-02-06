@@ -16,13 +16,18 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        bool is_english = false;
-        string[] al;
-        int p1, p2, p3, p4;
+        bool is_english = false, // проверка на использование английской версии программы
+            tracking = false; // проверка открытого окна слежения (для того, чтобы не создавалось более 1 окна слежения)
 
-        int[] grid_packets = new int[8], grid_p_current = new int[8];
-        int curcl_g1, curcl_g2, curcl_g3, curcl_g4, g1, g2, g3, g4;
-        string[] ip_g1, ip_g2, ip_g3, ip_g4;
+        int p1, p2, p3, p4, p5, p6, p7, p8, // количество запросов на каждого клиента во всех группах (не используется и не рекомендуется к использованию)
+            curcl_g1, curcl_g2, curcl_g3, curcl_g4, curcl_g5, curcl_g6, curcl_g7, curcl_g8, // id текущего клиента в его группе при опросе
+            g1, g2, g3, g4, g5, g6, g7, g8; // количество клиентов в каждой группе
+
+        int[] grid_packets = new int[8], // количество запросов на каждого клиента во всех группах
+            grid_p_current = new int[8]; // попытка замены id текущего клиента в его группе при опросе
+
+        string[] ip_g1, ip_g2, ip_g3, ip_g4, ip_g5, ip_g6, ip_g7, ip_g8, //списки ip адресов каждой группы
+            al; // список абонентов в сыром виде
 
         static System.Net.NetworkInformation.Ping ping_g1 = new System.Net.NetworkInformation.Ping();
         static System.Net.NetworkInformation.Ping ping_g2 = new System.Net.NetworkInformation.Ping();
@@ -851,8 +856,14 @@ namespace WindowsFormsApp1
             string s_dns = dataGridView1[1, selected_row].Value.ToString();
             string s_ip = dataGridView1[2, selected_row].Value.ToString();
 
-            Tracking tr = new Tracking(is_english, s_name, s_dns, s_ip);
-            tr.Show();
+            if (!tracking)
+            {
+                Tracking tr = new Tracking(is_english, s_name, s_dns, s_ip);
+                tr.FormClosed += new System.Windows.Forms.FormClosedEventHandler(Tracking_Closed);
+                toolStripButton3.Enabled = false;
+                tracking = true;
+                tr.Show();
+            }
         }
 
         private void dataGridView2_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -862,8 +873,14 @@ namespace WindowsFormsApp1
             string s_dns = dataGridView2[1, selected_row].Value.ToString();
             string s_ip = dataGridView2[2, selected_row].Value.ToString();
 
-            Tracking tr = new Tracking(is_english, s_name, s_dns, s_ip);
-            tr.Show();
+            if (!tracking)
+            {
+                Tracking tr = new Tracking(is_english, s_name, s_dns, s_ip);
+                tr.FormClosed += new System.Windows.Forms.FormClosedEventHandler(Tracking_Closed);
+                toolStripButton3.Enabled = false;
+                tracking = true;
+                tr.Show();
+            }
         }
 
         private void dataGridView3_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -873,8 +890,14 @@ namespace WindowsFormsApp1
             string s_dns = dataGridView3[1, selected_row].Value.ToString();
             string s_ip = dataGridView3[2, selected_row].Value.ToString();
 
-            Tracking tr = new Tracking(is_english, s_name, s_dns, s_ip);
-            tr.Show();
+            if (!tracking)
+            {
+                Tracking tr = new Tracking(is_english, s_name, s_dns, s_ip);
+                tr.FormClosed += new System.Windows.Forms.FormClosedEventHandler(Tracking_Closed);
+                toolStripButton3.Enabled = false;
+                tracking = true;
+                tr.Show();
+            }
         }
 
         private void dataGridView4_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -884,8 +907,14 @@ namespace WindowsFormsApp1
             string s_dns = dataGridView4[1, selected_row].Value.ToString();
             string s_ip = dataGridView4[2, selected_row].Value.ToString();
 
-            Tracking tr = new Tracking(is_english, s_name, s_dns, s_ip);
-            tr.Show();
+            if (!tracking)
+            {
+                Tracking tr = new Tracking(is_english, s_name, s_dns, s_ip);
+                tr.FormClosed += new System.Windows.Forms.FormClosedEventHandler(Tracking_Closed);
+                toolStripButton3.Enabled = false;
+                tracking = true;
+                tr.Show();
+            }
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
@@ -904,7 +933,16 @@ namespace WindowsFormsApp1
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
             Tracking tr = new Tracking(is_english, "", "", "");
+            tr.FormClosed += new System.Windows.Forms.FormClosedEventHandler(Tracking_Closed);
+            toolStripButton3.Enabled = false;
+            tracking = true;
             tr.Show();
+        }
+
+        private void Tracking_Closed(object sender, FormClosedEventArgs e)
+        {
+            toolStripButton3.Enabled = true;
+            tracking = false;
         }
 
         private void Lang_rusTSMitem_Click(object sender, EventArgs e)

@@ -123,6 +123,7 @@
             this.label17 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.Open_clientsTSMitem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
@@ -166,7 +167,8 @@
             this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Open_iniTSMitem,
-            this.Open_logTSMitem});
+            this.Open_logTSMitem,
+            this.Open_clientsTSMitem});
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
@@ -1195,6 +1197,12 @@
             this.label7.Size = new System.Drawing.Size(0, 13);
             this.label7.TabIndex = 16;
             // 
+            // Open_clientsTSMitem
+            // 
+            this.Open_clientsTSMitem.Name = "Open_clientsTSMitem";
+            this.Open_clientsTSMitem.Size = new System.Drawing.Size(180, 22);
+            this.Open_clientsTSMitem.Click += new System.EventHandler(this.Open_clientsTSMitem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1339,6 +1347,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ToolStripMenuItem Switch_ipTSMitem;
         private System.Windows.Forms.ToolStripMenuItem Switch_timeTSMitem;
+        private System.Windows.Forms.ToolStripMenuItem Open_clientsTSMitem;
     }
 }
 

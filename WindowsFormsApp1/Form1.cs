@@ -20,18 +20,15 @@ namespace WindowsFormsApp1
         bool is_english = false, // проверка на использование английской версии программы
             tracking = false; // проверка открытого окна слежения (для того, чтобы не создавалось более 1 окна слежения)
 
-        int[] grid_packets = new int[8], // количество запросов на каждого клиента во всех группах
-            grid_p_current = new int[8]; // попытка замены id текущего клиента в его группе при опросе
-
         int[,] g_settings = new int[8, 4]; // включает в себя вышеописанные строки кода
         // настройки групп в виде: [группа (1-8), настройки (кол-во клиентов/кол-во запросов/текущий клиент/текущий таймаут)]
 
-        //string;
+        private string pinging, check_connection;
 
         string[] ip_g1, ip_g2, ip_g3, ip_g4, ip_g5, ip_g6, ip_g7, ip_g8, //списки ip адресов каждой группы
-            al; // список абонентов в сыром виде
+            al; // сырой список абонентов из файла
 
-        string[,][] g_lists = new string[8,13][]; // включает в себя 1 вышеописанную строку кода, а также заменяет нижеописанную структуру данных client
+        string[,][] g_lists = new string[8,13][]; // включает в себя вышеописанную строку кода, а также заменяет нижеописанную структуру данных client
         // трёхмерный список клиентов в виде: [группа (1-8), аргументы (имя/dns/ip/время 1 опроса/ответ 1 опроса/время 2 опроса/.../ответ 5 опроса)] [клиент]
 
         static System.Net.NetworkInformation.Ping ping_g1 = new System.Net.NetworkInformation.Ping();
@@ -75,7 +72,7 @@ namespace WindowsFormsApp1
         public client[] ab;
 
         #region Константы
-        public const int C_sec = 1000, C_min = 60000;
+        private const int C_sec = 1000, C_min = 60000;
 
         private string[] StandartList = new string[]
             {"Loopback/ /127.0.0.1", "БРИ-1/ /10.1.1.254", "БРИ-2/ /10.1.2.254", "БРИ-3/ /192.168.60.254", "SM BelAir WAP/ /192.168.68.73", "АСП/ /10.1.2.250", "",
@@ -97,6 +94,7 @@ namespace WindowsFormsApp1
                 toolStripButton1.Text = "File";
                 Open_iniTSMitem.Text = "Open .INI file";
                 Open_logTSMitem.Text = "Open log file";
+                Open_clientsTSMitem.Text = "Open clients list";
                 toolStripButton2.Text = "Ping all";
                 toolStripButton3.Text = "Tracking";
                 toolStripButton4.Text = "Settings";
@@ -134,12 +132,16 @@ namespace WindowsFormsApp1
                 button2.Text = "Ping 2nd group";
                 button3.Text = "Ping 3rd group";
                 button4.Text = "Ping 4th group";
+
+                pinging = "Pinging...";
+                check_connection = "No connection to the network." + Environment.NewLine + "Check cable connection or network/firewall settings.";
             }
             else
             {
                 toolStripButton1.Text = "Файл";
                 Open_iniTSMitem.Text = "Открыть .INI файл";
                 Open_logTSMitem.Text = "Открыть лог файл";
+                Open_clientsTSMitem.Text = "Открыть список клиентов";
                 toolStripButton2.Text = "Пинг всех";
                 toolStripButton3.Text = "Слежение";
                 toolStripButton4.Text = "Настройки";
@@ -177,6 +179,9 @@ namespace WindowsFormsApp1
                 button2.Text = "Пинг 2 группы";
                 button3.Text = "Пинг 3 группы";
                 button4.Text = "Пинг 4 группы";
+
+                pinging = "Опрос...";
+                check_connection = "Нет подключения к сети" + Environment.NewLine + "Проверьте подключение сетевого кабеля или настройки сети/фаерволла";
             }
         }
 
@@ -432,24 +437,21 @@ namespace WindowsFormsApp1
 
             if (g_settings[current_group, 2] < g_settings[current_group, 0])
             {
-                button.Enabled = false;
-                check.Enabled = false;
-
-                if (is_english)
-                    grid[3, g_settings[current_group, 2]].Value = "Pinging...";
-                else
-                    grid[3, g_settings[current_group, 2]].Value = "Опрос...";
-
-                grid[3, g_settings[current_group, 2]].Style.BackColor = Color.Cyan;
-                grid[3, g_settings[current_group, 2]].Style.SelectionForeColor = Color.White;
-                grid[3, g_settings[current_group, 2]].Style.SelectionBackColor = Color.DarkCyan;
-
-                grid[0, g_settings[current_group, 2]].Selected = true;
-
                 if (System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+                {
+                    button.Enabled = false;
+                    check.Enabled = false;
+
+                    grid[0, g_settings[current_group, 2]].Selected = true;
+                    grid[3, g_settings[current_group, 2]].Value = pinging;
+                    grid[3, g_settings[current_group, 2]].Style.BackColor = Color.Cyan;
+                    grid[3, g_settings[current_group, 2]].Style.SelectionForeColor = Color.White;
+                    grid[3, g_settings[current_group, 2]].Style.SelectionBackColor = Color.DarkCyan;
+
                     PingCl(ping, grid[2, g_settings[current_group, 2]].Value.ToString(), timeout, waiter);
+                }
                 else
-                    MessageBox.Show("Нет подключения к интернету" + Environment.NewLine + "Проверьте ваш фаервол или настройки сетевого подключения");
+                    MessageBox.Show(check_connection);
             }
             else
             {
@@ -470,154 +472,102 @@ namespace WindowsFormsApp1
             ping.SendAsync(address, timeout, waiter);
         }
 
-        private void SortReply(int current_group)
+        private void SortReply(int group)
         {
-            string c;
-            FileStream f;
+            if (!File.Exists("Log" + ".txt"))
+            {
+                FileStream f = File.Create("Log" + ".txt");
+                f.Close();
+                File.AppendAllText("Log" + ".txt", "Программа запущена " + DateTime.Now.Date.ToString().Substring(0, 11) + " в " + DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString() + Environment.NewLine);
+                File.AppendAllText("Log" + ".txt", Environment.NewLine);
+            }
+            toolStripButton2.Enabled = true;
 
-            switch (current_group)
+            switch (group)
             {
                 case 1:
-                    dataGridView1[3, g_settings[0, 2]].Value = reply_g1.Status;
-
-                    if (!File.Exists("Log" + ".txt"))
-                    {
-                        f = File.Create("Log" + ".txt");
-                        f.Close();
-                        File.AppendAllText("Log" + ".txt", "Программа запущена " + DateTime.Now.Date.ToString().Substring(0, 11) + " в " + DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString() + Environment.NewLine);
-                        File.AppendAllText("Log" + ".txt", Environment.NewLine);
-                    }
-                    
-                    c = "Опрос " + dataGridView1[0, g_settings[0, 2]].Value + " " + dataGridView1[1, g_settings[0, 2]].Value + " " + dataGridView1[2, g_settings[0, 2]].Value + Environment.NewLine;
-
-                    File.AppendAllText("Log.txt", c);
-
-                    c = DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString();
-                    c += " " + reply_g1.Status;
-
-                    if (reply_g1.Status == System.Net.NetworkInformation.IPStatus.Success)
-                    {
-                        dataGridView1[3, g_settings[0, 2]].Style.BackColor = Color.GreenYellow;
-                        dataGridView1[3, g_settings[0, 2]].Style.SelectionBackColor = Color.DarkGreen;
-                        c += " " + reply_g1.RoundtripTime + " ms";
-
-                        //System.Net.NetworkInformation.IPAddressInformation iP;
-                        //long huh = 228;
-                        //System.Net.IPAddress kek = new System.Net.IPAddress(huh);
-                    }
-                    else
-                    {
-                        dataGridView1[3, g_settings[0, 2]].Style.BackColor = Color.Red;
-                        dataGridView1[3, g_settings[0, 2]].Style.SelectionBackColor = Color.DarkRed;
-                    }
-
-                    File.AppendAllText("Log.txt", c + Environment.NewLine);
-
-                    if (grid_p_current[0] == grid_packets[0])
-                    {
-                        g_settings[0, 2]++;
-                        grid_p_current[0] = 0;
-                    }
-                    else
-                        grid_p_current[0]++;
-
-                    if (g_settings[0, 2] < g_settings[0, 0])
-                        SortPing(1);
-                    else
-                    {
-                        g_settings[0, 2] = 0;
-                        toolStripButton2.Enabled = true;
-                        button1.Enabled = true;
-                        checkBox1.Enabled = true;
-                    }
+                    DisplayReply(group, dataGridView1, reply_g1, button1, checkBox1);
                     break;
                 case 2:
-                    dataGridView2[3, g_settings[1, 2]].Value = reply_g2.Status;
-
-                    if (reply_g2.Status == System.Net.NetworkInformation.IPStatus.Success)
-                    {
-                        dataGridView2[4, g_settings[1, 2]].Style.BackColor = Color.GreenYellow;
-                        dataGridView2[4, g_settings[1, 2]].Style.SelectionBackColor = Color.DarkGreen;
-                    }
-                    else
-                    {
-                        dataGridView2[4, g_settings[1, 2]].Style.BackColor = Color.Red;
-                        dataGridView2[4, g_settings[1, 2]].Style.SelectionBackColor = Color.DarkRed;
-                    }
-
-                    if (grid_p_current[1] == grid_packets[1])
-                    {
-                        g_settings[1, 2]++;
-                        grid_p_current[1] = 0;
-                    }
-                    else
-                        grid_p_current[1]++;
-
-                    if (g_settings[1, 2] < g_settings[1, 0])
-                        SortPing(2);
-                    else
-                    {
-                        g_settings[1, 2] = 0;
-                        toolStripButton2.Enabled = true;
-                        button2.Enabled = true;
-                        checkBox2.Enabled = true;
-                    }
+                    DisplayReply(group, dataGridView2, reply_g2, button2, checkBox2);
                     break;
                 case 3:
-                    DisplayReply(dataGridView3, reply_g3, g_settings[2, 2]);
-                    if (grid_p_current[2] == grid_packets[2])
-                    {
-                        g_settings[2, 2]++;
-                        grid_p_current[2] = 0;
-                    }
-                    else
-                        grid_p_current[2]++;
-
-                    if (g_settings[2, 2] < g_settings[2, 0])
-                        SortPing(3);
-                    else
-                    {
-                        g_settings[2, 2] = 0;
-                        toolStripButton2.Enabled = true;
-                        button3.Enabled = true;
-                        checkBox3.Enabled = true;
-                    }
+                    DisplayReply(group, dataGridView3, reply_g3, button3, checkBox3);
                     break;
                 case 4:
-                    DisplayReply(dataGridView4, reply_g4, g_settings[3, 2]);
-
-                    if (grid_p_current[3] == grid_packets[3])
-                    {
-                        g_settings[3, 2]++;
-                        grid_p_current[0] = 0;
-                    }
-                    else
-                        grid_p_current[0]++;
-
-                    if (g_settings[3, 2] < g_settings[3, 0])
-                        SortPing(4);
-                    else
-                    {
-                        g_settings[3, 2] = 0;
-                        toolStripButton2.Enabled = true;
-                        button4.Enabled = true;
-                        checkBox4.Enabled = true;
-                    }
+                    DisplayReply(group, dataGridView4, reply_g4, button4, checkBox4);
                     break;
             }
         }
-
-        private void DisplayReply(DataGridView grid, System.Net.NetworkInformation.PingReply reply, int current_client)
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        private void DisplayReply(int current_group, DataGridView grid, System.Net.NetworkInformation.PingReply reply, Button button, CheckBox check)
         {
-            grid[3, current_client].Value = reply.Status;
+            current_group--;
 
-            if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
-                grid[4, current_client].Style.BackColor = Color.GreenYellow;
+            grid[3, g_settings[current_group, 2]].Value = reply.Status;
+
+            string c = "Опрос " + dataGridView1[0, g_settings[current_group, 2]].Value + " " + dataGridView1[1, g_settings[current_group, 2]].Value + " " + dataGridView1[2, g_settings[current_group, 2]].Value + Environment.NewLine;
+
+            File.AppendAllText("Log.txt", c);
+
+            c = DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString();
+            c += " " + reply_g1.Status;
+
+            if (reply_g1.Status == System.Net.NetworkInformation.IPStatus.Success)
+            {
+                grid[3, g_settings[current_group, 2]].Style.BackColor = Color.GreenYellow;
+                grid[3, g_settings[current_group, 2]].Style.SelectionBackColor = Color.DarkGreen;
+                c += " " + reply_g1.RoundtripTime + " ms";
+
+                //System.Net.NetworkInformation.IPAddressInformation iP;
+                //long huh = 228;
+                //System.Net.IPAddress kek = new System.Net.IPAddress(huh);
+            }
             else
-                grid[4, current_client].Style.BackColor = Color.Red;
+            {
+                grid[3, g_settings[current_group, 2]].Style.BackColor = Color.Red;
+                grid[3, g_settings[current_group, 2]].Style.SelectionBackColor = Color.DarkRed;
+            }
+
+            File.AppendAllText("Log.txt", c + Environment.NewLine);
+
+            if (g_settings[current_group, 2] == g_settings[2, 1])
+            {
+                g_settings[current_group, 2]++;
+                g_settings[current_group, 2] = 0;
+            }
+            else
+                g_settings[current_group, 2]++;
+
+            if (g_settings[current_group, 2] < g_settings[current_group, 0])
+                SortPing(current_group + 1);
+            else
+            {
+                g_settings[current_group, 2] = 0;
+            }
+            button.Enabled = true;
+            check.Enabled = true;
         }
 
-        private void CheckChange(DataGridView grid, System.Windows.Forms.Timer timer, CheckBox check, NumericUpDown numupdown, Label label_a, Label label_b, int curgr, int count)
+        private void CheckChange(DataGridView grid, System.Windows.Forms.Timer timer, CheckBox check, NumericUpDown numupdown, Label label_a, Label label_b, int currrent_group, int count)
         {
             if (timer.Enabled)
                 timer.Stop();
@@ -631,13 +581,13 @@ namespace WindowsFormsApp1
                 timer.Interval = (int)numupdown.Value * C_min;
                 timer.Start();
 
-                foreach (int i in grid_p_current)
+                for (int i = 0; i < 8; i++)
                 {
-                    grid_p_current[i] = 0;
+                    g_settings[i, 2] = 0;
                 }
 
                 ClearGrid(grid, count);
-                SortPing(curgr);
+                SortPing(currrent_group);
             }
             else
             {
@@ -647,18 +597,18 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void ClearGrid(DataGridView dataGrid, int count)
+        private void ClearGrid(DataGridView grid, int count)
         {
             for (int i = 0; i < count; i++)
             {
-                dataGrid[3, i].Value = "";
-                dataGrid[4, i].Value = "";
+                grid[3, i].Value = "";
+                grid[4, i].Value = "";
 
-                dataGrid[3, i].Style.BackColor = Color.White;
-                dataGrid[3, i].Style.SelectionForeColor = Color.Black;
-                dataGrid[3, i].Style.SelectionBackColor = Color.LightGray;
-                dataGrid[4, i].Style.BackColor = Color.White;
-                dataGrid[4, i].Style.SelectionBackColor = Color.LightGray;
+                grid[3, i].Style.BackColor = Color.White;
+                grid[3, i].Style.SelectionForeColor = Color.Black;
+                grid[3, i].Style.SelectionBackColor = Color.LightGray;
+                grid[4, i].Style.BackColor = Color.White;
+                grid[4, i].Style.SelectionBackColor = Color.LightGray;
             }
         }
 
@@ -730,10 +680,15 @@ namespace WindowsFormsApp1
             Size = new Size(816, 639);
             FormResized();
 
-            SortPing(1);
-            SortPing(2);
-            SortPing(3);
-            SortPing(4);
+            if (System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            {
+                SortPing(1);
+                SortPing(2);
+                SortPing(3);
+                SortPing(4);
+            }
+            else
+                MessageBox.Show(check_connection);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -787,7 +742,7 @@ namespace WindowsFormsApp1
 
         private void numericUpDown3_ValueChanged(object sender, EventArgs e)
         {
-            grid_packets[0] = (int)numericUpDown3.Value;
+            g_settings[0, 1] = (int)numericUpDown3.Value;
         }
 
         private void numericUpDown5_ValueChanged(object sender, EventArgs e)
@@ -797,7 +752,7 @@ namespace WindowsFormsApp1
 
         private void numericUpDown6_ValueChanged(object sender, EventArgs e)
         {
-            grid_packets[1] = (int)numericUpDown6.Value;
+            g_settings[1, 1] = (int)numericUpDown6.Value;
         }
 
         private void numericUpDown8_ValueChanged(object sender, EventArgs e)
@@ -807,7 +762,7 @@ namespace WindowsFormsApp1
 
         private void numericUpDown9_ValueChanged(object sender, EventArgs e)
         {
-            grid_packets[2] = (int)numericUpDown9.Value;
+            g_settings[2, 1] = (int)numericUpDown9.Value;
         }
 
         private void numericUpDown11_ValueChanged(object sender, EventArgs e)
@@ -817,7 +772,7 @@ namespace WindowsFormsApp1
 
         private void numericUpDown12_ValueChanged(object sender, EventArgs e)
         {
-            grid_packets[3] = (int)numericUpDown12.Value;
+            g_settings[3, 1] = (int)numericUpDown12.Value;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -934,10 +889,18 @@ namespace WindowsFormsApp1
 
         private void Open_logTSMitem_Click(object sender, EventArgs e)
         {
-            if (File.Exists("D:\\Амир\\Уст. программы\\Notepad++\\notepad++.exe"))
+            if (File.Exists("D:\\Амир\\Уст. программы\\Notepad++\\notepad++.exe") && File.Exists("Log" + ".txt"))
                 Process.Start("D:\\Амир\\Уст. программы\\Notepad++\\notepad++.exe", "Log" + ".txt");
             else
                 Process.Start("C:\\Windows\\System32\\notepad.exe", "Log" + ".txt");
+        }
+
+        private void Open_clientsTSMitem_Click(object sender, EventArgs e)
+        {
+            if (File.Exists("D:\\Амир\\Уст. программы\\Notepad++\\notepad++.exe") && File.Exists("Clients.txt"))
+                Process.Start("D:\\Амир\\Уст. программы\\Notepad++\\notepad++.exe", "Clients.txt");
+            else
+                Process.Start("C:\\Windows\\System32\\notepad.exe", "Clients.txt");
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)

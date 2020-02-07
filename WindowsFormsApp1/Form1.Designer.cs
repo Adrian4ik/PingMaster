@@ -167,7 +167,6 @@
             this.toolStripButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Open_iniTSMitem,
             this.Open_logTSMitem});
-            this.toolStripButton1.Enabled = false;
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
@@ -176,12 +175,14 @@
             // Open_iniTSMitem
             // 
             this.Open_iniTSMitem.Name = "Open_iniTSMitem";
-            this.Open_iniTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.Open_iniTSMitem.Size = new System.Drawing.Size(180, 22);
+            this.Open_iniTSMitem.Click += new System.EventHandler(this.Open_iniTSMitem_Click);
             // 
             // Open_logTSMitem
             // 
             this.Open_logTSMitem.Name = "Open_logTSMitem";
-            this.Open_logTSMitem.Size = new System.Drawing.Size(67, 22);
+            this.Open_logTSMitem.Size = new System.Drawing.Size(180, 22);
+            this.Open_logTSMitem.Click += new System.EventHandler(this.Open_logTSMitem_Click);
             // 
             // toolStripButton2
             // 
@@ -1208,6 +1209,7 @@
             this.MinimumSize = new System.Drawing.Size(656, 519);
             this.Name = "Form1";
             this.Text = "Ping";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.SizeChanged += new System.EventHandler(this.Form_ChangedSize);
             this.toolStrip1.ResumeLayout(false);

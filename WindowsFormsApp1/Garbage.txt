@@ -28,6 +28,15 @@
 
 
 
+//
+//  Следующие строки кода не используются и не рекомендуются к использованию
+//
+int p1, p2, p3, p4, p5, p6, p7, p8, // количество запросов на каждого клиента во всех группах
+    curcl_g1, curcl_g2, curcl_g3, curcl_g4, curcl_g5, curcl_g6, curcl_g7, curcl_g8, // id текущего клиента в его группе при опросе
+    g1, g2, g3, g4, g5, g6, g7, g8; // количество клиентов в каждой группе
+
+
+
 //label1.Text = dataGridView1.VerticalScrollingOffset.ToString();
 //label1.Text = "Form size: " + ClientSize.Width + "x" + ClientSize.Height + " gb size: " + groupBox1.Width + "x" + groupBox1.Height + " dgv size: " + dataGridView1.Width + "x" + dataGridView1.Height;
 //dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;

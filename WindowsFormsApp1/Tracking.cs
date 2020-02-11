@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Net.NetworkInformation;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsFormsApp1
@@ -22,8 +17,8 @@ namespace WindowsFormsApp1
         DataGridViewTextBoxColumn Col2 = new DataGridViewTextBoxColumn();
         DataGridViewTextBoxColumn Col3 = new DataGridViewTextBoxColumn();
 
-        System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
-        System.Net.NetworkInformation.PingReply reply;
+        Ping ping = new Ping();
+        PingReply reply;
         static AutoResetEvent waiter = new AutoResetEvent(false);
 
         public Tracking(bool loc_eng, string name, string dns, string ip)
@@ -131,7 +126,7 @@ namespace WindowsFormsApp1
             {
                 dataGridView1[0, cur_row].Value = DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString();
 
-                if (reply.Status == System.Net.NetworkInformation.IPStatus.Success)
+                if (reply.Status == IPStatus.Success)
                 {
                     if (reply.RoundtripTime > 999)
                     {
@@ -204,7 +199,7 @@ namespace WindowsFormsApp1
             Preprocessing();
             Translate();
 
-            ping.PingCompleted += new System.Net.NetworkInformation.PingCompletedEventHandler(Received_reply);
+            ping.PingCompleted += new PingCompletedEventHandler(Received_reply);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -292,7 +287,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void Received_reply(object sender, System.Net.NetworkInformation.PingCompletedEventArgs e)
+        private void Received_reply(object sender, PingCompletedEventArgs e)
         {
             if (e.Cancelled)
                 ((AutoResetEvent)e.UserState).Set();

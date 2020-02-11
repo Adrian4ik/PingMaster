@@ -161,3 +161,12 @@ int p1, p2, p3, p4, p5, p6, p7, p8, // количество запросов н�
                 }
             }
         }
+
+
+
+        //private System.Windows.Forms.DataGridView[] DataGrid;
+        //private System.Windows.Forms.DataGridViewTextBoxColumn[,] GridColumn;
+        //private System.Windows.Forms.Label[,] GroupLabel;
+        //private System.Windows.Forms.CheckBox[] GroupCheck;
+        //private System.Windows.Forms.Button[] GroupButton;
+        //private System.Windows.Forms.NumericUpDown[,] GroupNumUpDown;

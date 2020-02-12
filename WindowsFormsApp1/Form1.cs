@@ -22,16 +22,17 @@ namespace WindowsFormsApp1
         bool is_english = false, // проверка на использование английской версии программы
             tracking = false; // проверка открытого окна слежения (для того, чтобы не создавалось более 1 окна слежения)
 
-        int groups_count = 0;
+        bool[,] states = new bool[8, 4];
+        // настройки (да/нет) групп клиентов, принимаемых из файла: [группа (1-8), настройки (автопинговать/показывать dns/показывать ip/показывать время ответа)]
+
+        int groups_num = 0; // количество групп, задействованных при старте программы
 
         int[,] g_settings = new int[8, 5];
         // настройки групп в виде: [группа (1-8), настройки (кол-во клиентов/текущий клиент/текущий период автопинга/текущее кол-во запросов/текущий таймаут)]
 
-        string pinging, check_connection, fill_clients_list,
-            date = DateTime.Now.Date.ToString().Substring(0, 11);
+        string pinging, check_connection, fill_clients_list; // текст некоторых элементов, зависящий от выбранного языка
 
-        string[] ip_g1, ip_g2, ip_g3, ip_g4, ip_g5, ip_g6, ip_g7, ip_g8, //списки ip адресов каждой группы
-            al; // сырой список абонентов из файла
+        string[] al; // сырой список абонентов из файла
 
         string[,][] g_lists = new string[8, 11][]; // включает в себя вышеописанную строку кода, а также заменяет нижеописанную структуру данных client
         // трёхмерный список клиентов в виде: [группа (1-8), аргументы (имя/dns/ip/время 1 опроса/ответ 1 опроса/время 2 опроса/.../ответ 4 опроса)] [клиент]
@@ -66,19 +67,6 @@ namespace WindowsFormsApp1
         Settings settings;
         Tracking tr;
 
-        public struct client
-        {
-            public int Group;
-            public int PosInGr;
-
-            public string Name;
-            public string DNS;
-            public string IP;
-            public string State;
-        }
-
-        public client[] ab;
-
         #region Константы
         private const int C_sec = 1000, C_min = 60000;
 
@@ -89,7 +77,9 @@ namespace WindowsFormsApp1
             "FS1/ /10.1.1.100", "ТВМ1-Н/ /10.1.3.1", "БПИ-НЧ (TRPU)/ /192.168.249.1", "БЗУ/ /10.1.11.5", "MDM (ШСС)/ /10.1.3.50"};
         #endregion Константы
 
-
+        //
+        //
+        //
 
         #region Методы
 
@@ -105,8 +95,8 @@ namespace WindowsFormsApp1
             CheckConfig();
             CheckLog();
 
-            File.AppendAllText(date + " log.txt", "Программа запущена " + date + " в " + DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString() + Environment.NewLine);
-            File.AppendAllText(date + " log.txt", Environment.NewLine);
+            File.AppendAllText(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt", "Программа запущена " + DateTime.Now.Date.ToString().Substring(0, 11) + " в " + DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString() + Environment.NewLine);
+            File.AppendAllText(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt", Environment.NewLine);
 
             if (!File.Exists("Clients.txt"))
             {
@@ -117,26 +107,6 @@ namespace WindowsFormsApp1
 
             al = File.ReadAllLines("Clients.txt");
 
-            if (al.Count() > 0)
-            {
-                groups_count++;
-
-                for (int s = 0; s < al.Count(); s++)
-                {
-                    if (al[s] == "")
-                        groups_count++;
-                    else
-                        g_settings[groups_count - 1, 0]++;
-                }
-
-                for(int i = 0; i < 8; i++)
-                {
-                    g_lists[1, 0] = new string[g_settings[i, 0]];
-                }
-            }
-            else
-                MessageBox.Show(fill_clients_list);
-
             ping_g1.PingCompleted += new PingCompletedEventHandler(Received_reply_g1);
             ping_g2.PingCompleted += new PingCompletedEventHandler(Received_reply_g2);
             ping_g3.PingCompleted += new PingCompletedEventHandler(Received_reply_g3);
@@ -146,8 +116,20 @@ namespace WindowsFormsApp1
             ping_g7.PingCompleted += new PingCompletedEventHandler(Received_reply_g7);
             ping_g8.PingCompleted += new PingCompletedEventHandler(Received_reply_g8);
 
+            Counting();
             FillClientsList();
             FillGrids();
+
+            checkBox1.Checked = states[0, 0];
+            checkBox2.Checked = states[1, 0];
+            checkBox3.Checked = states[2, 0];
+            checkBox4.Checked = states[3, 0];
+            checkBox5.Checked = states[4, 0];
+            checkBox6.Checked = states[5, 0];
+            checkBox7.Checked = states[6, 0];
+            checkBox8.Checked = states[7, 0];
+
+            SortColumns();
         }
 
         private void Translate()
@@ -243,42 +225,42 @@ namespace WindowsFormsApp1
             Column2a.HeaderText = Column1a.HeaderText;
             Column3a.HeaderText = Column1a.HeaderText;
             Column4a.HeaderText = Column1a.HeaderText;
-            //Column5a.HeaderText = Column1a.HeaderText;
-            //Column6a.HeaderText = Column1a.HeaderText;
-            //Column7a.HeaderText = Column1a.HeaderText;
-            //Column8a.HeaderText = Column1a.HeaderText;
+            Column5a.HeaderText = Column1a.HeaderText;
+            Column6a.HeaderText = Column1a.HeaderText;
+            Column7a.HeaderText = Column1a.HeaderText;
+            Column8a.HeaderText = Column1a.HeaderText;
 
             Column2b.HeaderText = Column1b.HeaderText;
             Column3b.HeaderText = Column1b.HeaderText;
             Column4b.HeaderText = Column1b.HeaderText;
-            //Column5b.HeaderText = Column1b.HeaderText;
-            //Column6b.HeaderText = Column1b.HeaderText;
-            //Column7b.HeaderText = Column1b.HeaderText;
-            //Column8b.HeaderText = Column1b.HeaderText;
+            Column5b.HeaderText = Column1b.HeaderText;
+            Column6b.HeaderText = Column1b.HeaderText;
+            Column7b.HeaderText = Column1b.HeaderText;
+            Column8b.HeaderText = Column1b.HeaderText;
 
             Column2c.HeaderText = Column1c.HeaderText;
             Column3c.HeaderText = Column1c.HeaderText;
             Column4c.HeaderText = Column1c.HeaderText;
-            //Column5c.HeaderText = Column1c.HeaderText;
-            //Column6c.HeaderText = Column1c.HeaderText;
-            //Column7c.HeaderText = Column1c.HeaderText;
-            //Column8c.HeaderText = Column1c.HeaderText;
+            Column5c.HeaderText = Column1c.HeaderText;
+            Column6c.HeaderText = Column1c.HeaderText;
+            Column7c.HeaderText = Column1c.HeaderText;
+            Column8c.HeaderText = Column1c.HeaderText;
 
             Column2d.HeaderText = Column1d.HeaderText;
             Column3d.HeaderText = Column1d.HeaderText;
             Column4d.HeaderText = Column1d.HeaderText;
-            //Column5d.HeaderText = Column1d.HeaderText;
-            //Column6d.HeaderText = Column1d.HeaderText;
-            //Column7d.HeaderText = Column1d.HeaderText;
-            //Column8d.HeaderText = Column1d.HeaderText;
+            Column5d.HeaderText = Column1d.HeaderText;
+            Column6d.HeaderText = Column1d.HeaderText;
+            Column7d.HeaderText = Column1d.HeaderText;
+            Column8d.HeaderText = Column1d.HeaderText;
 
             Column2e.HeaderText = Column1e.HeaderText;
             Column3e.HeaderText = Column1e.HeaderText;
             Column4e.HeaderText = Column1e.HeaderText;
-            //Column5e.HeaderText = Column1e.HeaderText;
-            //Column6e.HeaderText = Column1e.HeaderText;
-            //Column7e.HeaderText = Column1e.HeaderText;
-            //Column8e.HeaderText = Column1e.HeaderText;
+            Column5e.HeaderText = Column1e.HeaderText;
+            Column6e.HeaderText = Column1e.HeaderText;
+            Column7e.HeaderText = Column1e.HeaderText;
+            Column8e.HeaderText = Column1e.HeaderText;
         }
 
         private void CheckConfig()
@@ -298,175 +280,114 @@ namespace WindowsFormsApp1
                 else if (config[i] == "Language: rus")
                     is_english = false;
 
-                if(config[i].Length >= 15 && config[i].Substring(0, 15) == "Show DNS names:" && int.TryParse(config[i].Substring(16), out _))
-                    if (int.Parse(config[i].Substring(16)) <= 0)
-                    {
-                        Column1b.Visible = false;
-                        Column2b.Visible = false;
-                        Column3b.Visible = false;
-                        Column4b.Visible = false;
-                        //Column5b.Visible = false;
-                        //Column6b.Visible = false;
-                        //Column7b.Visible = false;
-                        //Column8b.Visible = false;
-                    }
-                    else
-                    {
-                        Column1b.Visible = true;
-                        Column2b.Visible = true;
-                        Column3b.Visible = true;
-                        Column4b.Visible = true;
-                        //Column5b.Visible = true;
-                        //Column6b.Visible = true;
-                        //Column7b.Visible = true;
-                        //Column8b.Visible = true;
-                    }
+                for (int g = 0; g < groups_num; g++)
+                {
+                    if (config[i].Length >= 17 && config[i].Substring(0, 17) == "Group " + (g + 1) + " autoping:" && int.TryParse(config[i].Substring(18), out _))
+                        if(int.Parse(config[i].Substring(18)) > 0)
+                            states[g, 0] = true;
+                        else
+                            states[g, 0] = false;
 
-                if (config[i].Length >= 10 && config[i].Substring(0, 10) == "Show IP's:" && int.TryParse(config[i].Substring(11), out _))
-                    if (int.Parse(config[i].Substring(11)) <= 0)
-                    {
-                        Column1c.Visible = false;
-                        Column2c.Visible = false;
-                        Column3c.Visible = false;
-                        Column4c.Visible = false;
-                        //Column5c.Visible = false;
-                        //Column6c.Visible = false;
-                        //Column7c.Visible = false;
-                        //Column8c.Visible = false;
-                    }
-                    else
-                    {
-                        Column1c.Visible = true;
-                        Column2c.Visible = true;
-                        Column3c.Visible = true;
-                        Column4c.Visible = true;
-                        //Column5c.Visible = true;
-                        //Column6c.Visible = true;
-                        //Column7c.Visible = true;
-                        //Column8c.Visible = true;
-                    }
+                    if (config[i].Length >= 17 && config[i].Substring(0, 17) == "Group " + (g + 1) + " show dns:" && int.TryParse(config[i].Substring(18), out _))
+                        if (int.Parse(config[i].Substring(18)) > 0)
+                            states[g, 1] = true;
+                        else
+                            states[g, 1] = false;
 
-                if (config[i].Length >= 15 && config[i].Substring(0, 17) == "Show reply times:" && int.TryParse(config[i].Substring(18), out _))
-                    if (Convert.ToInt32(config[i].Substring(18)) <= 0)
-                    {
-                        Column1d.Visible = false;
-                        Column2d.Visible = false;
-                        Column3d.Visible = false;
-                        Column4d.Visible = false;
-                        //Column5d.Visible = false;
-                        //Column6d.Visible = false;
-                        //Column7d.Visible = false;
-                        //Column8d.Visible = false;
-                    }
-                    else
-                    {
-                        Column1d.Visible = true;
-                        Column2d.Visible = true;
-                        Column3d.Visible = true;
-                        Column4d.Visible = true;
-                        //Column5d.Visible = true;
-                        //Column6d.Visible = true;
-                        //Column7d.Visible = true;
-                        //Column8d.Visible = true;
-                    }
+                    if (config[i].Length >= 16 && config[i].Substring(0, 16) == "Group " + (g + 1) + " show ip:" && int.TryParse(config[i].Substring(17), out _))
+                        if (int.Parse(config[i].Substring(17)) > 0)
+                            states[g, 2] = true;
+                        else
+                            states[g, 2] = false;
 
+                    if (config[i].Length >= 27 && config[i].Substring(0, 27) == "Group " + (g + 1) + " show response time:" && int.TryParse(config[i].Substring(28), out _))
+                        if (int.Parse(config[i].Substring(28)) > 0)
+                            states[g, 3] = true;
+                        else
+                            states[g, 3] = false;
 
+                    if (config[i].Length >= 29 && config[i].Substring(0, 29) == "Group " + (g + 1) + " autoping timer (min):" && int.TryParse(config[i].Substring(30), out _))
+                        g_settings[g, 2] = int.Parse(config[i].Substring(30));
 
-                if (config[i].Length >= 29 && config[i].Substring(0, 29) == "Group 1 autoping timer (min):" && int.TryParse(config[i].Substring(30), out _))
-                    g_settings[0, 2] = int.Parse(config[i].Substring(30));
+                    if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group " + (g + 1) + " timeout (sec):" && int.TryParse(config[i].Substring(23), out _))
+                        g_settings[g, 3] = int.Parse(config[i].Substring(23));
 
-                if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group 1 timeout (sec):" && int.TryParse(config[i].Substring(23), out _))
-                    g_settings[0, 3] = int.Parse(config[i].Substring(23));
-
-                if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group 1 packets count:" && int.TryParse(config[i].Substring(23), out _))
-                    g_settings[0, 4] = int.Parse(config[i].Substring(23));
-
-
-
-                if (config[i].Length >= 29 && config[i].Substring(0, 29) == "Group 2 autoping timer (min):" && int.TryParse(config[i].Substring(30), out _))
-                    g_settings[1, 2] = int.Parse(config[i].Substring(30));
-
-                if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group 2 timeout (sec):" && int.TryParse(config[i].Substring(23), out _))
-                    g_settings[1, 3] = int.Parse(config[i].Substring(23));
-
-                if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group 2 packets count:" && int.TryParse(config[i].Substring(23), out _))
-                    g_settings[1, 4] = int.Parse(config[i].Substring(23));
-
-
-
-                if (config[i].Length >= 29 && config[i].Substring(0, 29) == "Group 3 autoping timer (min):" && int.TryParse(config[i].Substring(30), out _))
-                    g_settings[2, 2] = int.Parse(config[i].Substring(30));
-
-                if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group 3 timeout (sec):" && int.TryParse(config[i].Substring(23), out _))
-                    g_settings[2, 3] = int.Parse(config[i].Substring(23));
-
-                if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group 3 packets count:" && int.TryParse(config[i].Substring(23), out _))
-                    g_settings[2, 4] = int.Parse(config[i].Substring(23));
-
-
-
-                if (config[i].Length >= 29 && config[i].Substring(0, 29) == "Group 4 autoping timer (min):" && int.TryParse(config[i].Substring(30), out _))
-                    g_settings[3, 2] = int.Parse(config[i].Substring(30));
-
-                if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group 4 timeout (sec):" && int.TryParse(config[i].Substring(23), out _))
-                    g_settings[3, 3] = int.Parse(config[i].Substring(23));
-
-                if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group 4 packets count:" && int.TryParse(config[i].Substring(23), out _))
-                    g_settings[3, 4] = int.Parse(config[i].Substring(23));
-
-
-
-                if (config[i].Length >= 29 && config[i].Substring(0, 29) == "Group 5 autoping timer (min):" && int.TryParse(config[i].Substring(30), out _))
-                    g_settings[4, 2] = int.Parse(config[i].Substring(30));
-
-                if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group 5 timeout (sec):" && int.TryParse(config[i].Substring(23), out _))
-                    g_settings[4, 3] = int.Parse(config[i].Substring(23));
-
-                if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group 5 packets count:" && int.TryParse(config[i].Substring(23), out _))
-                    g_settings[4, 4] = int.Parse(config[i].Substring(23));
-
-
-
-                if (config[i].Length >= 29 && config[i].Substring(0, 29) == "Group 6 autoping timer (min):" && int.TryParse(config[i].Substring(30), out _))
-                    g_settings[5, 2] = int.Parse(config[i].Substring(30));
-
-                if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group 6 timeout (sec):" && int.TryParse(config[i].Substring(23), out _))
-                    g_settings[5, 3] = int.Parse(config[i].Substring(23));
-
-                if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group 6 packets count:" && int.TryParse(config[i].Substring(23), out _))
-                    g_settings[5, 4] = int.Parse(config[i].Substring(23));
-
-
-
-                if (config[i].Length >= 29 && config[i].Substring(0, 29) == "Group 7 autoping timer (min):" && int.TryParse(config[i].Substring(30), out _))
-                    g_settings[6, 2] = int.Parse(config[i].Substring(30));
-
-                if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group 7 timeout (sec):" && int.TryParse(config[i].Substring(23), out _))
-                    g_settings[6, 3] = int.Parse(config[i].Substring(23));
-
-                if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group 7 packets count:" && int.TryParse(config[i].Substring(23), out _))
-                    g_settings[6, 4] = int.Parse(config[i].Substring(23));
-
-
-
-                if (config[i].Length >= 29 && config[i].Substring(0, 29) == "Group 8 autoping timer (min):" && int.TryParse(config[i].Substring(30), out _))
-                    g_settings[7, 2] = int.Parse(config[i].Substring(30));
-
-                if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group 8 timeout (sec):" && int.TryParse(config[i].Substring(23), out _))
-                    g_settings[7, 3] = int.Parse(config[i].Substring(23));
-
-                if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group 8 packets count:" && int.TryParse(config[i].Substring(23), out _))
-                    g_settings[7, 4] = int.Parse(config[i].Substring(23));
+                    if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group " + (g + 1) + " packets count:" && int.TryParse(config[i].Substring(23), out _))
+                        g_settings[g, 4] = int.Parse(config[i].Substring(23));
+                }
             }
+        }
+
+        private void SortColumns()
+        {
+            SwitchColumns(0, Column1b, Column1c, Column1d);
+            SwitchColumns(1, Column2b, Column2c, Column2d);
+            SwitchColumns(2, Column3b, Column3c, Column3d);
+            SwitchColumns(3, Column4b, Column4c, Column4d);
+            SwitchColumns(4, Column5b, Column5c, Column5d);
+            SwitchColumns(5, Column6b, Column6c, Column6d);
+            SwitchColumns(6, Column7b, Column7c, Column7d);
+            SwitchColumns(7, Column8b, Column8c, Column8d);
+        }
+
+        private void SwitchColumns(int group, DataGridViewTextBoxColumn col1, DataGridViewColumn col2, DataGridViewColumn col3)
+        {
+            col1.Visible = states[group, 1];
+            col2.Visible = states[group, 2];
+            col3.Visible = states[group, 3];
         }
         
         private void CheckLog()
         {
-            if (!File.Exists(date + " log.txt"))
+            if (!File.Exists(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt"))
             {
-                FileStream f = File.Create(date + " log.txt");
+                FileStream f = File.Create(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt");
                 f.Close();
             }
+        }
+
+        private void Counting()
+        {
+            if (al.Count() > 0)
+            {
+                groups_num++;
+
+                for (int s = 0; s < al.Count(); s++)
+                {
+                    if (al[s] == "")
+                        groups_num++;
+                    else
+                        g_settings[groups_num - 1, 0]++;
+                }
+
+                for (int i = 0; i < 8; i++)
+                {
+                    g_lists[1, 0] = new string[g_settings[i, 0]];
+                }
+            }
+            else
+                MessageBox.Show(fill_clients_list);
+
+            if (groups_num > 1)
+                groupBox2.Visible = true;
+
+            if (groups_num > 2)
+                groupBox3.Visible = true;
+
+            if (groups_num > 3)
+                groupBox4.Visible = true;
+
+            if (groups_num > 4)
+                groupBox5.Visible = true;
+
+            if (groups_num > 5)
+                groupBox6.Visible = true;
+
+            if (groups_num > 6)
+                groupBox7.Visible = true;
+
+            if (groups_num > 7)
+                groupBox8.Visible = true;
         }
 
         //
@@ -479,48 +400,6 @@ namespace WindowsFormsApp1
             //g_lists[1, 0] = new string[322];
             //g_lists[1, 0][228] = "kek";
             //g_lists[1, 0].Count;
-
-
-
-            if (g_settings[0, 0] >= 15)
-                dataGridView1.Rows.Add(g_settings[0, 0]);
-            else
-                dataGridView1.Rows.Add(15);
-
-            if (g_settings[1, 0] >= 15)
-                dataGridView2.Rows.Add(g_settings[1, 0]);
-            else
-                dataGridView2.Rows.Add(15);
-
-            if (g_settings[2, 0] >= 15)
-                dataGridView3.Rows.Add(g_settings[2, 0]);
-            else
-                dataGridView3.Rows.Add(15);
-
-            if (g_settings[3, 0] >= 15)
-                dataGridView4.Rows.Add(g_settings[3, 0]);
-            else
-                dataGridView4.Rows.Add(15);
-
-            //if (g_settings[4, 0] >= 15)
-            //    dataGridView5.Rows.Add(g_settings[4, 0]);
-            //else
-            //    dataGridView5.Rows.Add(15);
-
-            //if (g_settings[5, 0] >= 15)
-            //    dataGridView6.Rows.Add(g_settings[5, 0]);
-            //else
-            //    dataGridView6.Rows.Add(15);
-
-            //if (g_settings[6, 0] >= 15)
-            //    dataGridView7.Rows.Add(g_settings[6, 0]);
-            //else
-            //    dataGridView7.Rows.Add(15);
-
-            //if (g_settings[7, 0] >= 15)
-            //    dataGridView8.Rows.Add(g_settings[7, 0]);
-            //else
-            //    dataGridView8.Rows.Add(15);
 
             for (int s = 0, grid = 0; s < al.Count(); s++)
             {
@@ -535,20 +414,20 @@ namespace WindowsFormsApp1
 
                     for (int c = 0, flag = 1; c < al[s].Length; c++)
                     {
-                        if (str[c] == '/') // Правило разбиения строки на компоненты абонента (Имя абонента/DNS/IP)
+                        if (str[c] == '/') // Правило разбиения строки на компоненты (Имя/DNS/IP)
                             flag++;
                         else
                         {
                             switch (flag)
                             {
                                 case 1:
-                                    ab[s].Name = ab[s].Name + str[c];
+                                    ab[s].Name += str[c];
                                     break;
                                 case 2:
-                                    ab[s].DNS = ab[s].DNS + str[c];
+                                    ab[s].DNS += str[c];
                                     break;
                                 case 3:
-                                    ab[s].IP = ab[s].IP + str[c];
+                                    ab[s].IP += str[c];
                                     break;
                             }
                         }
@@ -591,6 +470,48 @@ namespace WindowsFormsApp1
         //
         private void FillGrids()
         {
+            if (g_settings[0, 0] >= 15)
+                dataGridView1.Rows.Add(g_settings[0, 0]);
+            else
+                dataGridView1.Rows.Add(15);
+
+            if (g_settings[1, 0] >= 15)
+                dataGridView2.Rows.Add(g_settings[1, 0]);
+            else
+                dataGridView2.Rows.Add(15);
+
+            if (g_settings[2, 0] >= 15)
+                dataGridView3.Rows.Add(g_settings[2, 0]);
+            else
+                dataGridView3.Rows.Add(15);
+
+            if (g_settings[3, 0] >= 15)
+                dataGridView4.Rows.Add(g_settings[3, 0]);
+            else
+                dataGridView4.Rows.Add(15);
+
+            if (g_settings[4, 0] >= 15)
+                dataGridView5.Rows.Add(g_settings[4, 0]);
+            else
+                dataGridView5.Rows.Add(15);
+
+            if (g_settings[5, 0] >= 15)
+                dataGridView6.Rows.Add(g_settings[5, 0]);
+            else
+                dataGridView6.Rows.Add(15);
+
+            if (g_settings[6, 0] >= 15)
+                dataGridView7.Rows.Add(g_settings[6, 0]);
+            else
+                dataGridView7.Rows.Add(15);
+
+            if (g_settings[7, 0] >= 15)
+                dataGridView8.Rows.Add(g_settings[7, 0]);
+            else
+                dataGridView8.Rows.Add(15);
+
+
+
             for (int i = 0, j = 0; i < ab.Count(); i++, j++)
             {
                 if (ab[i].Name == "")
@@ -645,16 +566,16 @@ namespace WindowsFormsApp1
                     PingGroup(group, dataGridView4, button14, checkBox4, ping_g4, g_settings[group - 1, 4] * C_sec, waiter4);
                     break;
                 case 5:
-                    //PingGroup(group, dataGridView5, button15, checkBox5, ping_g5, g_settings[group - 1, 4] * C_sec, waiter5);
+                    PingGroup(group, dataGridView5, button15, checkBox5, ping_g5, g_settings[group - 1, 4] * C_sec, waiter5);
                     break;
                 case 6:
-                    //PingGroup(group, dataGridView6, button16, checkBox6, ping_g6, g_settings[group - 1, 4] * C_sec, waiter6);
+                    PingGroup(group, dataGridView6, button16, checkBox6, ping_g6, g_settings[group - 1, 4] * C_sec, waiter6);
                     break;
                 case 7:
-                    //PingGroup(group, dataGridView7, button17, checkBox7, ping_g7, g_settings[group - 1, 4] * C_sec, waiter7);
+                    PingGroup(group, dataGridView7, button17, checkBox7, ping_g7, g_settings[group - 1, 4] * C_sec, waiter7);
                     break;
                 case 8:
-                    //PingGroup(group, dataGridView8, button18, checkBox8, ping_g8, g_settings[group - 1, 4] * C_sec, waiter8);
+                    PingGroup(group, dataGridView8, button18, checkBox8, ping_g8, g_settings[group - 1, 4] * C_sec, waiter8);
                     break;
             }
         }
@@ -718,38 +639,20 @@ namespace WindowsFormsApp1
                     DisplayReply(group, dataGridView4, reply_g4, button14, checkBox4);
                     break;
                 case 5:
-                    //DisplayReply(group, dataGridView5, reply_g5, button15, checkBox5);
+                    DisplayReply(group, dataGridView5, reply_g5, button15, checkBox5);
                     break;
                 case 6:
-                    //DisplayReply(group, dataGridView6, reply_g6, button16, checkBox6);
+                    DisplayReply(group, dataGridView6, reply_g6, button16, checkBox6);
                     break;
                 case 7:
-                    //DisplayReply(group, dataGridView7, reply_g7, button17, checkBox7);
+                    DisplayReply(group, dataGridView7, reply_g7, button17, checkBox7);
                     break;
                 case 8:
-                    //DisplayReply(group, dataGridView8, reply_g8, button18, checkBox8);
+                    DisplayReply(group, dataGridView8, reply_g8, button18, checkBox8);
                     break;
             }
         }
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
+        
         private void DisplayReply(int current_group, DataGridView grid, PingReply reply, Button button, CheckBox check)
         {
             current_group--;
@@ -758,7 +661,7 @@ namespace WindowsFormsApp1
 
             string c = "Опрос " + dataGridView1[0, g_settings[current_group, 1]].Value + " " + dataGridView1[1, g_settings[current_group, 1]].Value + " " + dataGridView1[2, g_settings[current_group, 1]].Value + Environment.NewLine;
 
-            File.AppendAllText(date + " log.txt", c);
+            File.AppendAllText(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt", c);
 
             c = DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString();
             c += " " + reply_g1.Status;
@@ -779,7 +682,7 @@ namespace WindowsFormsApp1
                 grid[3, g_settings[current_group, 1]].Style.SelectionBackColor = Color.DarkRed;
             }
 
-            File.AppendAllText(date + " log.txt", c + Environment.NewLine);
+            File.AppendAllText(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt", c + Environment.NewLine);
 
             if (g_settings[current_group, 1] == g_settings[current_group, 4])
             {
@@ -826,18 +729,59 @@ namespace WindowsFormsApp1
                 grid[3, i].Value = "";
                 grid[4, i].Value = "";
 
-                grid[3, i].Style.BackColor = Color.White;
-                grid[3, i].Style.SelectionForeColor = Color.Black;
-                grid[3, i].Style.SelectionBackColor = Color.LightGray;
                 grid[4, i].Style.BackColor = Color.White;
+                grid[4, i].Style.SelectionForeColor = Color.Black;
                 grid[4, i].Style.SelectionBackColor = Color.LightGray;
             }
         }
 
-        //
-        // дописать
-        //
-        private void FormResized() // form adds height and width to client size: x16, y39
+        private void SortStyle() // form adds height and width to client size: x16, y39
+        {
+            switch (groups_num)
+            {
+                case 1:
+                    ResizeStyle1();
+                    break;
+                case 2:
+                    ResizeStyle2();
+                    break;
+                case 3:
+                    ResizeStyle3();
+                    break;
+                case 4:
+                    ResizeStyle4();
+                    break;
+                case 5:
+                    ResizeStyle5();
+                    break;
+                case 6:
+                    ResizeStyle6();
+                    break;
+                case 7:
+                    ResizeStyle7();
+                    break;
+                case 8:
+                    ResizeStyle8();
+                    break;
+            }
+        }
+
+        private void ResizeStyle1()
+        {
+
+        }
+
+        private void ResizeStyle2()
+        {
+
+        }
+
+        private void ResizeStyle3()
+        {
+
+        }
+
+        private void ResizeStyle4()
         {
             groupBox1.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 50) / 2);
             groupBox2.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 50) / 2);
@@ -862,7 +806,7 @@ namespace WindowsFormsApp1
             button13.Location = new Point(groupBox3.Size.Width - 105, 60);
             button14.Location = new Point(groupBox4.Size.Width - 105, 60);
 
-            if(Column1b.Visible)
+            if (Column1b.Visible)
             {
                 Column1b.Width = (dataGridView1.Width - 205) / 2;
                 Column2b.Width = (dataGridView1.Width - 230) / 2;
@@ -883,9 +827,68 @@ namespace WindowsFormsApp1
             }
         }
 
+        private void ResizeStyle5()
+        {
+
+        }
+
+        private void ResizeStyle6()
+        {
+
+        }
+
+        private void ResizeStyle7()
+        {
+
+        }
+
+        private void ResizeStyle8()
+        {
+
+        }
+
+        private void ShowTracking()
+        {
+            if (!tracking)
+            {
+                tr = new Tracking(is_english, "", "", "");
+                tr.FormClosed += new FormClosedEventHandler(Tracking_Closed);
+                toolStripButton3.Enabled = false;
+                tracking = true;
+                tr.Show();
+            }
+        }
+
+        private void ShowTracking(DataGridView grid)
+        {
+            int selected_row = grid.SelectedCells[0].RowIndex;
+            string s_name = grid[0, selected_row].Value.ToString();
+            string s_dns = grid[1, selected_row].Value.ToString();
+            string s_ip = grid[2, selected_row].Value.ToString();
+
+            if (!tracking)
+            {
+                tr = new Tracking(is_english, s_name, s_dns, s_ip);
+                tr.FormClosed += new FormClosedEventHandler(Tracking_Closed);
+                toolStripButton3.Enabled = false;
+                tracking = true;
+                tr.Show();
+            }
+        }
+
+        private void ShowSettings(int group)
+        {
+            group--;
+            settings = new Settings(is_english, states[group, 1], states[group, 2], states[group, 3], group, g_settings[group, 2], g_settings[group, 3], g_settings[group, 4]);
+            settings.FormClosed += new FormClosedEventHandler(Settings_Closed);
+            settings.Show();
+        }
+
         #endregion Методы
 
-
+        //
+        //
+        //
 
         #region События
 
@@ -894,17 +897,7 @@ namespace WindowsFormsApp1
             PreProcessing();
 
             Size = new Size(916, 739);
-            FormResized();
-
-            //if (NetworkInterface.GetIsNetworkAvailable())
-            //{
-                //SortPing(1);
-                //SortPing(2);
-                //SortPing(3);
-                //SortPing(4);
-            //}
-            //else
-            //    MessageBox.Show(check_connection);
+            SortStyle();
 
             Application.DoEvents();
         }
@@ -935,25 +928,25 @@ namespace WindowsFormsApp1
 
         private void timer5_Tick(object sender, EventArgs e)
         {
-            //ClearGrid(dataGridView5, g_settings[4, 0]);
+            ClearGrid(dataGridView5, g_settings[4, 0]);
             SortPing(5);
         }
 
         private void timer6_Tick(object sender, EventArgs e)
         {
-            //ClearGrid(dataGridView6, g_settings[5, 0]);
+            ClearGrid(dataGridView6, g_settings[5, 0]);
             SortPing(6);
         }
 
         private void timer7_Tick(object sender, EventArgs e)
         {
-            //ClearGrid(dataGridView7, g_settings[6, 0]);
+            ClearGrid(dataGridView7, g_settings[6, 0]);
             SortPing(7);
         }
 
         private void timer8_Tick(object sender, EventArgs e)
         {
-            //ClearGrid(dataGridView8, g_settings[7, 0]);
+            ClearGrid(dataGridView8, g_settings[7, 0]);
             SortPing(8);
         }
 
@@ -979,22 +972,62 @@ namespace WindowsFormsApp1
 
         private void checkBox5_CheckedChanged(object sender, EventArgs e)
         {
-            //CheckChange(dataGridView5, Timer5, checkBox5, 5, g_settings[4, 0]);
+            CheckChange(dataGridView5, Timer5, checkBox5, 5, g_settings[4, 0]);
         }
 
         private void checkBox6_CheckedChanged(object sender, EventArgs e)
         {
-            //CheckChange(dataGridView6, Timer6, checkBox6, 6, g_settings[5, 0]);
+            CheckChange(dataGridView6, Timer6, checkBox6, 6, g_settings[5, 0]);
         }
 
         private void checkBox7_CheckedChanged(object sender, EventArgs e)
         {
-            //CheckChange(dataGridView7, Timer7, checkBox7, 7, g_settings[6, 0]);
+            CheckChange(dataGridView7, Timer7, checkBox7, 7, g_settings[6, 0]);
         }
 
         private void checkBox8_CheckedChanged(object sender, EventArgs e)
         {
-            //CheckChange(dataGridView8, Timer8, checkBox8, 8, g_settings[7, 0]);
+            CheckChange(dataGridView8, Timer8, checkBox8, 8, g_settings[7, 0]);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ShowSettings(1);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ShowSettings(2);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ShowSettings(3);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            ShowSettings(4);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            ShowSettings(5);
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            ShowSettings(6);
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            ShowSettings(7);
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            ShowSettings(8);
         }
 
         private void button11_Click(object sender, EventArgs e)
@@ -1038,7 +1071,7 @@ namespace WindowsFormsApp1
             if (Timer5.Enabled)
                 Timer5.Stop();
 
-            //ClearGrid(dataGridView5, g_settings[4, 0]);
+            ClearGrid(dataGridView5, g_settings[4, 0]);
             SortPing(5);
         }
 
@@ -1047,7 +1080,7 @@ namespace WindowsFormsApp1
             if (Timer6.Enabled)
                 Timer6.Stop();
 
-            //ClearGrid(dataGridView6, g_settings[5, 0]);
+            ClearGrid(dataGridView6, g_settings[5, 0]);
             SortPing(6);
         }
 
@@ -1056,7 +1089,7 @@ namespace WindowsFormsApp1
             if (Timer7.Enabled)
                 Timer7.Stop();
 
-            //ClearGrid(dataGridView7, g_settings[6, 0]);
+            ClearGrid(dataGridView7, g_settings[6, 0]);
             SortPing(7);
         }
 
@@ -1065,100 +1098,63 @@ namespace WindowsFormsApp1
             if (Timer8.Enabled)
                 Timer8.Stop();
 
-            //ClearGrid(dataGridView8, g_settings[7, 0]);
+            ClearGrid(dataGridView8, g_settings[7, 0]);
             SortPing(8);
         }
 
         private void dataGridView1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            int selected_row = dataGridView1.SelectedCells[0].RowIndex;
-            string s_name = dataGridView1[0, selected_row].Value.ToString();
-            string s_dns = dataGridView1[1, selected_row].Value.ToString();
-            string s_ip = dataGridView1[2, selected_row].Value.ToString();
-
-            if (!tracking)
-            {
-                tr = new Tracking(is_english, s_name, s_dns, s_ip);
-                tr.FormClosed += new FormClosedEventHandler(Tracking_Closed);
-                toolStripButton3.Enabled = false;
-                tracking = true;
-                tr.Show();
-            }
+            ShowTracking(dataGridView1);
         }
 
         private void dataGridView2_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            int selected_row = dataGridView2.SelectedCells[0].RowIndex;
-            string s_name = dataGridView2[0, selected_row].Value.ToString();
-            string s_dns = dataGridView2[1, selected_row].Value.ToString();
-            string s_ip = dataGridView2[2, selected_row].Value.ToString();
-
-            if (!tracking)
-            {
-                tr = new Tracking(is_english, s_name, s_dns, s_ip);
-                tr.FormClosed += new FormClosedEventHandler(Tracking_Closed);
-                toolStripButton3.Enabled = false;
-                tracking = true;
-                tr.Show();
-            }
+            ShowTracking(dataGridView2);
         }
 
         private void dataGridView3_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            int selected_row = dataGridView3.SelectedCells[0].RowIndex;
-            string s_name = dataGridView3[0, selected_row].Value.ToString();
-            string s_dns = dataGridView3[1, selected_row].Value.ToString();
-            string s_ip = dataGridView3[2, selected_row].Value.ToString();
-
-            if (!tracking)
-            {
-                tr = new Tracking(is_english, s_name, s_dns, s_ip);
-                tr.FormClosed += new FormClosedEventHandler(Tracking_Closed);
-                toolStripButton3.Enabled = false;
-                tracking = true;
-                tr.Show();
-            }
+            ShowTracking(dataGridView3);
         }
 
         private void dataGridView4_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            int selected_row = dataGridView4.SelectedCells[0].RowIndex;
-            string s_name = dataGridView4[0, selected_row].Value.ToString();
-            string s_dns = dataGridView4[1, selected_row].Value.ToString();
-            string s_ip = dataGridView4[2, selected_row].Value.ToString();
+            ShowTracking(dataGridView4);
+        }
 
-            if (!tracking)
-            {
-                tr = new Tracking(is_english, s_name, s_dns, s_ip);
-                tr.FormClosed += new FormClosedEventHandler(Tracking_Closed);
-                toolStripButton3.Enabled = false;
-                tracking = true;
-                tr.Show();
-            }
+        private void dataGridView5_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ShowTracking(dataGridView5);
+        }
+
+        private void dataGridView6_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ShowTracking(dataGridView6);
+        }
+
+        private void dataGridView7_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ShowTracking(dataGridView7);
+        }
+
+        private void dataGridView8_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ShowTracking(dataGridView8);
         }
 
         private void Open_iniTSMitem_Click(object sender, EventArgs e)
         {
-            //if (File.Exists("D:\\Амир\\Уст. программы\\Notepad++\\notepad++.exe"))
-                //Process.Start("D:\\Амир\\Уст. программы\\Notepad++\\notepad++.exe", "Config.ini");
-            //else
-                Process.Start("C:\\Windows\\System32\\notepad.exe", "Config.ini");
+            Process.Start("C:\\Windows\\System32\\notepad.exe", "Config.ini");
         }
 
         private void Open_logTSMitem_Click(object sender, EventArgs e)
         {
-            //if (File.Exists("D:\\Амир\\Уст. программы\\Notepad++\\notepad++.exe") && File.Exists("Log" + ".txt"))
-                //Process.Start("D:\\Амир\\Уст. программы\\Notepad++\\notepad++.exe", "Log" + ".txt");
-            //else
-                Process.Start("C:\\Windows\\System32\\notepad.exe", date + " log.txt");
+            Process.Start("C:\\Windows\\System32\\notepad.exe", DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt");
         }
 
         private void Open_clientsTSMitem_Click(object sender, EventArgs e)
         {
-            //if (File.Exists("D:\\Амир\\Уст. программы\\Notepad++\\notepad++.exe") && File.Exists("Clients.txt"))
-                //Process.Start("D:\\Амир\\Уст. программы\\Notepad++\\notepad++.exe", "Clients.txt");
-            //else
-                Process.Start("C:\\Windows\\System32\\notepad.exe", "Clients.txt");
+            Process.Start("C:\\Windows\\System32\\notepad.exe", "Clients.txt");
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
@@ -1176,11 +1172,7 @@ namespace WindowsFormsApp1
 
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
-            tr = new Tracking(is_english, "", "", "");
-            tr.FormClosed += new FormClosedEventHandler(Tracking_Closed);
-            toolStripButton3.Enabled = false;
-            tracking = true;
-            tr.Show();
+            ShowTracking();
         }
 
         private void Tracking_Closed(object sender, FormClosedEventArgs e)
@@ -1189,18 +1181,17 @@ namespace WindowsFormsApp1
             tracking = false;
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            settings = new Settings(is_english, 0, 3, 60, 1);
-            settings.FormClosed += new FormClosedEventHandler(Settings_Closed);
-            settings.Show();
-        }
-
         private void Settings_Closed(object sender, FormClosedEventArgs e)
         {
+            states[settings.Group, 1] = settings.DNS;
+            states[settings.Group, 2] = settings.IP;
+            states[settings.Group, 3] = settings.RT;
+
             g_settings[settings.Group, 2] = settings.Period;
             g_settings[settings.Group, 3] = settings.Timeout;
             g_settings[settings.Group, 4] = settings.Packets;
+
+            SortColumns();
         }
 
         private void Lang_rusTSMitem_Click(object sender, EventArgs e)
@@ -1237,7 +1228,7 @@ namespace WindowsFormsApp1
 
                 MinimumSize = new Size(896, 519);
             }
-            FormResized();
+            SortStyle();
         }
         
         private void Received_reply_g1(object sender, PingCompletedEventArgs e)
@@ -1370,13 +1361,13 @@ namespace WindowsFormsApp1
         
         private void Form_ChangedSize(object sender, EventArgs e)
         {
-            FormResized();
+            SortStyle();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            File.AppendAllText(date + " log.txt", "Программа закрыта " + date + " в " + DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString() + Environment.NewLine);
-            File.AppendAllText(date + " log.txt", Environment.NewLine);
+            File.AppendAllText(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt", "Программа закрыта " + DateTime.Now.Date.ToString().Substring(0, 11) + " в " + DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString() + Environment.NewLine);
+            File.AppendAllText(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt", Environment.NewLine);
         }
         #endregion События
     }

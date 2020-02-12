@@ -14,17 +14,25 @@ namespace WindowsFormsApp1
     {
         bool is_eng;
 
+        public bool DNS { get; private set; }
+        public bool IP { get; private set; }
+        public bool RT { get; private set; }
+
         public int Group { get; private set; }
-        public int Timeout { get; private set; }
         public int Period { get; private set; }
+        public int Timeout { get; private set; }
         public int Packets { get; private set; }
 
-        public Settings(bool loc_eng, int group, int timeout, int period, int packets)
+        public Settings(bool loc_eng, bool dns, bool ip, bool rt, int group, int period, int timeout, int packets)
         {
             is_eng = loc_eng;
+            DNS = dns;
+            IP = ip;
+            RT = rt;
+
             Group = group;
-            Timeout = timeout;
             Period = period;
+            Timeout = timeout;
             Packets = packets;
 
             InitializeComponent();
@@ -42,8 +50,8 @@ namespace WindowsFormsApp1
             if (is_eng)
             {
                 Text = "Settings of " + (Group + 1) + " clients group";
-                label1.Text = "Timeout:";
-                label2.Text = "Ping ever:";
+                label1.Text = "Ping ever:";
+                label2.Text = "Timeout:";
                 label3.Text = "Packets count:";
                 label4.Text = "sec";
                 label5.Text = "min";
@@ -53,8 +61,8 @@ namespace WindowsFormsApp1
             {
                 Text = "Настройки " + (Group + 1) + " группы клиентов";
 
-                label1.Text = "Время ожидания:";
-                label2.Text = "Период автопинга:";
+                label1.Text = "Период автопинга:";
+                label2.Text = "Время ожидания:";
                 label3.Text = "Кол-во пакетов:";
                 label4.Text = "сек";
                 label5.Text = "мин";

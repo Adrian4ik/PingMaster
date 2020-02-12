@@ -50,7 +50,6 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(186, 25);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Время ожидания:";
             // 
             // label2
             // 
@@ -60,7 +59,6 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(200, 25);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Период автопинга:";
             // 
             // label3
             // 
@@ -70,7 +68,6 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(172, 25);
             this.label3.TabIndex = 2;
-            this.label3.Text = "Кол-во пакетов:";
             // 
             // label4
             // 
@@ -80,7 +77,6 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(46, 25);
             this.label4.TabIndex = 3;
-            this.label4.Text = "сек";
             // 
             // label5
             // 
@@ -90,7 +86,6 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(51, 25);
             this.label5.TabIndex = 4;
-            this.label5.Text = "мин";
             // 
             // numericUpDown1
             // 
@@ -123,7 +118,6 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(110, 30);
             this.button1.TabIndex = 8;
-            this.button1.Text = "Применить";
             this.button1.UseVisualStyleBackColor = true;
             // 
             // Settings
@@ -145,7 +139,6 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Settings";
-            this.Text = "Settings";
             this.Load += new System.EventHandler(this.Settings_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();

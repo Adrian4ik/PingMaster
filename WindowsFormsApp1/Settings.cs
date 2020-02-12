@@ -40,8 +40,12 @@ namespace WindowsFormsApp1
 
         private void Preprocessing()
         {
-            numericUpDown1.Value = Timeout;
-            numericUpDown2.Value = Period;
+            checkBox1.Checked = DNS;
+            checkBox2.Checked = IP;
+            checkBox3.Checked = RT;
+
+            numericUpDown1.Value = Period;
+            numericUpDown2.Value = Timeout;
             numericUpDown3.Value = Packets;
         }
 
@@ -50,7 +54,10 @@ namespace WindowsFormsApp1
             if (is_eng)
             {
                 Text = "Settings of " + (Group + 1) + " clients group";
-                label1.Text = "Ping ever:";
+                checkBox1.Text = "Show DNS names";
+                checkBox2.Text = "Show IP addresses";
+                checkBox3.Text = "Show response time";
+                label1.Text = "Autoping period:";
                 label2.Text = "Timeout:";
                 label3.Text = "Packets count:";
                 label4.Text = "sec";
@@ -60,7 +67,9 @@ namespace WindowsFormsApp1
             else
             {
                 Text = "Настройки " + (Group + 1) + " группы клиентов";
-
+                checkBox1.Text = "Показывать DNS имена";
+                checkBox2.Text = "Показывать IP адреса";
+                checkBox3.Text = "Показывать время ответов";
                 label1.Text = "Период автопинга:";
                 label2.Text = "Время ожидания:";
                 label3.Text = "Кол-во пакетов:";
@@ -74,6 +83,36 @@ namespace WindowsFormsApp1
         {
             Preprocessing();
             Translate();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            DNS = checkBox1.Checked;
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            IP = checkBox1.Checked;
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            RT = checkBox1.Checked;
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            Period = (int)numericUpDown1.Value;
+        }
+
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+            Timeout = (int)numericUpDown2.Value;
+        }
+
+        private void numericUpDown3_ValueChanged(object sender, EventArgs e)
+        {
+            Packets = (int)numericUpDown3.Value;
         }
     }
 }

@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsFormsApp1
@@ -60,8 +53,8 @@ namespace WindowsFormsApp1
                 label1.Text = "Autoping period:";
                 label2.Text = "Timeout:";
                 label3.Text = "Packets count:";
-                label4.Text = "sec";
-                label5.Text = "min";
+                label4.Text = "min";
+                label5.Text = "sec";
                 button1.Text = "Apply";
             }
             else
@@ -73,8 +66,8 @@ namespace WindowsFormsApp1
                 label1.Text = "Период автопинга:";
                 label2.Text = "Время ожидания:";
                 label3.Text = "Кол-во пакетов:";
-                label4.Text = "сек";
-                label5.Text = "мин";
+                label4.Text = "мин";
+                label5.Text = "сек";
                 button1.Text = "Применить";
             }
         }
@@ -92,12 +85,12 @@ namespace WindowsFormsApp1
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
-            IP = checkBox1.Checked;
+            IP = checkBox2.Checked;
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
-            RT = checkBox1.Checked;
+            RT = checkBox3.Checked;
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
@@ -113,6 +106,11 @@ namespace WindowsFormsApp1
         private void numericUpDown3_ValueChanged(object sender, EventArgs e)
         {
             Packets = (int)numericUpDown3.Value;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

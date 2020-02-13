@@ -115,7 +115,8 @@ namespace WindowsFormsApp1
 
             Counting();
             FillClientsList();
-            FillGrids();
+            EnableElements();
+            SortGrids();
 
             checkBox1.Checked = states[0, 0];
             checkBox2.Checked = states[1, 0];
@@ -365,6 +366,13 @@ namespace WindowsFormsApp1
             else
                 MessageBox.Show(fill_clients_list);
 
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 11; j++)
+                    g_lists[i, j] = new string[g_settings[i, 0]];
+        }
+
+        private void EnableElements()
+        {
             if (groups_num > 1)
                 groupBox2.Visible = true;
 
@@ -386,39 +394,6 @@ namespace WindowsFormsApp1
             if (groups_num > 7)
                 groupBox8.Visible = true;
 
-            for (int i = 0; i < 8; i++)
-                for (int j = 0; j < 11; j++)
-                    g_lists[i, j] = new string[g_settings[i, 0]];
-        }
-
-        private void FillClientsList()
-        {
-            for (int s = 0, h = 0, group = 0; s < al.Count(); s++)
-            {
-                if (al[s] == "")
-                {
-                    group++;
-                    h = 0;
-                }
-                else
-                {
-                    for (int c = 0, flag = 0; c < al[s].Length; c++)
-                    {
-                        if (al[s][c] == '/') // Правило разбиения строки на компоненты (Имя/DNS/IP)
-                            flag++;
-                        else
-                            g_lists[group, flag][h] += al[s][c];
-                    }
-                    h++;
-                }
-            }
-        }
-
-        //
-        // исправить
-        //
-        private void FillGrids()
-        {
             if (g_settings[0, 0] >= 15)
                 dataGridView1.Rows.Add(g_settings[0, 0]);
             else
@@ -458,44 +433,62 @@ namespace WindowsFormsApp1
                 dataGridView8.Rows.Add(g_settings[7, 0]);
             else
                 dataGridView8.Rows.Add(15);
+        }
 
-
-            
-            for (int i = 0, j = 0; i < ab.Count(); i++, j++)
+        private void FillClientsList()
+        {
+            for (int s = 0, cl = 0, group = 0; s < al.Count(); s++)
             {
-                if (ab[i].Name == "")
-                    j = -1;
+                if (al[s] == "")
+                {
+                    group++;
+                    cl = 0;
+                }
                 else
                 {
-                    switch (ab[i].Group)
+                    for (int c = 0, flag = 0; c < al[s].Length; c++)
                     {
-                        case 1:
-                            dataGridView1[0, j].Value = ab[i].Name;
-                            dataGridView1[1, j].Value = ab[i].DNS;
-                            dataGridView1[2, j].Value = ab[i].IP;
-                            ip_g1[j] = ab[i].IP;
-                            break;
-                        case 2:
-                            dataGridView2[0, j].Value = ab[i].Name;
-                            dataGridView2[1, j].Value = ab[i].DNS;
-                            dataGridView2[2, j].Value = ab[i].IP;
-                            ip_g2[j] = ab[i].IP;
-                            break;
-                        case 3:
-                            dataGridView3[0, j].Value = ab[i].Name;
-                            dataGridView3[1, j].Value = ab[i].DNS;
-                            dataGridView3[2, j].Value = ab[i].IP;
-                            ip_g3[j] = ab[i].IP;
-                            break;
-                        case 4:
-                            dataGridView4[0, j].Value = ab[i].Name;
-                            dataGridView4[1, j].Value = ab[i].DNS;
-                            dataGridView4[2, j].Value = ab[i].IP;
-                            ip_g4[j] = ab[i].IP;
-                            break;
+                        if (al[s][c] == '/') // Правило разбиения строки на компоненты (Имя/DNS/IP)
+                            flag++;
+                        else
+                            g_lists[group, flag][cl] += al[s][c];
                     }
+                    cl++;
                 }
             }
+        }
+
+        private void SortGrids()
+        {
+            FillGrid(dataGridView1, 0);
+
+            if (groups_num > 1)
+                FillGrid(dataGridView2, 1);
+
+            if (groups_num > 2)
+                FillGrid(dataGridView3, 2);
+
+            if (groups_num > 3)
+                FillGrid(dataGridView4, 3);
+
+            if (groups_num > 4)
+                FillGrid(dataGridView5, 4);
+
+            if (groups_num > 5)
+                FillGrid(dataGridView6, 5);
+
+            if (groups_num > 6)
+                FillGrid(dataGridView7, 6);
+
+            if (groups_num > 7)
+                FillGrid(dataGridView8, 7);
+        }
+
+        private void FillGrid(DataGridView grid, int group)
+        {
+            for (int cl = 0; cl < g_settings[group, 0]; cl++)
+                for(int col = 0; col < 3; col++)
+                    grid[col, cl].Value = g_lists[group, col][cl];
         }
 
         private void SortPing(int group)

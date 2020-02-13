@@ -22,59 +22,56 @@ namespace WindowsFormsApp1
         bool is_english = false, // проверка на использование английской версии программы
             tracking = false; // проверка открытого окна слежения (для того, чтобы не создавалось более 1 окна слежения)
 
-        bool[,] states = new bool[8, 4];
-        // настройки (да/нет) групп клиентов, принимаемых из файла: [группа (1-8), настройки (автопинговать/показывать dns/показывать ip/показывать время ответа)]
+        readonly bool[,] states = new bool[8, 4]; // настройки (да/нет) групп клиентов, принимаемых из файла: [группа (1-8), настройки (автопинговать/показывать dns/показывать ip/показывать время ответа)]
 
         int groups_num = 0; // количество групп, задействованных при старте программы
 
-        int[,] g_settings = new int[8, 5];
-        // настройки групп в виде: [группа (1-8), настройки (кол-во клиентов/текущий клиент/текущий период автопинга/текущее кол-во запросов/текущий таймаут)]
+        readonly int[,] g_settings = new int[8, 5]; // настройки групп в виде: [группа (1-8), настройки (кол-во клиентов/текущий клиент/текущий период автопинга/текущее кол-во запросов/текущий таймаут)]
 
         string pinging, check_connection, fill_clients_list; // текст некоторых элементов, зависящий от выбранного языка
 
         string[] al; // сырой список абонентов из файла
 
-        string[,][] g_lists = new string[8, 11][]; // включает в себя вышеописанную строку кода, а также заменяет нижеописанную структуру данных client
-        // трёхмерный список клиентов в виде: [группа (1-8), аргументы (имя/dns/ip/время 1 опроса/ответ 1 опроса/время 2 опроса/.../ответ 4 опроса)] [клиент]
+        readonly string[,][] g_lists = new string[8, 11][]; // трёхмерный список клиентов в виде: [группа (1-8), аргументы (имя/dns/ip/время 1 опроса/ответ 1 опроса/время 2 опроса/.../ответ 4 опроса)] [клиент]
 
-        static Ping ping_g1 = new Ping();
-        static Ping ping_g2 = new Ping();
-        static Ping ping_g3 = new Ping();
-        static Ping ping_g4 = new Ping();
-        static Ping ping_g5 = new Ping();
-        static Ping ping_g6 = new Ping();
-        static Ping ping_g7 = new Ping();
-        static Ping ping_g8 = new Ping();
+        static readonly Ping ping_g1 = new Ping(),
+            ping_g2 = new Ping(),
+            ping_g3 = new Ping(),
+            ping_g4 = new Ping(),
+            ping_g5 = new Ping(),
+            ping_g6 = new Ping(),
+            ping_g7 = new Ping(),
+            ping_g8 = new Ping();
 
-        static AutoResetEvent waiter1 = new AutoResetEvent(false);
-        static AutoResetEvent waiter2 = new AutoResetEvent(false);
-        static AutoResetEvent waiter3 = new AutoResetEvent(false);
-        static AutoResetEvent waiter4 = new AutoResetEvent(false);
-        static AutoResetEvent waiter5 = new AutoResetEvent(false);
-        static AutoResetEvent waiter6 = new AutoResetEvent(false);
-        static AutoResetEvent waiter7 = new AutoResetEvent(false);
-        static AutoResetEvent waiter8 = new AutoResetEvent(false);
+        static readonly AutoResetEvent waiter1 = new AutoResetEvent(false),
+            waiter2 = new AutoResetEvent(false),
+            waiter3 = new AutoResetEvent(false),
+            waiter4 = new AutoResetEvent(false),
+            waiter5 = new AutoResetEvent(false),
+            waiter6 = new AutoResetEvent(false),
+            waiter7 = new AutoResetEvent(false),
+            waiter8 = new AutoResetEvent(false);
 
-        PingReply reply_g1;
-        PingReply reply_g2;
-        PingReply reply_g3;
-        PingReply reply_g4;
-        PingReply reply_g5;
-        PingReply reply_g6;
-        PingReply reply_g7;
-        PingReply reply_g8;
+        PingReply reply_g1, reply_g2, reply_g3, reply_g4, reply_g5, reply_g6, reply_g7, reply_g8;
 
         Settings settings;
+
         Tracking tr;
 
+        //
+        //
+        //
+
         #region Константы
+
         private const int C_sec = 1000, C_min = 60000;
 
-        private string[] StandartList = new string[]
+        private readonly string[] StandartList = new string[]
             {"Loopback/ /127.0.0.1", "БРИ-1/ /10.1.1.254", "БРИ-2/ /10.1.2.254", "БРИ-3/ /192.168.60.254", "SM BelAir WAP/ /192.168.68.73", "АСП/ /10.1.2.250", "",
             "USL ER-SWB-J1,J2/ /192.168.67.250", "USL ER-SWA/ /192.168.60.253", "ISS Server 1/ /192.168.60.51", "LS1/ /192.168.60.53", "Lab printer/ /192.168.60.82", "",
             "RSE1/ /10.1.1.3", "RSK1/ /10.1.1.4", "RSK2/ /10.1.1.5", "RSS1/ /10.1.2.1", "RSS2/ /10.1.1.1", "RSE-Med/ /10.1.1.7", "Mediaserver AGAT/ /10.1.1.80", "SM Printer/ /192.168.60.81", "",
             "FS1/ /10.1.1.100", "ТВМ1-Н/ /10.1.3.1", "БПИ-НЧ (TRPU)/ /192.168.249.1", "БЗУ/ /10.1.11.5", "MDM (ШСС)/ /10.1.3.50"};
+
         #endregion Константы
 
         //
@@ -388,81 +385,33 @@ namespace WindowsFormsApp1
 
             if (groups_num > 7)
                 groupBox8.Visible = true;
+
+            for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 11; j++)
+                    g_lists[i, j] = new string[g_settings[i, 0]];
         }
 
-        //
-        // Исправить
-        //
         private void FillClientsList()
         {
-            ab = new client[al.Count()];
-
-            //g_lists[1, 0] = new string[322];
-            //g_lists[1, 0][228] = "kek";
-            //g_lists[1, 0].Count;
-
-            for (int s = 0, grid = 0; s < al.Count(); s++)
+            for (int s = 0, h = 0, group = 0; s < al.Count(); s++)
             {
                 if (al[s] == "")
                 {
-                    ab[s].Name = "";
-                    grid++;
+                    group++;
+                    h = 0;
                 }
                 else
                 {
-                    string str = al[s];
-
-                    for (int c = 0, flag = 1; c < al[s].Length; c++)
+                    for (int c = 0, flag = 0; c < al[s].Length; c++)
                     {
-                        if (str[c] == '/') // Правило разбиения строки на компоненты (Имя/DNS/IP)
+                        if (al[s][c] == '/') // Правило разбиения строки на компоненты (Имя/DNS/IP)
                             flag++;
                         else
-                        {
-                            switch (flag)
-                            {
-                                case 1:
-                                    ab[s].Name += str[c];
-                                    break;
-                                case 2:
-                                    ab[s].DNS += str[c];
-                                    break;
-                                case 3:
-                                    ab[s].IP += str[c];
-                                    break;
-                            }
-                        }
+                            g_lists[group, flag][h] += al[s][c];
                     }
-                }
-                ab[s].Group = grid + 1;
-
-                switch (grid)
-                {
-                    case 0:
-                        ab[s].PosInGr = s;
-                        g_settings[0, 0]++;
-                        break;
-                    case 1:
-                        ab[s].PosInGr = s - g_settings[0, 0];
-                        g_settings[1, 0]++;
-                        break;
-                    case 2:
-                        ab[s].PosInGr = s - g_settings[0, 0] - g_settings[1, 0];
-                        g_settings[2, 0]++;
-                        break;
-                    case 3:
-                        ab[s].PosInGr = s - g_settings[0, 0] - g_settings[1, 0] - g_settings[2, 0];
-                        g_settings[3, 0]++;
-                        break;
+                    h++;
                 }
             }
-            g_settings[1, 0]--;
-            g_settings[2, 0]--;
-            g_settings[3, 0]--;
-
-            ip_g1 = new string[g_settings[0, 0]];
-            ip_g2 = new string[g_settings[1, 0]];
-            ip_g3 = new string[g_settings[2, 0]];
-            ip_g4 = new string[g_settings[3, 0]];
         }
 
         //
@@ -511,7 +460,7 @@ namespace WindowsFormsApp1
                 dataGridView8.Rows.Add(15);
 
 
-
+            
             for (int i = 0, j = 0; i < ab.Count(); i++, j++)
             {
                 if (ab[i].Name == "")
@@ -580,6 +529,9 @@ namespace WindowsFormsApp1
             }
         }
 
+        //
+        // иправить
+        //
         private void PingGroup(int current_group, DataGridView grid, Button button, CheckBox check, Ping ping, int timeout, AutoResetEvent waiter)
         {
             current_group--;
@@ -653,6 +605,9 @@ namespace WindowsFormsApp1
             }
         }
         
+        //
+        // исправить
+        //
         private void DisplayReply(int current_group, DataGridView grid, PingReply reply, Button button, CheckBox check)
         {
             current_group--;

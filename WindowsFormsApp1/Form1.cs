@@ -26,7 +26,7 @@ namespace WindowsFormsApp1
 
         int groups_num = 0; // количество групп, задействованных при старте программы
 
-        int[,] g_settings = new int[8, 5]; // настройки групп в виде: [группа (1-8), настройки (кол-во клиентов/текущий клиент/текущий период автопинга/текущее кол-во запросов/текущий таймаут)]
+        int[,] g_settings = new int[8, 6]; // настройки групп в виде: [группа (1-8), настройки (кол-во клиентов/текущий клиент/текущий период автопинга/текущий таймаут/кол-во запросов/текущее кол-во запросов)]
 
         string pinging, check_connection, fill_clients_list; // текст некоторых элементов, зависящий от выбранного языка
 
@@ -528,9 +528,6 @@ namespace WindowsFormsApp1
             }
         }
 
-        //
-        // иправить
-        //
         private void PingGroup(int current_group, DataGridView grid, Button button, CheckBox check, Ping ping, int timeout, AutoResetEvent waiter)
         {
             current_group--;
@@ -602,31 +599,19 @@ namespace WindowsFormsApp1
             }
         }
         
-        //
-        // исправить
-        //
         private void DisplayReply(int current_group, DataGridView grid, PingReply reply, Button button, CheckBox check)
         {
             current_group--;
 
+            grid[3, g_settings[current_group, 1]].Value = DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString();
+
             grid[4, g_settings[current_group, 1]].Value = reply.Status;
 
-            string c = "Опрос " + dataGridView1[0, g_settings[current_group, 1]].Value + " " + dataGridView1[1, g_settings[current_group, 1]].Value + " " + dataGridView1[2, g_settings[current_group, 1]].Value + Environment.NewLine;
-
-            File.AppendAllText(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt", c);
-
-            c = DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString();
-            c += " " + reply_g1.Status;
-
-            if (reply_g1.Status == IPStatus.Success)
+            if (reply.Status == IPStatus.Success)
             {
+                grid[4, g_settings[current_group, 1]].Value += " " + reply.RoundtripTime.ToString() + " ms";
                 grid[4, g_settings[current_group, 1]].Style.BackColor = Color.GreenYellow;
                 grid[4, g_settings[current_group, 1]].Style.SelectionBackColor = Color.DarkGreen;
-                c += " " + reply_g1.RoundtripTime + " ms";
-
-                //IPAddressInformation iP;
-                //long huh = 228;
-                //IPAddress kek = new IPAddress(huh);
             }
             else
             {
@@ -634,24 +619,22 @@ namespace WindowsFormsApp1
                 grid[4, g_settings[current_group, 1]].Style.SelectionBackColor = Color.DarkRed;
             }
 
-            File.AppendAllText(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt", c + Environment.NewLine);
-
-            if (g_settings[current_group, 1] == g_settings[current_group, 4])
+            if (g_settings[current_group, 5] == g_settings[current_group, 4])
             {
                 g_settings[current_group, 1]++;
-                g_settings[current_group, 1] = 0;
+                g_settings[current_group, 5] = 0;
             }
             else
-                g_settings[current_group, 1]++;
+                g_settings[current_group, 5]++;
 
             if (g_settings[current_group, 1] < g_settings[current_group, 0])
                 SortPing(current_group + 1);
             else
             {
                 g_settings[current_group, 1] = 0;
+                button.Enabled = true;
+                check.Enabled = true;
             }
-            button.Enabled = true;
-            check.Enabled = true;
         }
 
         private void CheckChange(DataGridView grid, System.Windows.Forms.Timer timer, CheckBox check, int currrent_group, int count)
@@ -1353,6 +1336,15 @@ namespace WindowsFormsApp1
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            ping_g1.SendAsyncCancel();
+            ping_g2.SendAsyncCancel();
+            ping_g3.SendAsyncCancel();
+            ping_g4.SendAsyncCancel();
+            ping_g5.SendAsyncCancel();
+            ping_g6.SendAsyncCancel();
+            ping_g7.SendAsyncCancel();
+            ping_g8.SendAsyncCancel();
+
             File.AppendAllText(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt", "Программа закрыта " + DateTime.Now.Date.ToString().Substring(0, 11) + " в " + DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString() + Environment.NewLine);
             File.AppendAllText(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt", Environment.NewLine);
         }

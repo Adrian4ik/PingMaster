@@ -66,11 +66,22 @@ namespace WindowsFormsApp1
 
         private const int C_sec = 1000, C_min = 60000;
 
-        private readonly string[] StandartList = new string[]
-            {"Loopback/ /127.0.0.1", "БРИ-1/ /10.1.1.254", "БРИ-2/ /10.1.2.254", "БРИ-3/ /192.168.60.254", "SM BelAir WAP/ /192.168.68.73", "АСП/ /10.1.2.250", "",
+        private readonly string[] StandartConfigList = new string[]
+            { "Language: rus", "Autoping all: 1", "",
+            "Group 1 autoping: 0", "Group 1 show ip: 0", "Group 1 show response time: 1", "Group 1 autoping timer (min): 1", "Group 1 timeout (sec): 3", "Group 1 packets count: 1", "",
+            "Group 2 autoping: 0", "Group 2 show ip: 0", "Group 2 show response time: 1", "Group 2 autoping timer (min): 1", "Group 2 timeout (sec): 3", "Group 2 packets count: 1", "",
+            "Group 3 autoping: 0", "Group 3 show ip: 0", "Group 3 show response time: 1", "Group 3 autoping timer (min): 1", "Group 3 timeout (sec): 3", "Group 3 packets count: 1", "",
+            "Group 4 autoping: 0", "Group 4 show ip: 0", "Group 4 show response time: 1", "Group 4 autoping timer (min): 1", "Group 4 timeout (sec): 3", "Group 4 packets count: 1", "",
+            "Group 5 autoping: 0", "Group 5 show ip: 0", "Group 5 show response time: 1", "Group 5 autoping timer (min): 1", "Group 5 timeout (sec): 3", "Group 5 packets count: 1", "",
+            "Group 6 autoping: 0", "Group 6 show ip: 0", "Group 6 show response time: 1", "Group 6 autoping timer (min): 1", "Group 6 timeout (sec): 3", "Group 6 packets count: 1", "",
+            "Group 7 autoping: 0", "Group 7 show ip: 0", "Group 7 show response time: 1", "Group 7 autoping timer (min): 1", "Group 7 timeout (sec): 3", "Group 7 packets count: 1", "",
+            "Group 8 autoping: 0", "Group 8 show ip: 0", "Group 8 show response time: 1", "Group 8 autoping timer (min): 1", "Group 8 timeout (sec): 3", "Group 8 packets count: 1" };
+
+        private readonly string[] StandartClientList = new string[]
+            { "Loopback/ /127.0.0.1", "БРИ-1/ /10.1.1.254", "БРИ-2/ /10.1.2.254", "БРИ-3/ /192.168.60.254", "SM BelAir WAP/ /192.168.68.73", "АСП/ /10.1.2.250", "",
             "USL ER-SWB-J1,J2/ /192.168.67.250", "USL ER-SWA/ /192.168.60.253", "ISS Server 1/ /192.168.60.51", "LS1/ /192.168.60.53", "Lab printer/ /192.168.60.82", "",
             "RSE1/ /10.1.1.3", "RSK1/ /10.1.1.4", "RSK2/ /10.1.1.5", "RSS1/ /10.1.2.1", "RSS2/ /10.1.1.1", "RSE-Med/ /10.1.1.7", "Mediaserver AGAT/ /10.1.1.80", "SM Printer/ /192.168.60.81", "",
-            "FS1/ /10.1.1.100", "ТВМ1-Н/ /10.1.3.1", "БПИ-НЧ (TRPU)/ /192.168.249.1", "БЗУ/ /10.1.11.5", "MDM (ШСС)/ /10.1.3.50"};
+            "FS1/ /10.1.1.100", "ТВМ1-Н/ /10.1.3.1", "БПИ-НЧ (TRPU)/ /192.168.249.1", "БЗУ/ /10.1.11.5", "MDM (ШСС)/ /10.1.3.50" };
 
         #endregion Константы
 
@@ -91,7 +102,7 @@ namespace WindowsFormsApp1
             {
                 FileStream f = File.Create("Clients.txt");
                 f.Close();
-                File.WriteAllLines("Clients.txt", StandartList);
+                File.WriteAllLines("Clients.txt", StandartClientList);
             }
 
             al = File.ReadAllLines("Clients.txt");
@@ -118,6 +129,7 @@ namespace WindowsFormsApp1
             SortColumns();
             Translate();
             CopyText();
+            CopyElements();
 
             checkBox1.Checked = states[0, 0];
             checkBox2.Checked = states[1, 0];
@@ -157,6 +169,7 @@ namespace WindowsFormsApp1
             {
                 FileStream f = File.Create("Config.ini");
                 f.Close();
+                File.WriteAllLines("Config.ini", StandartConfigList);
             }
 
             string[] config = File.ReadAllLines("Config.ini");
@@ -368,10 +381,10 @@ namespace WindowsFormsApp1
                 LanguageTSMitem.Text = "Language";
                 Lang_rusTSMitem.Text = "Russian";
                 Lang_engTSMitem.Text = "English";
-                TablesTSMitem.Text = "Tables";
-                Switch_dnsTSMitem.Text = "On/Off DNS";
-                Switch_ipTSMitem.Text = "On/Off IP";
-                Switch_timeTSMitem.Text = "On/Off Time";
+                //TablesTSMitem.Text = "Tables";
+                //Switch_dnsTSMitem.Text = "On/Off DNS";
+                //Switch_ipTSMitem.Text = "On/Off IP";
+                //Switch_timeTSMitem.Text = "On/Off Time";
                 toolStripButton5.Text = "Help";
                 User_guideTSMitem.Text = "User's guide";
                 AboutTSMitem.Text = "About";
@@ -416,10 +429,10 @@ namespace WindowsFormsApp1
                 LanguageTSMitem.Text = "Язык";
                 Lang_rusTSMitem.Text = "Русский";
                 Lang_engTSMitem.Text = "Английский";
-                TablesTSMitem.Text = "Таблицы";
-                Switch_dnsTSMitem.Text = "Вкл/Выкл DNS";
-                Switch_ipTSMitem.Text = "Вкл/Выкл IP";
-                Switch_timeTSMitem.Text = "Вкл/Выкл Время";
+                //TablesTSMitem.Text = "Таблицы";
+                //Switch_dnsTSMitem.Text = "Вкл/Выкл DNS";
+                //Switch_ipTSMitem.Text = "Вкл/Выкл IP";
+                //Switch_timeTSMitem.Text = "Вкл/Выкл Время";
                 toolStripButton5.Text = "Помощь";
                 User_guideTSMitem.Text = "Руководство пользователя";
                 AboutTSMitem.Text = "О программе";
@@ -495,6 +508,57 @@ namespace WindowsFormsApp1
             Column6e.HeaderText = Column1e.HeaderText;
             Column7e.HeaderText = Column1e.HeaderText;
             Column8e.HeaderText = Column1e.HeaderText;
+        }
+
+        private void CopyElements()
+        {
+            checkBox2.Location = new Point(checkBox1.Location.X, checkBox1.Location.Y);
+            checkBox3.Location = new Point(checkBox1.Location.X, checkBox1.Location.Y);
+            checkBox4.Location = new Point(checkBox1.Location.X, checkBox1.Location.Y);
+            checkBox5.Location = new Point(checkBox1.Location.X, checkBox1.Location.Y);
+            checkBox6.Location = new Point(checkBox1.Location.X, checkBox1.Location.Y);
+            checkBox7.Location = new Point(checkBox1.Location.X, checkBox1.Location.Y);
+            checkBox8.Location = new Point(checkBox1.Location.X, checkBox1.Location.Y);
+
+            button2.Location = new Point(button1.Location.X, button1.Location.Y);
+            button3.Location = new Point(button1.Location.X, button1.Location.Y);
+            button4.Location = new Point(button1.Location.X, button1.Location.Y);
+            button5.Location = new Point(button1.Location.X, button1.Location.Y);
+            button6.Location = new Point(button1.Location.X, button1.Location.Y);
+            button7.Location = new Point(button1.Location.X, button1.Location.Y);
+            button8.Location = new Point(button1.Location.X, button1.Location.Y);
+
+            button12.Location = new Point(button11.Location.X, button11.Location.Y);
+            button13.Location = new Point(button11.Location.X, button11.Location.Y);
+            button14.Location = new Point(button11.Location.X, button11.Location.Y);
+            button15.Location = new Point(button11.Location.X, button11.Location.Y);
+            button16.Location = new Point(button11.Location.X, button11.Location.Y);
+            button17.Location = new Point(button11.Location.X, button11.Location.Y);
+            button18.Location = new Point(button11.Location.X, button11.Location.Y);
+
+            dataGridView2.Location = new Point(dataGridView1.Location.X, dataGridView1.Location.Y);
+            dataGridView3.Location = new Point(dataGridView1.Location.X, dataGridView1.Location.Y);
+            dataGridView4.Location = new Point(dataGridView1.Location.X, dataGridView1.Location.Y);
+            dataGridView5.Location = new Point(dataGridView1.Location.X, dataGridView1.Location.Y);
+            dataGridView6.Location = new Point(dataGridView1.Location.X, dataGridView1.Location.Y);
+            dataGridView7.Location = new Point(dataGridView1.Location.X, dataGridView1.Location.Y);
+            dataGridView8.Location = new Point(dataGridView1.Location.X, dataGridView1.Location.Y);
+
+            groupBox2.Location = new Point(groupBox1.Location.X, groupBox1.Location.Y);
+            groupBox3.Location = new Point(groupBox1.Location.X, groupBox1.Location.Y);
+            groupBox4.Location = new Point(groupBox1.Location.X, groupBox1.Location.Y);
+            groupBox5.Location = new Point(groupBox1.Location.X, groupBox1.Location.Y);
+            groupBox6.Location = new Point(groupBox1.Location.X, groupBox1.Location.Y);
+            groupBox7.Location = new Point(groupBox1.Location.X, groupBox1.Location.Y);
+            groupBox8.Location = new Point(groupBox1.Location.X, groupBox1.Location.Y);
+
+            groupBox2.Size = new Size(groupBox1.Width, groupBox1.Height);
+            groupBox3.Size = new Size(groupBox1.Width, groupBox1.Height);
+            groupBox4.Size = new Size(groupBox1.Width, groupBox1.Height);
+            groupBox5.Size = new Size(groupBox1.Width, groupBox1.Height);
+            groupBox6.Size = new Size(groupBox1.Width, groupBox1.Height);
+            groupBox7.Size = new Size(groupBox1.Width, groupBox1.Height);
+            groupBox8.Size = new Size(groupBox1.Width, groupBox1.Height);
         }
 
         private void SortPing(int group)
@@ -718,28 +782,30 @@ namespace WindowsFormsApp1
 
         private void ResizeStyle4()
         {
-            groupBox1.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 50) / 2);
-            groupBox2.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 50) / 2);
-            groupBox2.Location = new Point(groupBox1.Width + 20, 25);
-            groupBox3.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 50) / 2);
-            groupBox3.Location = new Point(10, groupBox1.Height + 35);
-            groupBox4.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 50) / 2);
-            groupBox4.Location = new Point(groupBox1.Width + 20, groupBox1.Height + 35);
+            groupBox1.Location = new Point(10, toolStrip1.Size.Height);
+            groupBox2.Location = new Point(groupBox1.Width + 20, groupBox2.Location.Y);
+            groupBox3.Location = new Point(groupBox1.Location.X, groupBox1.Height + toolStrip1.Size.Height + 5);
+            groupBox4.Location = new Point(groupBox1.Width + 20, groupBox1.Height + toolStrip1.Size.Height + 5);
 
-            dataGridView1.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 95);
-            dataGridView2.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 95);
-            dataGridView3.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 95);
-            dataGridView4.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 95);
+            groupBox1.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 60) / 2);
+            groupBox2.Size = new Size(groupBox1.Size.Width, groupBox1.Size.Height);
+            groupBox3.Size = new Size(groupBox1.Size.Width, groupBox1.Size.Height);
+            groupBox4.Size = new Size(groupBox1.Size.Width, groupBox1.Size.Height);
+
+            dataGridView1.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 90);
+            dataGridView2.Size = new Size(dataGridView1.Size.Width, dataGridView1.Size.Height);
+            dataGridView3.Size = new Size(dataGridView1.Size.Width, dataGridView1.Size.Height);
+            dataGridView4.Size = new Size(dataGridView1.Size.Width, dataGridView1.Size.Height);
 
             //checkBox1.Location = new Point(groupBox1.Size.Width - 125, 20);
             //checkBox2.Location = new Point(groupBox2.Size.Width - 125, 20);
             //checkBox3.Location = new Point(groupBox3.Size.Width - 125, 20);
             //checkBox4.Location = new Point(groupBox4.Size.Width - 125, 20);
 
-            button11.Location = new Point(groupBox1.Size.Width - 105, 60);
-            button12.Location = new Point(groupBox2.Size.Width - 105, 60);
-            button13.Location = new Point(groupBox3.Size.Width - 105, 60);
-            button14.Location = new Point(groupBox4.Size.Width - 105, 60);
+            button11.Location = new Point(groupBox1.Size.Width - 105, 50);
+            button12.Location = new Point(button11.Location.X, button11.Location.Y);
+            button13.Location = new Point(button11.Location.X, button11.Location.Y);
+            button14.Location = new Point(button11.Location.X, button11.Location.Y);
 
             Column1e.Width = dataGridView1.Width - 120;
             Column2e.Width = dataGridView2.Width - 120;
@@ -868,7 +934,7 @@ namespace WindowsFormsApp1
             Size = new Size(916, 739);
             SortStyle();
 
-            Application.DoEvents();
+            //Application.DoEvents();
         }
 
         private void timer1_Tick(object sender, EventArgs e)

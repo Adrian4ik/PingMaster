@@ -20,7 +20,8 @@ namespace WindowsFormsApp1
     public partial class Form1 : Form
     {
         bool is_english = false, // проверка на использование английской версии программы
-            is_tracking = false; // проверка открытого окна слежения (для того, чтобы не создавалось более 1 окна слежения)
+            is_tracking = false, // проверка открытого окна слежения (для того, чтобы не создавалось более 1 окна слежения)
+            is_ping_all = false;
 
         bool[,] states = new bool[8, 4]; // настройки (да/нет) групп клиентов, принимаемых из файла: [группа (1-8), настройки (автопинговать/показывать dns/показывать ip/показывать время ответа)]
 
@@ -30,7 +31,8 @@ namespace WindowsFormsApp1
 
         string pinging, check_connection, fill_clients_list; // текст некоторых элементов, зависящий от выбранного языка
 
-        string[] al; // сырой список абонентов из файла
+        string[] al, // сырой список абонентов из файла
+            g_names = new string[8];
 
         string[,][] g_lists = new string[8, 11][]; // трёхмерный список клиентов в виде: [группа (1-8), аргументы (имя/dns/ip/время 1 опроса/ответ 1 опроса/время 2 опроса/.../ответ 4 опроса)] [клиент]
 
@@ -67,19 +69,19 @@ namespace WindowsFormsApp1
         private const int C_sec = 1000, C_min = 60000;
 
         private readonly string[] StandartConfigList = new string[]
-            { "Language: rus", "Autoping all: 1", "",
-            "Group 1 autoping: 0", "Group 1 show ip: 0", "Group 1 show response time: 1", "Group 1 autoping timer (min): 1", "Group 1 timeout (sec): 3", "Group 1 packets count: 1", "",
-            "Group 2 autoping: 0", "Group 2 show ip: 0", "Group 2 show response time: 1", "Group 2 autoping timer (min): 1", "Group 2 timeout (sec): 3", "Group 2 packets count: 1", "",
-            "Group 3 autoping: 0", "Group 3 show ip: 0", "Group 3 show response time: 1", "Group 3 autoping timer (min): 1", "Group 3 timeout (sec): 3", "Group 3 packets count: 1", "",
-            "Group 4 autoping: 0", "Group 4 show ip: 0", "Group 4 show response time: 1", "Group 4 autoping timer (min): 1", "Group 4 timeout (sec): 3", "Group 4 packets count: 1", "",
-            "Group 5 autoping: 0", "Group 5 show ip: 0", "Group 5 show response time: 1", "Group 5 autoping timer (min): 1", "Group 5 timeout (sec): 3", "Group 5 packets count: 1", "",
-            "Group 6 autoping: 0", "Group 6 show ip: 0", "Group 6 show response time: 1", "Group 6 autoping timer (min): 1", "Group 6 timeout (sec): 3", "Group 6 packets count: 1", "",
-            "Group 7 autoping: 0", "Group 7 show ip: 0", "Group 7 show response time: 1", "Group 7 autoping timer (min): 1", "Group 7 timeout (sec): 3", "Group 7 packets count: 1", "",
-            "Group 8 autoping: 0", "Group 8 show ip: 0", "Group 8 show response time: 1", "Group 8 autoping timer (min): 1", "Group 8 timeout (sec): 3", "Group 8 packets count: 1" };
+            { "Language: rus", "Autoping all: yes", "Group 1 name: Сетевые коммутационные оборудования", "Group 2 name: Лэптопы", "Group 3 name: Научное оборудование", "Group 4 name: Name", "Group 5 name: Принтеры",
+            "Group 1 autoping: no", "Group 1 show ip: no", "Group 1 show response time: yes", "Group 1 autoping timer (min): 1", "Group 1 timeout (sec): 3", "Group 1 packets count: 1", "",
+            "Group 2 autoping: no", "Group 2 show ip: no", "Group 2 show response time: yes", "Group 2 autoping timer (min): 1", "Group 2 timeout (sec): 3", "Group 2 packets count: 1", "",
+            "Group 3 autoping: no", "Group 3 show ip: no", "Group 3 show response time: yes", "Group 3 autoping timer (min): 1", "Group 3 timeout (sec): 3", "Group 3 packets count: 1", "",
+            "Group 4 autoping: no", "Group 4 show ip: no", "Group 4 show response time: yes", "Group 4 autoping timer (min): 1", "Group 4 timeout (sec): 3", "Group 4 packets count: 1", "",
+            "Group 5 autoping: no", "Group 5 show ip: no", "Group 5 show response time: yes", "Group 5 autoping timer (min): 1", "Group 5 timeout (sec): 3", "Group 5 packets count: 1", "",
+            "Group 6 autoping: no", "Group 6 show ip: no", "Group 6 show response time: yes", "Group 6 autoping timer (min): 1", "Group 6 timeout (sec): 3", "Group 6 packets count: 1", "",
+            "Group 7 autoping: no", "Group 7 show ip: no", "Group 7 show response time: yes", "Group 7 autoping timer (min): 1", "Group 7 timeout (sec): 3", "Group 7 packets count: 1", "",
+            "Group 8 autoping: no", "Group 8 show ip: no", "Group 8 show response time: yes", "Group 8 autoping timer (min): 1", "Group 8 timeout (sec): 3", "Group 8 packets count: 1" };
 
         private readonly string[] StandartClientList = new string[]
             { "Loopback/ /127.0.0.1", "БРИ-1/ /10.1.1.254", "БРИ-2/ /10.1.2.254", "БРИ-3/ /192.168.60.254", "SM BelAir WAP/ /192.168.68.73", "АСП/ /10.1.2.250", "",
-            "USL ER-SWB-J1,J2/ /192.168.67.250", "USL ER-SWA/ /192.168.60.253", "ISS Server 1/ /192.168.60.51", "LS1/ /192.168.60.53", "Lab printer/ /192.168.60.82", "",
+            "USL ER-SWB-J1, J2/ /192.168.67.250", "USL ER-SWA/ /192.168.60.253", "ISS Server 1/ /192.168.60.51", "LS1/ /192.168.60.53", "Lab printer/ /192.168.60.82", "",
             "RSE1/ /10.1.1.3", "RSK1/ /10.1.1.4", "RSK2/ /10.1.1.5", "RSS1/ /10.1.2.1", "RSS2/ /10.1.1.1", "RSE-Med/ /10.1.1.7", "Mediaserver AGAT/ /10.1.1.80", "SM Printer/ /192.168.60.81", "",
             "FS1/ /10.1.1.100", "ТВМ1-Н/ /10.1.3.1", "БПИ-НЧ (TRPU)/ /192.168.249.1", "БЗУ/ /10.1.11.5", "MDM (ШСС)/ /10.1.3.50" };
 
@@ -111,8 +113,8 @@ namespace WindowsFormsApp1
             CheckConfig();
             CheckLog();
 
-            File.AppendAllText(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt", "Программа запущена " + DateTime.Now.Date.ToString().Substring(0, 11) + " в " + DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString() + Environment.NewLine);
-            File.AppendAllText(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt", Environment.NewLine);
+            File.AppendAllText("Logs//" + DateTime.Now.Date.ToString().Substring(0, 10) + ".log", "Программа запущена " + DateTime.Now.Date.ToString().Substring(0, 11) + " в " + DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString() + Environment.NewLine);
+            File.AppendAllText("Logs//" + DateTime.Now.Date.ToString().Substring(0, 10) + ".log", Environment.NewLine);
 
             ping_g1.PingCompleted += new PingCompletedEventHandler(Received_reply_g1);
             ping_g2.PingCompleted += new PingCompletedEventHandler(Received_reply_g2);
@@ -122,6 +124,15 @@ namespace WindowsFormsApp1
             ping_g6.PingCompleted += new PingCompletedEventHandler(Received_reply_g6);
             ping_g7.PingCompleted += new PingCompletedEventHandler(Received_reply_g7);
             ping_g8.PingCompleted += new PingCompletedEventHandler(Received_reply_g8);
+
+            groupBox1.Text = g_names[0];
+            groupBox2.Text = g_names[1];
+            groupBox3.Text = g_names[2];
+            groupBox4.Text = g_names[3];
+            groupBox5.Text = g_names[4];
+            groupBox6.Text = g_names[5];
+            groupBox7.Text = g_names[6];
+            groupBox8.Text = g_names[7];
 
             FillClientsList();
             EnableElements();
@@ -165,65 +176,87 @@ namespace WindowsFormsApp1
 
         private void CheckConfig()
         {
-            if (!File.Exists("Config.ini"))
+            if (File.Exists("Config.ini"))
             {
-                FileStream f = File.Create("Config.ini");
-                f.Close();
-                File.WriteAllLines("Config.ini", StandartConfigList);
+                string[] config = File.ReadAllLines("Config.ini");
+
+                for (int i = 0; i < config.Count(); i++)
+                {
+                    if (config[i] == "Language: eng")
+                        is_english = true;
+                    else if (config[i] == "Language: rus")
+                        is_english = false;
+
+                    if (config[i] == "Autoping all: yes" || config[i] == "Autoping all: y")
+                        is_ping_all = true;
+                    else if (config[i] == "Autoping all: no" || config[i] == "Autoping all: n")
+                        is_ping_all = false;
+
+                    for (int g = 0; g < groups_num; g++)
+                    {
+                        if (config[i].Length >= 13 && config[i].Substring(0, 13) == "Group " + (g + 1) + " name:")
+                            g_names[g] = config[i].Substring(14);
+
+                        if (config[i] == "Group " + (g + 1) + " autoping: yes" || config[i] == "Group " + (g + 1) + " autoping: y")
+                            states[g, 0] = true;
+                        else if (config[i] == "Group " + (g + 1) + " autoping: no" || config[i] == "Group " + (g + 1) + " autoping: n")
+                            states[g, 0] = false;
+
+                        if (config[i] == "Group " + (g + 1) + " show dns: yes" || config[i] == "Group " + (g + 1) + " show dns: y")
+                            states[g, 1] = true;
+                        else if (config[i] == "Group " + (g + 1) + " show dns: no" || config[i] == "Group " + (g + 1) + " show dns: n")
+                            states[g, 1] = false;
+
+                        if (config[i] == "Group " + (g + 1) + " show ip: yes" || config[i] == "Group " + (g + 1) + " show ip: y")
+                            states[g, 2] = true;
+                        else if (config[i] == "Group " + (g + 1) + " show ip: no" || config[i] == "Group " + (g + 1) + " show ip: n")
+                            states[g, 2] = false;
+
+                        if (config[i] == "Group " + (g + 1) + " show response time: yes" || config[i] == "Group " + (g + 1) + " show response time: y")
+                            states[g, 3] = true;
+                        else if (config[i] == "Group " + (g + 1) + " show response time: no" || config[i] == "Group " + (g + 1) + " show response time: n")
+                            states[g, 3] = false;
+
+                        if (config[i].Length >= 29 && config[i].Substring(0, 29) == "Group " + (g + 1) + " autoping timer (min):" && int.TryParse(config[i].Substring(30), out _))
+                            g_settings[g, 2] = int.Parse(config[i].Substring(30));
+
+                        if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group " + (g + 1) + " timeout (sec):" && int.TryParse(config[i].Substring(23), out _))
+                            g_settings[g, 3] = int.Parse(config[i].Substring(23));
+
+                        if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group " + (g + 1) + " packets count:" && int.TryParse(config[i].Substring(23), out _))
+                            g_settings[g, 4] = int.Parse(config[i].Substring(23));
+                    }
+                }
             }
-
-            string[] config = File.ReadAllLines("Config.ini");
-
-            for (int i = 0; i < config.Count(); i++)
+            else
             {
-                if (config[i] == "Language: eng")
-                    is_english = true;
-                else if (config[i] == "Language: rus")
-                    is_english = false;
+                is_english = false;
+                is_ping_all = true;
 
                 for (int g = 0; g < groups_num; g++)
                 {
-                    if (config[i].Length >= 17 && config[i].Substring(0, 17) == "Group " + (g + 1) + " autoping:" && int.TryParse(config[i].Substring(18), out _))
-                        if(int.Parse(config[i].Substring(18)) > 0)
-                            states[g, 0] = true;
-                        else
-                            states[g, 0] = false;
+                    g_names[g] = "Группа " + g;
 
-                    if (config[i].Length >= 17 && config[i].Substring(0, 17) == "Group " + (g + 1) + " show dns:" && int.TryParse(config[i].Substring(18), out _))
-                        if (int.Parse(config[i].Substring(18)) > 0)
-                            states[g, 1] = true;
-                        else
-                            states[g, 1] = false;
+                    states[g, 0] = true;
+                    states[g, 1] = false;
+                    states[g, 2] = false;
+                    states[g, 3] = true;
 
-                    if (config[i].Length >= 16 && config[i].Substring(0, 16) == "Group " + (g + 1) + " show ip:" && int.TryParse(config[i].Substring(17), out _))
-                        if (int.Parse(config[i].Substring(17)) > 0)
-                            states[g, 2] = true;
-                        else
-                            states[g, 2] = false;
-
-                    if (config[i].Length >= 27 && config[i].Substring(0, 27) == "Group " + (g + 1) + " show response time:" && int.TryParse(config[i].Substring(28), out _))
-                        if (int.Parse(config[i].Substring(28)) > 0)
-                            states[g, 3] = true;
-                        else
-                            states[g, 3] = false;
-
-                    if (config[i].Length >= 29 && config[i].Substring(0, 29) == "Group " + (g + 1) + " autoping timer (min):" && int.TryParse(config[i].Substring(30), out _))
-                        g_settings[g, 2] = int.Parse(config[i].Substring(30));
-
-                    if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group " + (g + 1) + " timeout (sec):" && int.TryParse(config[i].Substring(23), out _))
-                        g_settings[g, 3] = int.Parse(config[i].Substring(23));
-
-                    if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group " + (g + 1) + " packets count:" && int.TryParse(config[i].Substring(23), out _))
-                        g_settings[g, 4] = int.Parse(config[i].Substring(23));
+                    g_settings[g, 2] = 1;
+                    g_settings[g, 3] = 3;
+                    g_settings[g, 4] = 1;
                 }
             }
         }
 
         private void CheckLog()
         {
-            if (!File.Exists(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt"))
+            if (!Directory.Exists("Logs\\"))
+                Directory.CreateDirectory("Logs\\");
+
+            if (!File.Exists("Logs\\" + DateTime.Now.Date.ToString().Substring(0, 10) + ".log"))
             {
-                FileStream f = File.Create(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt");
+                FileStream f = File.Create("Logs\\" + DateTime.Now.Date.ToString().Substring(0, 10) + ".log");
                 f.Close();
             }
         }
@@ -373,6 +406,7 @@ namespace WindowsFormsApp1
             {
                 toolStripButton1.Text = "File";
                 Open_iniTSMitem.Text = "Open .INI file";
+                Save_iniTSMitem.Text = "Save .INI file";
                 Open_logTSMitem.Text = "Open log file";
                 Open_clientsTSMitem.Text = "Open clients list";
                 toolStripButton2.Text = "Ping all";
@@ -389,10 +423,10 @@ namespace WindowsFormsApp1
                 User_guideTSMitem.Text = "User's guide";
                 AboutTSMitem.Text = "About";
 
-                groupBox1.Text = "Group 1";
-                groupBox2.Text = "Group 2";
-                groupBox3.Text = "Group 3";
-                groupBox4.Text = "Group 4";
+                //groupBox1.Text = "Group 1";
+                //groupBox2.Text = "Group 2";
+                //groupBox3.Text = "Group 3";
+                //groupBox4.Text = "Group 4";
 
                 Column1a.HeaderText = "Name";
                 Column1d.HeaderText = "Time";
@@ -421,6 +455,7 @@ namespace WindowsFormsApp1
             {
                 toolStripButton1.Text = "Файл";
                 Open_iniTSMitem.Text = "Открыть .INI файл";
+                Save_iniTSMitem.Text = "Сохранить .INI файл";
                 Open_logTSMitem.Text = "Открыть лог файл";
                 Open_clientsTSMitem.Text = "Открыть список клиентов";
                 toolStripButton2.Text = "Пинг всех";
@@ -437,10 +472,10 @@ namespace WindowsFormsApp1
                 User_guideTSMitem.Text = "Руководство пользователя";
                 AboutTSMitem.Text = "О программе";
 
-                groupBox1.Text = "Группа 1";
-                groupBox2.Text = "Группа 2";
-                groupBox3.Text = "Группа 3";
-                groupBox4.Text = "Группа 4";
+                //groupBox1.Text = "Группа 1";
+                //groupBox2.Text = "Группа 2";
+                //groupBox3.Text = "Группа 3";
+                //groupBox4.Text = "Группа 4";
 
                 Column1a.HeaderText = "Имя";
                 Column1d.HeaderText = "Время";
@@ -782,15 +817,15 @@ namespace WindowsFormsApp1
 
         private void ResizeStyle4()
         {
-            groupBox1.Location = new Point(10, toolStrip1.Size.Height);
-            groupBox2.Location = new Point(groupBox1.Width + 20, groupBox2.Location.Y);
-            groupBox3.Location = new Point(groupBox1.Location.X, groupBox1.Height + toolStrip1.Size.Height + 5);
-            groupBox4.Location = new Point(groupBox1.Width + 20, groupBox1.Height + toolStrip1.Size.Height + 5);
-
             groupBox1.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 60) / 2);
             groupBox2.Size = new Size(groupBox1.Size.Width, groupBox1.Size.Height);
             groupBox3.Size = new Size(groupBox1.Size.Width, groupBox1.Size.Height);
             groupBox4.Size = new Size(groupBox1.Size.Width, groupBox1.Size.Height);
+
+            groupBox1.Location = new Point(10, toolStrip1.Size.Height);
+            groupBox2.Location = new Point(groupBox1.Width + 20, groupBox2.Location.Y);
+            groupBox3.Location = new Point(groupBox1.Location.X, groupBox1.Height + toolStrip1.Size.Height + 5);
+            groupBox4.Location = new Point(groupBox1.Width + 20, groupBox1.Height + toolStrip1.Size.Height + 5);
 
             dataGridView1.Size = new Size(groupBox1.Size.Width - 10, groupBox1.Size.Height - 90);
             dataGridView2.Size = new Size(dataGridView1.Size.Width, dataGridView1.Size.Height);
@@ -802,15 +837,15 @@ namespace WindowsFormsApp1
             //checkBox3.Location = new Point(groupBox3.Size.Width - 125, 20);
             //checkBox4.Location = new Point(groupBox4.Size.Width - 125, 20);
 
-            button11.Location = new Point(groupBox1.Size.Width - 105, 50);
+            button11.Location = new Point(groupBox1.Size.Width - 155, button11.Location.Y);
             button12.Location = new Point(button11.Location.X, button11.Location.Y);
             button13.Location = new Point(button11.Location.X, button11.Location.Y);
             button14.Location = new Point(button11.Location.X, button11.Location.Y);
 
-            Column1e.Width = dataGridView1.Width - 120;
-            Column2e.Width = dataGridView2.Width - 120;
-            Column3e.Width = dataGridView3.Width - 120;
-            Column4e.Width = dataGridView4.Width - 120;
+            Column1e.Width = dataGridView1.Width - Column1a.Width - 20;
+            Column2e.Width = Column1e.Width;
+            Column3e.Width = Column1e.Width;
+            Column4e.Width = Column1e.Width;
 
             if (Column1b.Visible)
             {
@@ -860,6 +895,8 @@ namespace WindowsFormsApp1
 
             if (Column4d.Visible)
                 Column4e.Width -= Column4d.Width;
+
+            //label1.Text = Size.Width + "." + Size.Height;
         }
 
         private void ResizeStyle5()
@@ -1142,6 +1179,103 @@ namespace WindowsFormsApp1
             ShowTracking(dataGridView1);
         }
 
+        private void Save_iniTSMitem_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists("Config.ini"))
+            {
+                FileStream f = File.Create("Config.ini");
+                f.Close();
+                File.WriteAllLines("Config.ini", StandartConfigList);
+            }
+            else
+            {
+                FileStream f = File.Create("Config.ini");
+                f.Close();
+
+                if (is_english)
+                    File.AppendAllText("Config.ini", "Language: eng" + Environment.NewLine);
+                else
+                    File.AppendAllText("Config.ini", "Language: rus" + Environment.NewLine);
+
+                File.AppendAllText("Config.ini", "Autoping all: yes" + Environment.NewLine);
+
+                for (int g = 0; g < groups_num; g++)
+                {
+                    File.AppendAllText("Config.ini", Environment.NewLine);
+                    File.AppendAllText("Config.ini", "Group " + (g + 1) + " name: " + g_names[g] + Environment.NewLine);
+
+                    //if (states[g, 0])
+                    switch (g)
+                    {
+                        case 0:
+                            if (checkBox1.Checked)
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
+                            else
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
+                            break;
+                        case 1:
+                            if (checkBox2.Checked)
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
+                            else
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
+                            break;
+                        case 2:
+                            if (checkBox3.Checked)
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
+                            else
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
+                            break;
+                        case 3:
+                            if (checkBox4.Checked)
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
+                            else
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
+                            break;
+                        case 4:
+                            if (checkBox5.Checked)
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
+                            else
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
+                            break;
+                        case 5:
+                            if (checkBox6.Checked)
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
+                            else
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
+                            break;
+                        case 6:
+                            if (checkBox7.Checked)
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
+                            else
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
+                            break;
+                        case 7:
+                            if (checkBox8.Checked)
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
+                            else
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
+                            break;
+                    }
+
+                    if (states[g, 2])
+                        File.AppendAllText("Config.ini", "Group " + (g + 1) + " show ip: y" + Environment.NewLine);
+                    else
+                        File.AppendAllText("Config.ini", "Group " + (g + 1) + " show ip: n" + Environment.NewLine);
+
+                    if (states[g, 3])
+                        File.AppendAllText("Config.ini", "Group " + (g + 1) + " show response time: y" + Environment.NewLine);
+                    else
+                        File.AppendAllText("Config.ini", "Group " + (g + 1) + " show response time: n" + Environment.NewLine);
+
+                    File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping timer (min): " + g_settings[g, 2] + Environment.NewLine);
+
+                    File.AppendAllText("Config.ini", "Group " + (g + 1) + " timeout (sec): " + g_settings[g, 3] + Environment.NewLine);
+
+                    File.AppendAllText("Config.ini", "Group " + (g + 1) + " packets count: " + g_settings[g, 4] + Environment.NewLine);
+                }
+            }
+        }
+
         private void dataGridView2_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             ShowTracking(dataGridView2);
@@ -1184,7 +1318,7 @@ namespace WindowsFormsApp1
 
         private void Open_logTSMitem_Click(object sender, EventArgs e)
         {
-            Process.Start("C:\\Windows\\System32\\notepad.exe", DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt");
+            Process.Start("C:\\Windows\\System32\\notepad.exe", "Logs//" + DateTime.Now.Date.ToString().Substring(0, 10) + ".log");
         }
 
         private void Open_clientsTSMitem_Click(object sender, EventArgs e)
@@ -1411,8 +1545,8 @@ namespace WindowsFormsApp1
             ping_g7.SendAsyncCancel();
             ping_g8.SendAsyncCancel();
 
-            File.AppendAllText(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt", "Программа закрыта " + DateTime.Now.Date.ToString().Substring(0, 11) + " в " + DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString() + Environment.NewLine);
-            File.AppendAllText(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt", Environment.NewLine);
+            File.AppendAllText("Logs//" + DateTime.Now.Date.ToString().Substring(0, 10) + ".log", "Программа закрыта " + DateTime.Now.Date.ToString().Substring(0, 11) + " в " + DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString() + Environment.NewLine);
+            File.AppendAllText("Logs//" + DateTime.Now.Date.ToString().Substring(0, 10) + ".log", Environment.NewLine);
         }
         #endregion События
     }

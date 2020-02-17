@@ -27,7 +27,6 @@
     <ProductName>Ping Master 3.0</ProductName>
     <PublisherName>RSC Energia</PublisherName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <AutorunEnabled>true</AutorunEnabled>
     <ApplicationRevision>6</ApplicationRevision>
     <ApplicationVersion>1.0.26.6</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>

@@ -21,7 +21,7 @@ namespace WindowsFormsApp1
     {
         bool is_english = false, // проверка на использование английской версии программы
             is_tracking = false, // проверка открытого окна слежения (для того, чтобы не создавалось более 1 окна слежения)
-            is_ping_all = false;
+            is_ping_all = false, is_started;
 
         bool[,] states = new bool[8, 4]; // настройки (да/нет) групп клиентов, принимаемых из файла: [группа (1-8), настройки (автопинговать/показывать dns/показывать ip/показывать время ответа)]
 
@@ -100,6 +100,8 @@ namespace WindowsFormsApp1
 
         private void PreProcessing()
         {
+            is_started = true;
+
             if (!File.Exists("Clients.txt"))
             {
                 FileStream f = File.Create("Clients.txt");
@@ -150,6 +152,9 @@ namespace WindowsFormsApp1
             checkBox6.Checked = states[5, 0];
             checkBox7.Checked = states[6, 0];
             checkBox8.Checked = states[7, 0];
+
+            if (is_ping_all)
+                PingAll();
         }
 
         private void Counting()
@@ -596,6 +601,64 @@ namespace WindowsFormsApp1
             groupBox8.Size = new Size(groupBox1.Width, groupBox1.Height);
         }
 
+        private void PingAll()
+        {
+            CheckLog();
+            toolStripButton2.Enabled = false;
+
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                is_ping_all = true;
+
+                ClearGrid(dataGridView1, g_settings[0, 0]);
+                ClearGrid(dataGridView2, g_settings[1, 0]);
+                ClearGrid(dataGridView3, g_settings[2, 0]);
+                ClearGrid(dataGridView4, g_settings[3, 0]);
+                ClearGrid(dataGridView5, g_settings[4, 0]);
+                ClearGrid(dataGridView6, g_settings[5, 0]);
+                ClearGrid(dataGridView7, g_settings[6, 0]);
+                ClearGrid(dataGridView8, g_settings[7, 0]);
+                
+                if(is_started)
+                {
+                    if (!checkBox1.Checked)
+                        SortPing(1);
+
+                    if (!checkBox2.Checked)
+                        SortPing(2);
+
+                    if (!checkBox3.Checked)
+                        SortPing(3);
+
+                    if (!checkBox4.Checked)
+                        SortPing(4);
+
+                    if (!checkBox5.Checked)
+                        SortPing(5);
+
+                    if (!checkBox6.Checked)
+                        SortPing(6);
+
+                    if (!checkBox7.Checked)
+                        SortPing(7);
+
+                    if (!checkBox8.Checked)
+                        SortPing(8);
+                }
+                else
+                {
+                    for(int i = 1; i <= groups_num; i++)
+                        SortPing(i);
+                }
+            }
+            else
+                MessageBox.Show(check_connection);
+
+            is_started = false;
+            is_ping_all = false;
+            toolStripButton2.Enabled = true;
+        }
+
         private void SortPing(int group)
         {
             switch(group)
@@ -652,7 +715,7 @@ namespace WindowsFormsApp1
                     else
                         MessageBox.Show("Список клиентов данной группы пуст");
                 }
-                else
+                else if (!is_ping_all)
                     MessageBox.Show(check_connection);
             }
             else
@@ -666,9 +729,6 @@ namespace WindowsFormsApp1
 
         private void SortReply(int group)
         {
-            CheckLog();
-            toolStripButton2.Enabled = true;
-
             switch (group)
             {
                 case 1:
@@ -799,22 +859,22 @@ namespace WindowsFormsApp1
                     break;
             }
         }
-
+        // ------------------------
         private void ResizeStyle1()
         {
 
         }
-
+        // ------------------------
         private void ResizeStyle2()
         {
 
         }
-
+        // ------------------------
         private void ResizeStyle3()
         {
 
         }
-
+        // ------------------------
         private void ResizeStyle4()
         {
             groupBox1.Size = new Size((ClientSize.Width - 30) / 2, (ClientSize.Height - 60) / 2);
@@ -898,22 +958,22 @@ namespace WindowsFormsApp1
 
             //label1.Text = Size.Width + "." + Size.Height;
         }
-
+        // ------------------------
         private void ResizeStyle5()
         {
 
         }
-
+        // ------------------------
         private void ResizeStyle6()
         {
 
         }
-
+        // ------------------------
         private void ResizeStyle7()
         {
 
         }
-
+        // ------------------------
         private void ResizeStyle8()
         {
 
@@ -954,6 +1014,103 @@ namespace WindowsFormsApp1
             settings = new Settings(is_english, states[group, 1], states[group, 2], states[group, 3], group, g_settings[group, 2], g_settings[group, 3], g_settings[group, 4]);
             settings.FormClosed += new FormClosedEventHandler(Settings_Closed);
             settings.Show();
+        }
+
+        private void SaveINI()
+        {
+            if (!File.Exists("Config.ini"))
+            {
+                FileStream f = File.Create("Config.ini");
+                f.Close();
+                File.WriteAllLines("Config.ini", StandartConfigList);
+            }
+            else
+            {
+                FileStream f = File.Create("Config.ini");
+                f.Close();
+
+                if (is_english)
+                    File.AppendAllText("Config.ini", "Language: eng" + Environment.NewLine);
+                else
+                    File.AppendAllText("Config.ini", "Language: rus" + Environment.NewLine);
+
+                File.AppendAllText("Config.ini", "Autoping all: yes" + Environment.NewLine);
+
+                for (int g = 0; g < groups_num; g++)
+                {
+                    File.AppendAllText("Config.ini", Environment.NewLine);
+                    File.AppendAllText("Config.ini", "Group " + (g + 1) + " name: " + g_names[g] + Environment.NewLine);
+
+                    //if (states[g, 0])
+                    switch (g)
+                    {
+                        case 0:
+                            if (checkBox1.Checked)
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
+                            else
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
+                            break;
+                        case 1:
+                            if (checkBox2.Checked)
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
+                            else
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
+                            break;
+                        case 2:
+                            if (checkBox3.Checked)
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
+                            else
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
+                            break;
+                        case 3:
+                            if (checkBox4.Checked)
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
+                            else
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
+                            break;
+                        case 4:
+                            if (checkBox5.Checked)
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
+                            else
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
+                            break;
+                        case 5:
+                            if (checkBox6.Checked)
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
+                            else
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
+                            break;
+                        case 6:
+                            if (checkBox7.Checked)
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
+                            else
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
+                            break;
+                        case 7:
+                            if (checkBox8.Checked)
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
+                            else
+                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
+                            break;
+                    }
+
+                    if (states[g, 2])
+                        File.AppendAllText("Config.ini", "Group " + (g + 1) + " show ip: y" + Environment.NewLine);
+                    else
+                        File.AppendAllText("Config.ini", "Group " + (g + 1) + " show ip: n" + Environment.NewLine);
+
+                    if (states[g, 3])
+                        File.AppendAllText("Config.ini", "Group " + (g + 1) + " show response time: y" + Environment.NewLine);
+                    else
+                        File.AppendAllText("Config.ini", "Group " + (g + 1) + " show response time: n" + Environment.NewLine);
+
+                    File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping timer (min): " + g_settings[g, 2] + Environment.NewLine);
+
+                    File.AppendAllText("Config.ini", "Group " + (g + 1) + " timeout (sec): " + g_settings[g, 3] + Environment.NewLine);
+
+                    File.AppendAllText("Config.ini", "Group " + (g + 1) + " packets count: " + g_settings[g, 4] + Environment.NewLine);
+                }
+            }
         }
 
         #endregion Методы
@@ -1181,99 +1338,7 @@ namespace WindowsFormsApp1
 
         private void Save_iniTSMitem_Click(object sender, EventArgs e)
         {
-            if (!File.Exists("Config.ini"))
-            {
-                FileStream f = File.Create("Config.ini");
-                f.Close();
-                File.WriteAllLines("Config.ini", StandartConfigList);
-            }
-            else
-            {
-                FileStream f = File.Create("Config.ini");
-                f.Close();
-
-                if (is_english)
-                    File.AppendAllText("Config.ini", "Language: eng" + Environment.NewLine);
-                else
-                    File.AppendAllText("Config.ini", "Language: rus" + Environment.NewLine);
-
-                File.AppendAllText("Config.ini", "Autoping all: yes" + Environment.NewLine);
-
-                for (int g = 0; g < groups_num; g++)
-                {
-                    File.AppendAllText("Config.ini", Environment.NewLine);
-                    File.AppendAllText("Config.ini", "Group " + (g + 1) + " name: " + g_names[g] + Environment.NewLine);
-
-                    //if (states[g, 0])
-                    switch (g)
-                    {
-                        case 0:
-                            if (checkBox1.Checked)
-                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
-                            else
-                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
-                            break;
-                        case 1:
-                            if (checkBox2.Checked)
-                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
-                            else
-                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
-                            break;
-                        case 2:
-                            if (checkBox3.Checked)
-                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
-                            else
-                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
-                            break;
-                        case 3:
-                            if (checkBox4.Checked)
-                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
-                            else
-                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
-                            break;
-                        case 4:
-                            if (checkBox5.Checked)
-                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
-                            else
-                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
-                            break;
-                        case 5:
-                            if (checkBox6.Checked)
-                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
-                            else
-                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
-                            break;
-                        case 6:
-                            if (checkBox7.Checked)
-                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
-                            else
-                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
-                            break;
-                        case 7:
-                            if (checkBox8.Checked)
-                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: y" + Environment.NewLine);
-                            else
-                                File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping: n" + Environment.NewLine);
-                            break;
-                    }
-
-                    if (states[g, 2])
-                        File.AppendAllText("Config.ini", "Group " + (g + 1) + " show ip: y" + Environment.NewLine);
-                    else
-                        File.AppendAllText("Config.ini", "Group " + (g + 1) + " show ip: n" + Environment.NewLine);
-
-                    if (states[g, 3])
-                        File.AppendAllText("Config.ini", "Group " + (g + 1) + " show response time: y" + Environment.NewLine);
-                    else
-                        File.AppendAllText("Config.ini", "Group " + (g + 1) + " show response time: n" + Environment.NewLine);
-
-                    File.AppendAllText("Config.ini", "Group " + (g + 1) + " autoping timer (min): " + g_settings[g, 2] + Environment.NewLine);
-
-                    File.AppendAllText("Config.ini", "Group " + (g + 1) + " timeout (sec): " + g_settings[g, 3] + Environment.NewLine);
-
-                    File.AppendAllText("Config.ini", "Group " + (g + 1) + " packets count: " + g_settings[g, 4] + Environment.NewLine);
-                }
-            }
+            SaveINI();
         }
 
         private void dataGridView2_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -1328,15 +1393,7 @@ namespace WindowsFormsApp1
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            ClearGrid(dataGridView1, g_settings[0, 0]);
-            ClearGrid(dataGridView2, g_settings[1, 0]);
-            ClearGrid(dataGridView3, g_settings[2, 0]);
-            ClearGrid(dataGridView4, g_settings[3, 0]);
-
-            SortPing(1);
-            SortPing(2);
-            SortPing(3);
-            SortPing(4);
+            PingAll();
         }
 
         private void toolStripButton3_Click(object sender, EventArgs e)
@@ -1536,6 +1593,9 @@ namespace WindowsFormsApp1
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            File.AppendAllText("Logs//" + DateTime.Now.Date.ToString().Substring(0, 10) + ".log", "Программа закрыта " + DateTime.Now.Date.ToString().Substring(0, 11) + " в " + DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString() + Environment.NewLine);
+            File.AppendAllText("Logs//" + DateTime.Now.Date.ToString().Substring(0, 10) + ".log", Environment.NewLine);
+
             ping_g1.SendAsyncCancel();
             ping_g2.SendAsyncCancel();
             ping_g3.SendAsyncCancel();
@@ -1545,8 +1605,14 @@ namespace WindowsFormsApp1
             ping_g7.SendAsyncCancel();
             ping_g8.SendAsyncCancel();
 
-            File.AppendAllText("Logs//" + DateTime.Now.Date.ToString().Substring(0, 10) + ".log", "Программа закрыта " + DateTime.Now.Date.ToString().Substring(0, 11) + " в " + DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString() + Environment.NewLine);
-            File.AppendAllText("Logs//" + DateTime.Now.Date.ToString().Substring(0, 10) + ".log", Environment.NewLine);
+            ClearGrid(dataGridView1, g_settings[0, 0]);
+            ClearGrid(dataGridView2, g_settings[1, 0]);
+            ClearGrid(dataGridView3, g_settings[2, 0]);
+            ClearGrid(dataGridView4, g_settings[3, 0]);
+            ClearGrid(dataGridView5, g_settings[4, 0]);
+            ClearGrid(dataGridView6, g_settings[5, 0]);
+            ClearGrid(dataGridView7, g_settings[6, 0]);
+            ClearGrid(dataGridView8, g_settings[7, 0]);
         }
         #endregion События
     }

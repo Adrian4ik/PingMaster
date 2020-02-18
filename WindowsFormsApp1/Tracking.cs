@@ -11,6 +11,7 @@ namespace WindowsFormsApp1
         bool is_eng, to_ping = false, to_clear = false;
         int cur_row = 0;
         string received_name, received_dns, received_ip;
+        string check_connection;
 
         DataGridViewTextBoxColumn Col0 = new DataGridViewTextBoxColumn();
         DataGridViewTextBoxColumn Col1 = new DataGridViewTextBoxColumn();
@@ -72,6 +73,8 @@ namespace WindowsFormsApp1
                 Col1.HeaderText = "Reply";
                 Col2.HeaderText = "Status";
                 button1.Text = "Start";
+
+                check_connection = "No connection to the network." + Environment.NewLine + "Check cable connection or network/firewall settings.";
             }
             else
             {
@@ -82,6 +85,8 @@ namespace WindowsFormsApp1
                 Col1.HeaderText = "Ответ";
                 Col2.HeaderText = "Статус";
                 button1.Text = "Старт";
+
+                check_connection = "Нет подключения к сети" + Environment.NewLine + "Проверьте подключение сетевого кабеля или настройки сети/фаерволла";
             }
 
             Col3.HeaderText = "";
@@ -206,70 +211,75 @@ namespace WindowsFormsApp1
         {
             if(button1.Text == "Старт" || button1.Text == "Start")
             {
-                int num = 0;
+                if (NetworkInterface.GetIsNetworkAvailable())
+                {
+                    int num = 0;
 
-                if (textBox1.TextLength < 7)
-                {
-                    if (is_eng)
-                        MessageBox.Show("Input correct ip address");
-                    else
-                        MessageBox.Show("Введите правильный ip адрес");
-                }
-                else
-                {
-                    bool norm = true;
-                    for (int i = 0, j = 0, dot = 0; i < textBox1.Text.Length; i++)
+                    if (textBox1.TextLength < 7)
                     {
-                        if (textBox1.Text[i] == '0' || textBox1.Text[i] == '1' || textBox1.Text[i] == '2' || textBox1.Text[i] == '3' || textBox1.Text[i] == '4' || textBox1.Text[i] == '5' || textBox1.Text[i] == '6' || textBox1.Text[i] == '7' || textBox1.Text[i] == '8' || textBox1.Text[i] == '9')
+                        if (is_eng)
+                            MessageBox.Show("Input correct ip address");
+                        else
+                            MessageBox.Show("Введите правильный ip адрес");
+                    }
+                    else
+                    {
+                        bool norm = true;
+                        for (int i = 0, j = 0, dot = 0; i < textBox1.Text.Length; i++)
                         {
-                            if (j == 0)
-                                num = textBox1.Text[i];
-                            else if (j > 0 && j < 3)
-                                num = num * 10 + textBox1.Text[i];
+                            if (textBox1.Text[i] == '0' || textBox1.Text[i] == '1' || textBox1.Text[i] == '2' || textBox1.Text[i] == '3' || textBox1.Text[i] == '4' || textBox1.Text[i] == '5' || textBox1.Text[i] == '6' || textBox1.Text[i] == '7' || textBox1.Text[i] == '8' || textBox1.Text[i] == '9')
+                            {
+                                if (j == 0)
+                                    num = textBox1.Text[i];
+                                else if (j > 0 && j < 3)
+                                    num = num * 10 + textBox1.Text[i];
+                                else
+                                {
+                                    norm = false;
+                                    Message_error();
+                                }
+
+                                j++;
+                            }
+                            else if (textBox1.Text[i] == '.' && dot < 3 && (num >= 0 || num < 255))
+                            {
+                                if (j > 3)
+                                {
+                                    norm = false;
+                                    Message_error();
+                                }
+
+                                num = 0;
+                                j = 0;
+                                dot++;
+                            }
                             else
                             {
                                 norm = false;
                                 Message_error();
                             }
-
-                            j++;
                         }
-                        else if (textBox1.Text[i] == '.' && dot < 3 && (num >= 0 || num < 255))
+
+                        if (norm)
                         {
-                            if (j > 3)
+                            switch (is_eng)
                             {
-                                norm = false;
-                                Message_error();
+                                case true:
+                                    button1.Text = "Stop";
+                                    break;
+                                case false:
+                                    button1.Text = "Стоп";
+                                    break;
                             }
 
-                            num = 0;
-                            j = 0;
-                            dot++;
+                            to_ping = true;
+                            to_clear = false;
+                            Ping_cl();
                         }
-                        else
-                        {
-                            norm = false;
-                            Message_error();
-                        }
-                    }
-
-                    if(norm)
-                    {
-                        switch (is_eng)
-                        {
-                            case true:
-                                button1.Text = "Stop";
-                                break;
-                            case false:
-                                button1.Text = "Стоп";
-                                break;
-                        }
-
-                        to_ping = true;
-                        to_clear = false;
-                        Ping_cl();
                     }
                 }
+                else
+                    MessageBox.Show(check_connection);
             }
             else
             {

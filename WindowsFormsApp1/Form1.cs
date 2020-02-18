@@ -242,7 +242,7 @@ namespace WindowsFormsApp1
                 {
                     g_names[g] = "Группа " + g;
 
-                    states[g, 0] = true;
+                    states[g, 0] = false;
                     states[g, 1] = false;
                     states[g, 2] = false;
                     states[g, 3] = true;
@@ -251,6 +251,8 @@ namespace WindowsFormsApp1
                     g_settings[g, 3] = 3;
                     g_settings[g, 4] = 1;
                 }
+
+                SaveINI();
             }
         }
 
@@ -716,7 +718,33 @@ namespace WindowsFormsApp1
                         MessageBox.Show("Список клиентов данной группы пуст");
                 }
                 else if (!is_ping_all)
+                {
+                    if (checkBox1.Checked)
+                        checkBox1.Checked = false;
+
+                    if (checkBox2.Checked)
+                        checkBox2.Checked = false;
+
+                    if (checkBox3.Checked)
+                        checkBox3.Checked = false;
+
+                    if (checkBox4.Checked)
+                        checkBox4.Checked = false;
+
+                    if (checkBox5.Checked)
+                        checkBox5.Checked = false;
+
+                    if (checkBox6.Checked)
+                        checkBox6.Checked = false;
+
+                    if (checkBox7.Checked)
+                        checkBox7.Checked = false;
+
+                    if (checkBox8.Checked)
+                        checkBox8.Checked = false;
+
                     MessageBox.Show(check_connection);
+                }
             }
             else
                 CheckLog();

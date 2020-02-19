@@ -6,13 +6,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.NetworkInformation;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsFormsApp1
@@ -82,10 +77,10 @@ namespace WindowsFormsApp1
             "Group 8 autoping: no", "Group 8 show ip: no", "Group 8 show response time: yes", "Group 8 autoping timer (min): 1", "Group 8 timeout (sec): 3", "Group 8 packets count: 1" };
 
         private readonly string[] StandartClientList = new string[]
-            { "Loopback/ /127.0.0.1", "БРИ-1/ /10.1.1.254", "БРИ-2/ /10.1.2.254", "БРИ-3/ /192.168.60.254", "SM BelAir WAP/ /192.168.68.73", "АСП/ /10.1.2.250", "",
-            "USL ER-SWB-J1, J2/ /192.168.67.250", "USL ER-SWA/ /192.168.60.253", "ISS Server 1/ /192.168.60.51", "LS1/ /192.168.60.53", "Lab printer/ /192.168.60.82", "",
-            "RSE1/ /10.1.1.3", "RSK1/ /10.1.1.4", "RSK2/ /10.1.1.5", "RSS1/ /10.1.2.1", "RSS2/ /10.1.1.1", "RSE-Med/ /10.1.1.7", "Mediaserver AGAT/ /10.1.1.80", "SM Printer/ /192.168.60.81", "",
-            "FS1/ /10.1.1.100", "ТВМ1-Н/ /10.1.3.1", "БПИ-НЧ (TRPU)/ /192.168.249.1", "БЗУ/ /10.1.11.5", "MDM (ШСС)/ /10.1.3.50" };
+            { "Loopback/127.0.0.1", "БРИ-1/10.1.1.254", "БРИ-2/10.1.2.254", "БРИ-3/192.168.60.254", "SM BelAir WAP/192.168.68.73", "АСП/10.1.2.250", "",
+            "USL ER-SWB-J1, J2/192.168.67.250", "USL ER-SWA/192.168.60.253", "ISS Server 1/192.168.60.51", "LS1/192.168.60.53", "Lab printer/192.168.60.82", "",
+            "RSE1/10.1.1.3", "RSK1/10.1.1.4", "RSK2/10.1.1.5", "RSS1/10.1.2.1", "RSS2/10.1.1.1", "RSE-Med/10.1.1.7", "Mediaserver AGAT/10.1.1.80", "SM Printer/192.168.60.81", "",
+            "FS1/10.1.1.100", "ТВМ1-Н/10.1.3.1", "БПИ-НЧ (TRPU)/192.168.249.1", "БЗУ/10.1.11.5", "MDM (ШСС)/10.1.3.50" };
 
         #endregion Константы
 
@@ -239,23 +234,6 @@ namespace WindowsFormsApp1
             {
                 SaveINI();
                 CheckConfig();
-
-                /*is_english = false;
-                is_ping_all = true;
-
-                for (int g = 0; g < groups_num; g++)
-                {
-                    g_names[g] = "Группа " + g;
-
-                    states[g, 0] = false;
-                    states[g, 1] = false;
-                    states[g, 2] = false;
-                    states[g, 3] = true;
-
-                    g_settings[g, 2] = 1;
-                    g_settings[g, 3] = 3;
-                    g_settings[g, 4] = 1;
-                }*/
             }
         }
 
@@ -284,8 +262,8 @@ namespace WindowsFormsApp1
                 {
                     for (int c = 0, flag = 0; c < al[s].Length; c++)
                     {
-                        if (al[s][c] == '/') // Правило разбиения строки на компоненты (Имя/DNS/IP)
-                            flag++;
+                        if (al[s][c] == '/') // Правило разбиения строки на компоненты (Имя/DNS/IP), так как временно dns вычленяется, то флаг прибавляется на 2 значения сразу
+                            flag += 2;
                         else
                             g_lists[group, flag][cl] += al[s][c];
                     }
@@ -425,18 +403,9 @@ namespace WindowsFormsApp1
                 LanguageTSMitem.Text = "Language";
                 Lang_rusTSMitem.Text = "Russian";
                 Lang_engTSMitem.Text = "English";
-                //TablesTSMitem.Text = "Tables";
-                //Switch_dnsTSMitem.Text = "On/Off DNS";
-                //Switch_ipTSMitem.Text = "On/Off IP";
-                //Switch_timeTSMitem.Text = "On/Off Time";
                 toolStripButton5.Text = "Help";
                 User_guideTSMitem.Text = "User's guide";
                 AboutTSMitem.Text = "About";
-
-                //groupBox1.Text = "Group 1";
-                //groupBox2.Text = "Group 2";
-                //groupBox3.Text = "Group 3";
-                //groupBox4.Text = "Group 4";
 
                 Column1a.HeaderText = "Name";
                 Column1d.HeaderText = "Time";
@@ -474,18 +443,9 @@ namespace WindowsFormsApp1
                 LanguageTSMitem.Text = "Язык";
                 Lang_rusTSMitem.Text = "Русский";
                 Lang_engTSMitem.Text = "Английский";
-                //TablesTSMitem.Text = "Таблицы";
-                //Switch_dnsTSMitem.Text = "Вкл/Выкл DNS";
-                //Switch_ipTSMitem.Text = "Вкл/Выкл IP";
-                //Switch_timeTSMitem.Text = "Вкл/Выкл Время";
                 toolStripButton5.Text = "Помощь";
                 User_guideTSMitem.Text = "Руководство пользователя";
                 AboutTSMitem.Text = "О программе";
-
-                //groupBox1.Text = "Группа 1";
-                //groupBox2.Text = "Группа 2";
-                //groupBox3.Text = "Группа 3";
-                //groupBox4.Text = "Группа 4";
 
                 Column1a.HeaderText = "Имя";
                 Column1d.HeaderText = "Время";
@@ -813,17 +773,21 @@ namespace WindowsFormsApp1
 
             if (reply.Status == IPStatus.Success)
             {
-                grid[4, g_settings[current_group, 1]].Value += " " + reply.RoundtripTime.ToString() + " ms";
+                if(reply.RoundtripTime <= 0)
+                    grid[4, g_settings[current_group, 1]].Value += " " + "<1 ms";
+                else
+                    grid[4, g_settings[current_group, 1]].Value += " " + reply.RoundtripTime.ToString() + " ms";
+
                 grid[4, g_settings[current_group, 1]].Style.BackColor = Color.GreenYellow;
                 grid[4, g_settings[current_group, 1]].Style.SelectionBackColor = Color.DarkGreen;
             }
             else
             {
-                grid[4, g_settings[current_group, 1]].Style.BackColor = Color.OrangeRed;
+                grid[4, g_settings[current_group, 1]].Style.BackColor = Color.FromArgb(255, 63, 63);
                 grid[4, g_settings[current_group, 1]].Style.SelectionBackColor = Color.DarkRed;
             }
 
-            if (g_settings[current_group, 5] == g_settings[current_group, 4])
+            if (g_settings[current_group, 5] == g_settings[current_group, 4] - 1)
             {
                 g_settings[current_group, 1]++;
                 g_settings[current_group, 5] = 0;
@@ -1028,7 +992,7 @@ namespace WindowsFormsApp1
         {
             if (!is_tracking)
             {
-                tracking = new Tracking(is_english, "", "", "");
+                tracking = new Tracking(is_english, "", "");
                 tracking.FormClosed += new FormClosedEventHandler(Tracking_Closed);
                 toolStripButton3.Enabled = false;
                 is_tracking = true;
@@ -1040,12 +1004,12 @@ namespace WindowsFormsApp1
         {
             int selected_row = grid.SelectedCells[0].RowIndex;
             string s_name = grid[0, selected_row].Value.ToString();
-            string s_dns = grid[1, selected_row].Value.ToString();
+            //string s_dns = grid[1, selected_row].Value.ToString();
             string s_ip = grid[2, selected_row].Value.ToString();
 
             if (!is_tracking)
             {
-                tracking = new Tracking(is_english, s_name, s_dns, s_ip);
+                tracking = new Tracking(is_english, s_name, s_ip);
                 tracking.FormClosed += new FormClosedEventHandler(Tracking_Closed);
                 toolStripButton3.Enabled = false;
                 is_tracking = true;
@@ -1516,7 +1480,8 @@ namespace WindowsFormsApp1
 
             reply_g1 = e.Reply;
 
-            SortReply(1);
+            if(!to_close)
+                SortReply(1);
         }
         
         private void Received_reply_g2(object sender, PingCompletedEventArgs e)
@@ -1532,7 +1497,8 @@ namespace WindowsFormsApp1
 
             reply_g2 = e.Reply;
 
-            SortReply(2);
+            if (!to_close)
+                SortReply(2);
         }
         
         private void Received_reply_g3(object sender, PingCompletedEventArgs e)
@@ -1548,7 +1514,8 @@ namespace WindowsFormsApp1
 
             reply_g3 = e.Reply;
 
-            SortReply(3);
+            if (!to_close)
+                SortReply(3);
         }
         
         private void Received_reply_g4(object sender, PingCompletedEventArgs e)
@@ -1564,7 +1531,8 @@ namespace WindowsFormsApp1
 
             reply_g4 = e.Reply;
 
-            SortReply(4);
+            if (!to_close)
+                SortReply(4);
         }
         
         private void Received_reply_g5(object sender, PingCompletedEventArgs e)
@@ -1580,7 +1548,8 @@ namespace WindowsFormsApp1
 
             reply_g5 = e.Reply;
 
-            SortReply(5);
+            if (!to_close)
+                SortReply(5);
         }
         
         private void Received_reply_g6(object sender, PingCompletedEventArgs e)
@@ -1596,7 +1565,8 @@ namespace WindowsFormsApp1
 
             reply_g6 = e.Reply;
 
-            SortReply(6);
+            if (!to_close)
+                SortReply(6);
         }
         
         private void Received_reply_g7(object sender, PingCompletedEventArgs e)
@@ -1612,7 +1582,8 @@ namespace WindowsFormsApp1
 
             reply_g7 = e.Reply;
 
-            SortReply(7);
+            if (!to_close)
+                SortReply(7);
         }
         
         private void Received_reply_g8(object sender, PingCompletedEventArgs e)
@@ -1628,7 +1599,8 @@ namespace WindowsFormsApp1
 
             reply_g8 = e.Reply;
 
-            SortReply(8);
+            if (!to_close)
+                SortReply(8);
         }
         
         private void Form_ChangedSize(object sender, EventArgs e)
@@ -1655,6 +1627,7 @@ namespace WindowsFormsApp1
 
             FormClosing -= new FormClosingEventHandler(Form1_FormClosing);
             Close();
+            Dispose();
         }
         #endregion События
     }

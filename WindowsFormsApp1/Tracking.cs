@@ -8,10 +8,10 @@ namespace WindowsFormsApp1
 {
     public partial class Tracking : Form
     {
-        bool is_eng, to_ping = false, to_clear = false;
+        bool is_eng, to_ping = true, to_clear = false;
         int cur_row = 0;
         string received_name, received_dns, received_ip;
-        string check_connection;
+        string check_connection, error;
 
         DataGridViewTextBoxColumn Col0 = new DataGridViewTextBoxColumn();
         DataGridViewTextBoxColumn Col1 = new DataGridViewTextBoxColumn();
@@ -22,10 +22,10 @@ namespace WindowsFormsApp1
         PingReply reply;
         static AutoResetEvent waiter = new AutoResetEvent(false);
 
-        public Tracking(bool loc_eng, string name, string dns, string ip)
+        public Tracking(bool loc_eng, string name, string ip)
         {
             received_name = name;
-            received_dns = dns;
+            //received_dns = dns;
             received_ip = ip;
             is_eng = loc_eng;
 
@@ -69,7 +69,7 @@ namespace WindowsFormsApp1
             if (is_eng)
             {
                 Text = "Tracking";
-                label1.Text = "Name/DNS";
+                label1.Text = "Name";
                 label2.Text = "Type ip that will ping:";
                 Col0.HeaderText = "Reply time";
                 Col1.HeaderText = "Reply";
@@ -77,11 +77,12 @@ namespace WindowsFormsApp1
                 button1.Text = "Start";
 
                 check_connection = "No connection to the network." + Environment.NewLine + "Check cable connection or network/firewall settings.";
+                error = "Input correct ip address.";
             }
             else
             {
                 Text = "Слежение";
-                label1.Text = "Имя/DNS";
+                label1.Text = "Имя";
                 label2.Text = "Введите пингуемый ip адрес:";
                 Col0.HeaderText = "Время ответа";
                 Col1.HeaderText = "Ответ";
@@ -89,6 +90,7 @@ namespace WindowsFormsApp1
                 button1.Text = "Старт";
 
                 check_connection = "Нет подключения к сети" + Environment.NewLine + "Проверьте подключение сетевого кабеля или настройки сети/фаерволла";
+                error = "Введите правильный ip адрес.";
             }
 
             Col3.HeaderText = "";
@@ -97,18 +99,7 @@ namespace WindowsFormsApp1
         private void Ping_cl()
         {
             if (textBox1.Text != "" && textBox1.Text != "0.0.0.0")
-            {
-                dataGridView1.Rows.Add();
-                ping.SendAsync(textBox1.Text, waiter);
-            }
-        }
-
-        private void Message_error()
-        {
-            if (is_eng)
-                MessageBox.Show("Input correct ip address");
-            else
-                MessageBox.Show("Введите правильный ip адрес");
+                ping.SendAsync(textBox1.Text, 1000, waiter);
         }
 
         private void Tracking_FormClosing(object sender, FormClosingEventArgs e)
@@ -164,7 +155,7 @@ namespace WindowsFormsApp1
 
                 cur_row++;
 
-                if (to_ping)
+                if (button1.Text == "Стоп" || button1.Text == "Stop")
                     Ping_cl();
             }
         }
@@ -217,12 +208,7 @@ namespace WindowsFormsApp1
                     int num = 0;
 
                     if (textBox1.TextLength < 7)
-                    {
-                        if (is_eng)
-                            MessageBox.Show("Input correct ip address");
-                        else
-                            MessageBox.Show("Введите правильный ip адрес");
-                    }
+                        MessageBox.Show(error);
                     else
                     {
                         bool norm = true;
@@ -237,7 +223,7 @@ namespace WindowsFormsApp1
                                 else
                                 {
                                     norm = false;
-                                    Message_error();
+                                    MessageBox.Show(error);
                                 }
 
                                 j++;
@@ -247,7 +233,7 @@ namespace WindowsFormsApp1
                                 if (j > 3)
                                 {
                                     norm = false;
-                                    Message_error();
+                                    MessageBox.Show(error);
                                 }
 
                                 num = 0;
@@ -257,7 +243,7 @@ namespace WindowsFormsApp1
                             else
                             {
                                 norm = false;
-                                Message_error();
+                                MessageBox.Show(error);
                             }
                         }
 
@@ -273,9 +259,10 @@ namespace WindowsFormsApp1
                                     break;
                             }
 
-                            to_ping = true;
+                            //to_ping = true;
                             to_clear = false;
-                            Ping_cl();
+                            if(to_ping)
+                                Ping_cl();
                         }
                     }
                 }
@@ -284,6 +271,8 @@ namespace WindowsFormsApp1
             }
             else
             {
+                //ping.SendAsyncCancel();
+
                 switch (is_eng)
                 {
                     case true:
@@ -311,8 +300,12 @@ namespace WindowsFormsApp1
 
             reply = e.Reply;
 
-            if(!to_clear && to_ping)
+            if(!to_clear)
+            {
+                to_ping = true;
+                dataGridView1.Rows.Add();
                 Display_reply();
+            }
         }
     }
 }

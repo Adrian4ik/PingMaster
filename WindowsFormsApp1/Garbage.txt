@@ -188,3 +188,22 @@ int p1, p2, p3, p4, p5, p6, p7, p8, // количество запросов н�
             c += " " + reply_g1.RoundtripTime + " ms";
 
             File.AppendAllText(DateTime.Now.Date.ToString().Substring(0, 11) + " log.txt", c + Environment.NewLine);
+
+
+            
+                /*is_english = false;
+                is_ping_all = true;
+
+                for (int g = 0; g < groups_num; g++)
+                {
+                    g_names[g] = "Группа " + g;
+
+                    states[g, 0] = false;
+                    states[g, 1] = false;
+                    states[g, 2] = false;
+                    states[g, 3] = true;
+
+                    g_settings[g, 2] = 1;
+                    g_settings[g, 3] = 3;
+                    g_settings[g, 4] = 1;
+                }*/

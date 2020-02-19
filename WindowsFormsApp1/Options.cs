@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace WindowsFormsApp1
 {
-    public partial class Settings : Form
+    public partial class Options : Form
     {
         bool is_eng;
 
@@ -16,7 +16,7 @@ namespace WindowsFormsApp1
         public int Timeout { get; private set; }
         public int Packets { get; private set; }
 
-        public Settings(bool loc_eng, bool dns, bool ip, bool rt, int group, int period, int timeout, int packets)
+        public Options(bool loc_eng, bool dns, bool ip, bool rt, int group, int period, int timeout, int packets)
         {
             is_eng = loc_eng;
             DNS = dns;

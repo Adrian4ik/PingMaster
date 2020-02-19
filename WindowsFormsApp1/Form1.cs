@@ -21,6 +21,7 @@ namespace WindowsFormsApp1
     {
         bool is_english = false, // проверка на использование английской версии программы
             is_tracking = false, // проверка открытого окна слежения (для того, чтобы не создавалось более 1 окна слежения)
+            to_close = false,
             is_ping_all = false, is_started;
 
         bool[,] states = new bool[8, 4]; // настройки (да/нет) групп клиентов, принимаемых из файла: [группа (1-8), настройки (автопинговать/показывать dns/показывать ip/показывать время ответа)]
@@ -56,7 +57,7 @@ namespace WindowsFormsApp1
 
         PingReply reply_g1, reply_g2, reply_g3, reply_g4, reply_g5, reply_g6, reply_g7, reply_g8;
 
-        Settings settings;
+        Options settings;
 
         Tracking tracking;
 
@@ -236,7 +237,10 @@ namespace WindowsFormsApp1
             }
             else
             {
-                is_english = false;
+                SaveINI();
+                CheckConfig();
+
+                /*is_english = false;
                 is_ping_all = true;
 
                 for (int g = 0; g < groups_num; g++)
@@ -251,9 +255,7 @@ namespace WindowsFormsApp1
                     g_settings[g, 2] = 1;
                     g_settings[g, 3] = 3;
                     g_settings[g, 4] = 1;
-                }
-
-                SaveINI();
+                }*/
             }
         }
 
@@ -758,32 +760,46 @@ namespace WindowsFormsApp1
 
         private void SortReply(int group)
         {
-            switch (group)
+            if (to_close)
             {
-                case 1:
-                    DisplayReply(group, dataGridView1, reply_g1, button11, checkBox1);
-                    break;
-                case 2:
-                    DisplayReply(group, dataGridView2, reply_g2, button12, checkBox2);
-                    break;
-                case 3:
-                    DisplayReply(group, dataGridView3, reply_g3, button13, checkBox3);
-                    break;
-                case 4:
-                    DisplayReply(group, dataGridView4, reply_g4, button14, checkBox4);
-                    break;
-                case 5:
-                    DisplayReply(group, dataGridView5, reply_g5, button15, checkBox5);
-                    break;
-                case 6:
-                    DisplayReply(group, dataGridView6, reply_g6, button16, checkBox6);
-                    break;
-                case 7:
-                    DisplayReply(group, dataGridView7, reply_g7, button17, checkBox7);
-                    break;
-                case 8:
-                    DisplayReply(group, dataGridView8, reply_g8, button18, checkBox8);
-                    break;
+                ClearGrid(dataGridView1, g_settings[0, 0]);
+                ClearGrid(dataGridView2, g_settings[1, 0]);
+                ClearGrid(dataGridView3, g_settings[2, 0]);
+                ClearGrid(dataGridView4, g_settings[3, 0]);
+                ClearGrid(dataGridView5, g_settings[4, 0]);
+                ClearGrid(dataGridView6, g_settings[5, 0]);
+                ClearGrid(dataGridView7, g_settings[6, 0]);
+                ClearGrid(dataGridView8, g_settings[7, 0]);
+            }
+            else
+            {
+                switch (group)
+                {
+                    case 1:
+                        DisplayReply(group, dataGridView1, reply_g1, button11, checkBox1);
+                        break;
+                    case 2:
+                        DisplayReply(group, dataGridView2, reply_g2, button12, checkBox2);
+                        break;
+                    case 3:
+                        DisplayReply(group, dataGridView3, reply_g3, button13, checkBox3);
+                        break;
+                    case 4:
+                        DisplayReply(group, dataGridView4, reply_g4, button14, checkBox4);
+                        break;
+                    case 5:
+                        DisplayReply(group, dataGridView5, reply_g5, button15, checkBox5);
+                        break;
+                    case 6:
+                        DisplayReply(group, dataGridView6, reply_g6, button16, checkBox6);
+                        break;
+                    case 7:
+                        DisplayReply(group, dataGridView7, reply_g7, button17, checkBox7);
+                        break;
+                    case 8:
+                        DisplayReply(group, dataGridView8, reply_g8, button18, checkBox8);
+                        break;
+                }
             }
         }
         
@@ -803,7 +819,7 @@ namespace WindowsFormsApp1
             }
             else
             {
-                grid[4, g_settings[current_group, 1]].Style.BackColor = Color.Red;
+                grid[4, g_settings[current_group, 1]].Style.BackColor = Color.OrangeRed;
                 grid[4, g_settings[current_group, 1]].Style.SelectionBackColor = Color.DarkRed;
             }
 
@@ -1040,7 +1056,7 @@ namespace WindowsFormsApp1
         private void ShowSettings(int group)
         {
             group--;
-            settings = new Settings(is_english, states[group, 1], states[group, 2], states[group, 3], group, g_settings[group, 2], g_settings[group, 3], g_settings[group, 4]);
+            settings = new Options(is_english, states[group, 1], states[group, 2], states[group, 3], group, g_settings[group, 2], g_settings[group, 3], g_settings[group, 4]);
             settings.FormClosed += new FormClosedEventHandler(Settings_Closed);
             settings.Show();
         }
@@ -1622,6 +1638,9 @@ namespace WindowsFormsApp1
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            e.Cancel = true;
+            to_close = true;
+
             File.AppendAllText("Logs//" + DateTime.Now.Date.ToString().Substring(0, 10) + ".log", "Программа закрыта " + DateTime.Now.Date.ToString().Substring(0, 11) + " в " + DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString() + Environment.NewLine);
             File.AppendAllText("Logs//" + DateTime.Now.Date.ToString().Substring(0, 10) + ".log", Environment.NewLine);
 
@@ -1634,14 +1653,8 @@ namespace WindowsFormsApp1
             ping_g7.SendAsyncCancel();
             ping_g8.SendAsyncCancel();
 
-            ClearGrid(dataGridView1, g_settings[0, 0]);
-            ClearGrid(dataGridView2, g_settings[1, 0]);
-            ClearGrid(dataGridView3, g_settings[2, 0]);
-            ClearGrid(dataGridView4, g_settings[3, 0]);
-            ClearGrid(dataGridView5, g_settings[4, 0]);
-            ClearGrid(dataGridView6, g_settings[5, 0]);
-            ClearGrid(dataGridView7, g_settings[6, 0]);
-            ClearGrid(dataGridView8, g_settings[7, 0]);
+            FormClosing -= new FormClosingEventHandler(Form1_FormClosing);
+            Close();
         }
         #endregion События
     }

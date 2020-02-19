@@ -34,6 +34,8 @@ namespace WindowsFormsApp1
 
         private void Preprocessing()
         {
+            Translate();
+
             if (received_ip != "")
             {
                 textBox1.Text = received_ip;
@@ -171,6 +173,15 @@ namespace WindowsFormsApp1
         {
             ping.SendAsyncCancel();
 
+            if (textBox1.Text == "127.0.0.1")
+                label1.Text = "Loopback";
+            else if (textBox1.Text == "8.8.8.8")
+                label1.Text = "Google";
+            else if (textBox1.Text == "4.2.2.2" || textBox1.Text == "77.88.21.11" || textBox1.Text == "5.255.255.50")
+                label1.Text = "Яндекс";
+            else
+                label1.Text = textBox1.Text;
+
             switch (is_eng)
             {
                 case true:
@@ -188,21 +199,11 @@ namespace WindowsFormsApp1
                 cur_row = 0;
                 dataGridView1.Rows.Clear();
             }
-
-            if (textBox1.Text == "127.0.0.1")
-                label1.Text = "Loopback";
-            else if (textBox1.Text == "8.8.8.8")
-                label1.Text = "Google";
-            else if (textBox1.Text == "4.2.2.2" || textBox1.Text == "77.88.21.11" || textBox1.Text == "5.255.255.50")
-                label1.Text = "Яндекс";
-            else
-                label1.Text = textBox1.Text;
         }
 
         private void Tracking_Load(object sender, EventArgs e)
         {
             Preprocessing();
-            Translate();
 
             ping.PingCompleted += new PingCompletedEventHandler(Received_reply);
         }

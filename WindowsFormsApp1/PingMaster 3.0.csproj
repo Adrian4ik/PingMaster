@@ -26,8 +26,9 @@
     <TargetCulture>en</TargetCulture>
     <ProductName>Ping Master 3.0</ProductName>
     <PublisherName>RSC Energia</PublisherName>
-    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>6</ApplicationRevision>
+    <SuiteName>RSC Energia</SuiteName>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <ApplicationRevision>7</ApplicationRevision>
     <ApplicationVersion>1.0.28.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

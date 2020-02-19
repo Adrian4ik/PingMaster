@@ -69,7 +69,8 @@ namespace WindowsFormsApp1
         private const int C_sec = 1000, C_min = 60000;
 
         private readonly string[] StandartConfigList = new string[]
-            { "Language: rus", "Autoping all: yes", "Group 1 name: Сетевые коммутационные оборудования", "Group 2 name: Лэптопы", "Group 3 name: Научное оборудование", "Group 4 name: Name", "Group 5 name: Принтеры",
+            { "Language: rus", "Autoping all: yes", "",
+            "Group 1 name: Сетевое коммутационное оборудование", "Group 2 name: Сетевые абоненты АС МКС", "Group 3 name: Сетевые абоненты РС МКС", "Group 4 name: Служебные системы РС МКС", "",
             "Group 1 autoping: no", "Group 1 show ip: no", "Group 1 show response time: yes", "Group 1 autoping timer (min): 1", "Group 1 timeout (sec): 3", "Group 1 packets count: 1", "",
             "Group 2 autoping: no", "Group 2 show ip: no", "Group 2 show response time: yes", "Group 2 autoping timer (min): 1", "Group 2 timeout (sec): 3", "Group 2 packets count: 1", "",
             "Group 3 autoping: no", "Group 3 show ip: no", "Group 3 show response time: yes", "Group 3 autoping timer (min): 1", "Group 3 timeout (sec): 3", "Group 3 packets count: 1", "",

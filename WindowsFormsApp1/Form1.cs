@@ -6,8 +6,13 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.NetworkInformation;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsFormsApp1
@@ -19,9 +24,11 @@ namespace WindowsFormsApp1
             to_close = false,
             is_ping_all = false, is_started;
 
+        bool[] ping_completed = new bool[8];
+
         bool[,] states = new bool[8, 4]; // настройки (да/нет) групп клиентов, принимаемых из файла: [группа (1-8), настройки (автопинговать/показывать dns/показывать ip/показывать время ответа)]
 
-        int groups_num = 0; // количество групп, задействованных при старте программы
+        int groups_num = 0; // количество групп для отображения, задействованных при старте программы
 
         int[,] g_settings = new int[8, 6]; // настройки групп в виде: [группа (1-8), настройки (кол-во клиентов/текущий клиент/текущий период автопинга/текущий таймаут/кол-во запросов/текущее кол-во запросов)]
 
@@ -174,6 +181,9 @@ namespace WindowsFormsApp1
             for (int i = 0; i < 8; i++)
                 for (int j = 0; j < 11; j++)
                     g_lists[i, j] = new string[g_settings[i, 0]];
+
+            for (int i = 0; i < 8; i++)
+                ping_completed[i] = true;
         }
 
         private void CheckConfig()
@@ -569,11 +579,14 @@ namespace WindowsFormsApp1
         private void PingAll()
         {
             CheckLog();
-            toolStripButton2.Enabled = false;
 
             if (NetworkInterface.GetIsNetworkAvailable())
             {
                 is_ping_all = true;
+                toolStripButton2.Enabled = false;
+
+                for (int i = 0; i < groups_num; i++)
+                    ping_completed[i] = false;
 
                 ClearGrid(dataGridView1, g_settings[0, 0]);
                 ClearGrid(dataGridView2, g_settings[1, 0]);
@@ -617,11 +630,13 @@ namespace WindowsFormsApp1
                 }
             }
             else
+            {
+                toolStripButton2.Enabled = true;
                 MessageBox.Show(check_connection);
+            }
 
             is_started = false;
             is_ping_all = false;
-            toolStripButton2.Enabled = true;
         }
 
         private void SortPing(int group)
@@ -658,7 +673,6 @@ namespace WindowsFormsApp1
         private void PingGroup(int current_group, DataGridView grid, Button button, CheckBox check, Ping ping, int timeout, AutoResetEvent waiter)
         {
             current_group--;
-            toolStripButton2.Enabled = false;
 
             if (g_settings[current_group, 1] < g_settings[current_group, 0])
             {
@@ -678,7 +692,10 @@ namespace WindowsFormsApp1
                         PingCl(ping, grid[2, g_settings[current_group, 1]].Value.ToString(), timeout, waiter);
                     }
                     else
+                    {
+                        toolStripButton2.Enabled = true;
                         MessageBox.Show("Список клиентов данной группы пуст");
+                    }
                 }
                 else if (!is_ping_all)
                 {
@@ -706,11 +723,15 @@ namespace WindowsFormsApp1
                     if (checkBox8.Checked)
                         checkBox8.Checked = false;
 
+                    toolStripButton2.Enabled = true;
                     MessageBox.Show(check_connection);
                 }
             }
             else
+            {
+                //toolStripButton2.Enabled = true;
                 CheckLog();
+            }
         }
 
         private static void PingCl(Ping ping, string address, int timeout, AutoResetEvent waiter)
@@ -802,6 +823,15 @@ namespace WindowsFormsApp1
                 g_settings[current_group, 1] = 0;
                 button.Enabled = true;
                 check.Enabled = true;
+                ping_completed[current_group] = true;
+
+                if (ping_completed[0] && ping_completed[1] && ping_completed[2] && ping_completed[3] && ping_completed[4] && ping_completed[5] && ping_completed[6] && ping_completed[7])
+                {
+                    for (int i = 0; i < groups_num; i++)
+                        ping_completed[i] = false;
+
+                    toolStripButton2.Enabled = true;
+                }
             }
         }
 
@@ -816,12 +846,18 @@ namespace WindowsFormsApp1
                 timer.Start();
 
                 for (int i = 0; i < 8; i++)
-                {
                     g_settings[i, 1] = 0;
-                }
+
+                toolStripButton2.Enabled = false;
+                ping_completed[currrent_group - 1] = false;
 
                 ClearGrid(grid, count);
                 SortPing(currrent_group);
+            }
+            else
+            {
+                if(!checkBox1.Checked && !checkBox2.Checked && !checkBox3.Checked && !checkBox4.Checked && !checkBox5.Checked && !checkBox6.Checked && !checkBox7.Checked && !checkBox8.Checked)
+                    toolStripButton2.Enabled = true;
             }
         }
 
@@ -1142,48 +1178,72 @@ namespace WindowsFormsApp1
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            toolStripButton2.Enabled = false;
+            ping_completed[0] = false;
+
             ClearGrid(dataGridView1, g_settings[0, 0]);
             SortPing(1);
         }
 
         private void timer2_Tick(object sender, EventArgs e)
         {
+            toolStripButton2.Enabled = false;
+            ping_completed[1] = false;
+
             ClearGrid(dataGridView2, g_settings[1, 0]);
             SortPing(2);
         }
 
         private void timer3_Tick(object sender, EventArgs e)
         {
+            toolStripButton2.Enabled = false;
+            ping_completed[2] = false;
+
             ClearGrid(dataGridView3, g_settings[2, 0]);
             SortPing(3);
         }
 
         private void timer4_Tick(object sender, EventArgs e)
         {
+            toolStripButton2.Enabled = false;
+            ping_completed[3] = false;
+
             ClearGrid(dataGridView4, g_settings[3, 0]);
             SortPing(4);
         }
 
         private void timer5_Tick(object sender, EventArgs e)
         {
+            toolStripButton2.Enabled = false;
+            ping_completed[4] = false;
+
             ClearGrid(dataGridView5, g_settings[4, 0]);
             SortPing(5);
         }
 
         private void timer6_Tick(object sender, EventArgs e)
         {
+            toolStripButton2.Enabled = false;
+            ping_completed[5] = false;
+
             ClearGrid(dataGridView6, g_settings[5, 0]);
             SortPing(6);
         }
 
         private void timer7_Tick(object sender, EventArgs e)
         {
+            toolStripButton2.Enabled = false;
+            ping_completed[6] = false;
+
             ClearGrid(dataGridView7, g_settings[6, 0]);
             SortPing(7);
         }
 
         private void timer8_Tick(object sender, EventArgs e)
         {
+            toolStripButton2.Enabled = false;
+            ping_completed[7] = false;
+
             ClearGrid(dataGridView8, g_settings[7, 0]);
             SortPing(8);
         }
@@ -1273,6 +1333,9 @@ namespace WindowsFormsApp1
             if (Timer1.Enabled)
                 Timer1.Stop();
 
+            toolStripButton2.Enabled = false;
+            ping_completed[0] = false;
+
             ClearGrid(dataGridView1, g_settings[0, 0]);
             SortPing(1);
         }
@@ -1281,6 +1344,9 @@ namespace WindowsFormsApp1
         {
             if (Timer2.Enabled)
                 Timer2.Stop();
+
+            toolStripButton2.Enabled = false;
+            ping_completed[1] = false;
 
             ClearGrid(dataGridView2, g_settings[1, 0]);
             SortPing(2);
@@ -1291,6 +1357,9 @@ namespace WindowsFormsApp1
             if (Timer3.Enabled)
                 Timer3.Stop();
 
+            toolStripButton2.Enabled = false;
+            ping_completed[2] = false;
+
             ClearGrid(dataGridView3, g_settings[2, 0]);
             SortPing(3);
         }
@@ -1299,6 +1368,9 @@ namespace WindowsFormsApp1
         {
             if (Timer4.Enabled)
                 Timer4.Stop();
+
+            toolStripButton2.Enabled = false;
+            ping_completed[3] = false;
 
             ClearGrid(dataGridView4, g_settings[3, 0]);
             SortPing(4);
@@ -1309,6 +1381,9 @@ namespace WindowsFormsApp1
             if (Timer5.Enabled)
                 Timer5.Stop();
 
+            toolStripButton2.Enabled = false;
+            ping_completed[4] = false;
+
             ClearGrid(dataGridView5, g_settings[4, 0]);
             SortPing(5);
         }
@@ -1317,6 +1392,9 @@ namespace WindowsFormsApp1
         {
             if (Timer6.Enabled)
                 Timer6.Stop();
+
+            toolStripButton2.Enabled = false;
+            ping_completed[5] = false;
 
             ClearGrid(dataGridView6, g_settings[5, 0]);
             SortPing(6);
@@ -1327,6 +1405,9 @@ namespace WindowsFormsApp1
             if (Timer7.Enabled)
                 Timer7.Stop();
 
+            toolStripButton2.Enabled = false;
+            ping_completed[6] = false;
+
             ClearGrid(dataGridView7, g_settings[6, 0]);
             SortPing(7);
         }
@@ -1335,6 +1416,9 @@ namespace WindowsFormsApp1
         {
             if (Timer8.Enabled)
                 Timer8.Stop();
+
+            toolStripButton2.Enabled = false;
+            ping_completed[7] = false;
 
             ClearGrid(dataGridView8, g_settings[7, 0]);
             SortPing(8);

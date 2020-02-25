@@ -122,15 +122,6 @@ namespace WindowsFormsApp1
             File.AppendAllText("Logs//" + DateTime.Now.Date.ToString().Substring(0, 10) + ".log", "Программа запущена " + DateTime.Now.Date.ToString().Substring(0, 11) + " в " + DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString() + Environment.NewLine);
             File.AppendAllText("Logs//" + DateTime.Now.Date.ToString().Substring(0, 10) + ".log", Environment.NewLine);
 
-            ping_g1.PingCompleted += new PingCompletedEventHandler(Received_reply_g1);
-            ping_g2.PingCompleted += new PingCompletedEventHandler(Received_reply_g2);
-            ping_g3.PingCompleted += new PingCompletedEventHandler(Received_reply_g3);
-            ping_g4.PingCompleted += new PingCompletedEventHandler(Received_reply_g4);
-            ping_g5.PingCompleted += new PingCompletedEventHandler(Received_reply_g5);
-            ping_g6.PingCompleted += new PingCompletedEventHandler(Received_reply_g6);
-            ping_g7.PingCompleted += new PingCompletedEventHandler(Received_reply_g7);
-            ping_g8.PingCompleted += new PingCompletedEventHandler(Received_reply_g8);
-
             groupBox1.Text = g_names[0];
             groupBox2.Text = g_names[1];
             groupBox3.Text = g_names[2];
@@ -147,6 +138,15 @@ namespace WindowsFormsApp1
             Translate();
             CopyText();
             CopyElements();
+
+            ping_g1.PingCompleted += new PingCompletedEventHandler(Received_reply_g1);
+            ping_g2.PingCompleted += new PingCompletedEventHandler(Received_reply_g2);
+            ping_g3.PingCompleted += new PingCompletedEventHandler(Received_reply_g3);
+            ping_g4.PingCompleted += new PingCompletedEventHandler(Received_reply_g4);
+            ping_g5.PingCompleted += new PingCompletedEventHandler(Received_reply_g5);
+            ping_g6.PingCompleted += new PingCompletedEventHandler(Received_reply_g6);
+            ping_g7.PingCompleted += new PingCompletedEventHandler(Received_reply_g7);
+            ping_g8.PingCompleted += new PingCompletedEventHandler(Received_reply_g8);
 
             checkBox1.Checked = states[0, 0];
             checkBox2.Checked = states[1, 0];
@@ -723,9 +723,19 @@ namespace WindowsFormsApp1
                     if (checkBox8.Checked)
                         checkBox8.Checked = false;
 
+                    g_settings[current_group, 1] = 0;
+                    button.Enabled = true;
+                    check.Enabled = true;
+                    ping_completed[current_group] = true;
+
+                    for (int i = 0; i < groups_num; i++)
+                        ping_completed[i] = false;
+
                     toolStripButton2.Enabled = true;
                     MessageBox.Show(check_connection);
                 }
+                else
+                    MessageBox.Show(check_connection);
             }
             else
             {
@@ -790,20 +800,30 @@ namespace WindowsFormsApp1
 
             grid[3, g_settings[current_group, 1]].Value = DateTime.Now.ToString().Substring(11) + "." + DateTime.Now.Millisecond.ToString();
 
-            grid[4, g_settings[current_group, 1]].Value = reply.Status;
 
-            if (reply.Status == IPStatus.Success)
+            if (reply != null)
             {
-                if(reply.RoundtripTime <= 0)
-                    grid[4, g_settings[current_group, 1]].Value += " " + "<1 ms";
-                else
-                    grid[4, g_settings[current_group, 1]].Value += " " + reply.RoundtripTime.ToString() + " ms";
+                grid[4, g_settings[current_group, 1]].Value = reply.Status;
 
-                grid[4, g_settings[current_group, 1]].Style.BackColor = Color.GreenYellow;
-                grid[4, g_settings[current_group, 1]].Style.SelectionBackColor = Color.DarkGreen;
+                if (reply.Status == IPStatus.Success)
+                {
+                    if (reply.RoundtripTime <= 0)
+                        grid[4, g_settings[current_group, 1]].Value += " " + "<1 ms";
+                    else
+                        grid[4, g_settings[current_group, 1]].Value += " " + reply.RoundtripTime.ToString() + " ms";
+
+                    grid[4, g_settings[current_group, 1]].Style.BackColor = Color.GreenYellow;
+                    grid[4, g_settings[current_group, 1]].Style.SelectionBackColor = Color.DarkGreen;
+                }
+                else
+                {
+                    grid[4, g_settings[current_group, 1]].Style.BackColor = Color.FromArgb(255, 63, 63);
+                    grid[4, g_settings[current_group, 1]].Style.SelectionBackColor = Color.DarkRed;
+                }
             }
             else
             {
+                grid[4, g_settings[current_group, 1]].Value = "Пакет утерян";
                 grid[4, g_settings[current_group, 1]].Style.BackColor = Color.FromArgb(255, 63, 63);
                 grid[4, g_settings[current_group, 1]].Style.SelectionBackColor = Color.DarkRed;
             }
@@ -1563,8 +1583,14 @@ namespace WindowsFormsApp1
             ((AutoResetEvent)e.UserState).Set();
 
             reply_g1 = e.Reply;
+            reply_g1 = e.Reply;
+            reply_g1 = e.Reply;
+            reply_g1 = e.Reply;
+            reply_g1 = e.Reply;
+            reply_g1 = e.Reply;
+            reply_g1 = e.Reply;
 
-            if(!to_close)
+            if (!to_close)
                 SortReply(1);
         }
         

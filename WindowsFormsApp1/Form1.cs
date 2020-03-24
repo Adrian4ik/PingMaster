@@ -39,6 +39,10 @@ namespace WindowsFormsApp1
 
         string[,][] g_lists = new string[8, 11][]; // трёхмерный список клиентов в виде: [группа (1-8), аргументы (имя/dns/ip/время 1 опроса/ответ 1 опроса/время 2 опроса/.../ответ 4 опроса)] [клиент]
 
+        //
+        //
+        //
+
         static Ping ping_g1 = new Ping(),
             ping_g2 = new Ping(),
             ping_g3 = new Ping(),
@@ -104,16 +108,16 @@ namespace WindowsFormsApp1
 
         private void PreProcessing()
         {
-            is_started = true;
+            is_started = true; // программа стартовала
 
             if (!File.Exists("Clients.txt"))
-            {
-                FileStream f = File.Create("Clients.txt");
+            { // если файл со списком клиентов не существует, то...
+                FileStream f = File.Create("Clients.txt"); // создаём его
                 f.Close();
-                File.WriteAllLines("Clients.txt", StandartClientList);
+                File.WriteAllLines("Clients.txt", StandartClientList); // и заполняем стандартным списком
             }
 
-            al = File.ReadAllLines("Clients.txt");
+            al = File.ReadAllLines("Clients.txt"); // читаем список клиентов
 
             Counting();
             CheckConfig();
@@ -164,15 +168,15 @@ namespace WindowsFormsApp1
         private void Counting()
         {
             if (al.Count() > 0)
-            {
-                groups_num++;
+            { // если количество клиентов больше нуля, то...
+                groups_num++; // считаем, что существует хотя бы 1 группа
 
                 for (int s = 0; s < al.Count(); s++)
-                {
+                { // в каждой строке списка клиентов...
                     if (al[s] == "")
-                        groups_num++;
+                        groups_num++; // при пустой строке наращиваем группу
                     else
-                        g_settings[groups_num - 1, 0]++;
+                        g_settings[groups_num - 1, 0]++; // наращиваем количество клиентов
                 }
             }
             else
@@ -180,68 +184,68 @@ namespace WindowsFormsApp1
 
             for (int i = 0; i < 8; i++)
                 for (int j = 0; j < 11; j++)
-                    g_lists[i, j] = new string[g_settings[i, 0]];
+                    g_lists[i, j] = new string[g_settings[i, 0]]; // создаём продвинутый список клиентов
 
             for (int i = 0; i < 8; i++)
-                ping_completed[i] = true;
+                ping_completed[i] = true; // помечаем все группы (даже не существующие) как пропингованные
         }
 
         private void CheckConfig()
         {
             if (File.Exists("Config.ini"))
-            {
-                string[] config = File.ReadAllLines("Config.ini");
+            { // если файл конфигураций существует, то...
+                string[] config = File.ReadAllLines("Config.ini"); // считываем его в список
 
                 for (int i = 0; i < config.Count(); i++)
-                {
+                { // в каждой строке списка...
                     if (config[i] == "Language: eng")
                         is_english = true;
                     else if (config[i] == "Language: rus")
-                        is_english = false;
+                        is_english = false; // проверяем язык (таким образом можно в любом порядке вписывать конфигурации в файл)
 
                     if (config[i] == "Autoping all: yes" || config[i] == "Autoping all: y")
                         is_ping_all = true;
                     else if (config[i] == "Autoping all: no" || config[i] == "Autoping all: n")
-                        is_ping_all = false;
+                        is_ping_all = false; // проверяем пинговать ли всех при запуске или нет
 
                     for (int g = 0; g < groups_num; g++)
-                    {
+                    { // для каждой группы...
                         if (config[i].Length >= 13 && config[i].Substring(0, 13) == "Group " + (g + 1) + " name:")
-                            g_names[g] = config[i].Substring(14);
+                            g_names[g] = config[i].Substring(14); // читаем название группы
 
                         if (config[i] == "Group " + (g + 1) + " autoping: yes" || config[i] == "Group " + (g + 1) + " autoping: y")
                             states[g, 0] = true;
                         else if (config[i] == "Group " + (g + 1) + " autoping: no" || config[i] == "Group " + (g + 1) + " autoping: n")
-                            states[g, 0] = false;
+                            states[g, 0] = false; // проверяем включать ли галочку автопинга группы
 
                         if (config[i] == "Group " + (g + 1) + " show dns: yes" || config[i] == "Group " + (g + 1) + " show dns: y")
                             states[g, 1] = true;
                         else if (config[i] == "Group " + (g + 1) + " show dns: no" || config[i] == "Group " + (g + 1) + " show dns: n")
-                            states[g, 1] = false;
+                            states[g, 1] = false; // проверяем показывать ли dns имена клиентов группы
 
                         if (config[i] == "Group " + (g + 1) + " show ip: yes" || config[i] == "Group " + (g + 1) + " show ip: y")
                             states[g, 2] = true;
                         else if (config[i] == "Group " + (g + 1) + " show ip: no" || config[i] == "Group " + (g + 1) + " show ip: n")
-                            states[g, 2] = false;
+                            states[g, 2] = false; // проверяем показывать ли ip адреса клиентов группы
 
                         if (config[i] == "Group " + (g + 1) + " show response time: yes" || config[i] == "Group " + (g + 1) + " show response time: y")
                             states[g, 3] = true;
                         else if (config[i] == "Group " + (g + 1) + " show response time: no" || config[i] == "Group " + (g + 1) + " show response time: n")
-                            states[g, 3] = false;
+                            states[g, 3] = false; // проверяем показывать ли время ответов клиентов группы
 
                         if (config[i].Length >= 29 && config[i].Substring(0, 29) == "Group " + (g + 1) + " autoping timer (min):" && int.TryParse(config[i].Substring(30), out _))
-                            g_settings[g, 2] = int.Parse(config[i].Substring(30));
+                            g_settings[g, 2] = int.Parse(config[i].Substring(30)); // считываем период автопинга группы
 
                         if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group " + (g + 1) + " timeout (sec):" && int.TryParse(config[i].Substring(23), out _))
-                            g_settings[g, 3] = int.Parse(config[i].Substring(23));
+                            g_settings[g, 3] = int.Parse(config[i].Substring(23)); // считываем время для таймаутов ответов группы
 
                         if (config[i].Length >= 22 && config[i].Substring(0, 22) == "Group " + (g + 1) + " packets count:" && int.TryParse(config[i].Substring(23), out _))
-                            g_settings[g, 4] = int.Parse(config[i].Substring(23));
+                            g_settings[g, 4] = int.Parse(config[i].Substring(23)); // считываем количество ping запросов группы
                     }
                 }
             }
             else
-            {
+            { // иначе...
                 SaveINI();
                 CheckConfig();
             }
